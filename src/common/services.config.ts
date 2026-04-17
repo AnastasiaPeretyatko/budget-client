@@ -10,7 +10,6 @@ export const http = axios.create({
   },
 });
 
-
 let isRefreshing = false;
 let refreshSubscribers: ((token: string) => void)[] = [];
 
@@ -47,20 +46,20 @@ http.interceptors.response.use(
 
         try {
           const refreshToken = localStorage.getItem('refreshToken');
-          const { data } = await axios.post(`${baseURL}/refresh`, {
+          const { data } = await axios.post(`${baseURL}/auth/refresh`, {
             token: refreshToken,
           });
 
-          localStorage.setItem('refreshToken', data.refreshToken);
-          localStorage.setItem('accessToken', data.accessToken);
+          // localStorage.setItem('refreshToken', data.refreshToken);
+          localStorage.setItem('token', data.token);
 
           axios.defaults.headers.common['Authorization'] =
-            `Bearer ${data.accessToken}`;
+            `Bearer ${data.token}`;
           isRefreshing = false;
-          onRefreshed(data.accessToken);
+          onRefreshed(data.token);
 
           originalRequest.headers['Authorization'] =
-            `Bearer ${data.accessToken}`;
+            `Bearer ${data.token}`;
           return http(originalRequest);
         } catch (err) {
           isRefreshing = false;

@@ -1,25 +1,43 @@
-import { AuthContext } from '@/entities/auth/auth.context';
+import { AppDispatch, RootState } from '@/common/store.config'
+import { loginThunk } from '@/entities/auth/api/auth.thunk'
+import { useNotifications } from '@/shared/hooks/useNotifications'
 import { Button, Container, Heading, Input, Link, VStack } from '@chakra-ui/react'
-import { useContext, useState } from 'react';
+import { useRouter } from 'next/router'
+import { useDispatch, useSelector } from 'react-redux'
 
 const LoginPage = () => {
-  const authState = useContext(AuthContext);
+  const dispatch = useDispatch<AppDispatch>()
+  const { showErrorMessage } = useNotifications()
+  const router = useRouter()
 
-  const [data, setData] = useState({
-    email: '',
-    password: '',
-  });
+  const { isLoading } = useSelector((state: RootState) => state.auth)
+
+  const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+    const data = new FormData(event.currentTarget)
+    const dto = {
+      email: data.get('email')?.toString() || '',
+      password: data.get('password')?.toString() || '',
+    }
+
+    dispatch(loginThunk(dto))
+      .unwrap()
+      .then(() => router.push('/workspaces'))
+      .catch(() => showErrorMessage('Неправильный логин или пароль'))
+  }
 
   return (
     <Container display={'flex'} flexDirection={'column'} alignItems={'center'} justifyContent={'center'} height={'100vh'}>
 
-    <VStack minW={'50%'} gap={6}>
-      <Heading size={'2xl'}>Авторизация</Heading>
-      <Input placeholder='Email' value={data.email} onChange={e => setData(prev => ({...prev, email: e.target.value}))}/>
-      <Input placeholder='Пароль' value={data.password} onChange={e => setData(prev => ({...prev, password: e.target.value}))}/>
-      <Link>Забыл пароль?</Link>
-      <Button width={'100%'} onClick={() => authState.logIn(data)}>Войти</Button>
-    </VStack> 
+      <form onSubmit={onSubmit} style={{ width: '40%' }}>
+        <VStack width={'100%'} gap={6} backgroundColor={'gray.900'} borderRadius={10} padding={8} border={'1px solid #3f3f46'}>
+          <Heading size={'3xl'} mb={4}>Авторизация</Heading>
+          <Input placeholder='Email' name='email' type='email'/>
+          <Input placeholder='Пароль' name='password' type='password'/>
+          <Link width={'100%'} justifyContent={'end'} color={'gray.400'}>Забыл пароль?</Link>
+          <Button width={'100%'} type='submit' loading={isLoading}>Войти</Button>
+        </VStack>
+      </form>
     </Container>
   )
 }
