@@ -5,8 +5,9 @@ export type BaseTransactionType = {
   toAccountId?: string;
   categoryId?: string;
   amount: string;
-  description?: null;
+  description?: string | null;
   date: Date;
+  workspaceId: string;
 }
 
 export type TransactionType = {

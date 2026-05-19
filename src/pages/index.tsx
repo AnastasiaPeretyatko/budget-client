@@ -1,15 +1,12 @@
+/* eslint-disable max-len */
+import Header from '@/features/Header/Header'
 import MoneyComponent from '@/shared/assets/animated/MoneyComponent'
-import { Box, Button, Container, Heading, HStack, Text } from '@chakra-ui/react'
-import { useRouter } from 'next/router'
+import { Box, Container, HStack, Text } from '@chakra-ui/react'
 
 const Home = () => {
-  const router = useRouter()
   return (
     <Container width={"100%"} height={'100vh'} padding={4} display={'flex'} flexDir={'column'} alignItems={'center'}>
-      <HStack width={"100%"} justify={'space-between'}>
-        <Heading textTransform={'uppercase'}>Budget home</Heading>
-        <Button size={'sm'} variant={'surface'} onClick={() => router.push('/login')}>Login</Button>
-      </HStack>
+      <Header />
       <HStack justify={'center'} height={'100%'} >
         <MoneyComponent/>
         <Box width={'30%'}>
