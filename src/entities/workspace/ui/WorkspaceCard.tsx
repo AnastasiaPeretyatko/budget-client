@@ -1,7 +1,10 @@
+import { AppDispatch } from '@/common/store.config'
 import { Card, CardBody, CardTitle, HStack, Text } from '@chakra-ui/react'
 import { WorkspaceListType } from '../types/workspace.type'
 import moment from 'moment'
 import { useRouter } from 'next/router'
+import { useDispatch } from 'react-redux'
+import { setActiveWorkspace } from '../api/workspace.slice'
 
 type Props = {
   workspace: WorkspaceListType
@@ -9,9 +12,12 @@ type Props = {
 
 const WorkspaceCard = ({ workspace }: Props) => {
   const router = useRouter()
+  const dispatch = useDispatch<AppDispatch>()
 
   const onDoubleClick = () => {
-    router.push(`/workspaces/${workspace.id}`)
+    localStorage.setItem('workspaceId', workspace.id)
+    dispatch(setActiveWorkspace(workspace.id))
+    router.push('/dashboard')
   }
 
   return (

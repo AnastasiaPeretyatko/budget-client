@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { loginThunk } from './auth.thunk'
 import { AuthUser } from '../types/user.type'
 
@@ -21,26 +21,27 @@ const auth = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    setIsAuth: (state, { payload }: { payload: boolean }) => {
+    setIsAuth: (state, { payload }: PayloadAction<boolean>) => {
       state.isAuth = payload
     },
-    setToken: (state, { payload }: { payload: string }) => {
+    setToken: (state, { payload }: PayloadAction<string>) => {
       state.token = payload
     },
     deleteToken: (state) => {
       state.token = null
     },
-    toggleIsLoading: (state) => {
-      console.log({ isLoading: state.isLoading });
-      state.isLoading = !state.isLoading
+    setIsLoading: (state, { payload }: PayloadAction<boolean>) => {
+      state.isLoading = payload
     }
   },
   extraReducers: builder => {
     builder
+      .addCase(loginThunk.pending, state => {
+        state.isLoading = true
+        state.error = undefined
+      })
       .addCase(loginThunk.fulfilled, (state, { payload }) => {
         state.user = payload.user
-        localStorage.setItem('token', payload.token)
-        localStorage.setItem('refreshToken', payload.refreshToken)
         state.isAuth = true
         state.isLoading = false
       })
@@ -48,12 +49,9 @@ const auth = createSlice({
         state.error = payload
         state.isLoading = false
       })
-      .addCase(loginThunk.pending, state => {
-        state.isLoading = true
-      })
   }
 })
 
-export const { setIsAuth, setToken, deleteToken, toggleIsLoading } = auth.actions
+export const { setIsAuth, setToken, deleteToken, setIsLoading } = auth.actions
 
 export default auth.reducer

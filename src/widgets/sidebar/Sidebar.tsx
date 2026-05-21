@@ -13,7 +13,7 @@ const SIDEBAR_LIST: SidebarItemProps[] = [
   {
     title: 'Dashboard',
     icon: null,
-    path: '/'
+    path: '/dashboard'
   },
   {
     title: 'Budgets',

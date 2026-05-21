@@ -1,6 +1,8 @@
-import { PUBLIC_ROUTES } from '@/common/router.config'
+import PrivateLayout from '@/app/layouts/PrivateLayout'
+import { NO_WORKSPACE_ROUTES, PUBLIC_ROUTES } from '@/common/router.config'
 import { AppDispatch, RootState } from '@/common/store.config'
-import { setToken, toggleIsLoading } from '@/entities/auth/api/auth.slice';
+import { setToken, setIsLoading } from '@/entities/auth/api/auth.slice';
+import { setActiveWorkspace } from '@/entities/workspace/api/workspace.slice';
 import LoadingComponent from '@/shared/assets/animated/LoadingComponent';
 import { NextComponentType, NextPageContext } from 'next';
 import { useRouter } from 'next/router'
@@ -17,8 +19,10 @@ export function AppGuard({ Component, pageProps }: AppGuardProps) {
   const router = useRouter()
   const dispatch = useDispatch<AppDispatch>()
   const { isLoading, token } = useSelector((state: RootState) => state.auth)
+  const { activeWorkspaceId } = useSelector((state: RootState) => state.workspaces)
 
   const isPublic = PUBLIC_ROUTES.includes(router.pathname)
+  const requiresWorkspace = !isPublic && !NO_WORKSPACE_ROUTES.includes(router.pathname)
 
   useEffect(() => {
     if (!token && isLoading) {
@@ -34,14 +38,37 @@ export function AppGuard({ Component, pageProps }: AppGuardProps) {
       if (!localToken && !isPublic) {
         router.push('/login')
       }
-      dispatch(toggleIsLoading());
+      dispatch(setIsLoading(false));
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isPublic, router.pathname, token])
+
+  useEffect(() => {
+    if (isLoading || isPublic) return
+
+    const storedWorkspaceId = localStorage.getItem('workspaceId')
+
+    if (storedWorkspaceId && !activeWorkspaceId) {
+      dispatch(setActiveWorkspace(storedWorkspaceId))
+    }
+
+    if (!storedWorkspaceId && requiresWorkspace) {
+      router.push('/workspaces')
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isLoading, isPublic, requiresWorkspace, activeWorkspaceId])
 
   if (isLoading) {
     return <LoadingComponent/>
   }
 
-  return <Component {...pageProps} />
+  if (isPublic) {
+    return <Component {...pageProps} />
+  }
+
+  return (
+    <PrivateLayout>
+      <Component {...pageProps} />
+    </PrivateLayout>
+  )
 }

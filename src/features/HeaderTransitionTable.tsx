@@ -1,37 +1,33 @@
-import { AppDispatch } from '@/common/store.config'
+import { AppDispatch, RootState } from '@/common/store.config'
 import { Button, HStack, Input } from '@chakra-ui/react'
 import React, { useEffect, useState } from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import SelectListSavingAccount from './SelectListSavingAccount'
-import { useRouter } from 'next/router'
 import { getAllTransactionThunk } from '@/entities/transaction/api/transaction.thunk'
 
 const HeaderTransitionTable = () => {
   const dispatch = useDispatch<AppDispatch>()
-  const router = useRouter()
+  const { activeWorkspaceId } = useSelector((state: RootState) => state.workspaces)
 
-  const [filter, setFilter] = useState({})
-  console.log({ filter });
+  const [filter, setFilter] = useState<{ fromAccountId?: string; toAccountId?: string; categoryId?: string }>({})
   const isDisplayReset = Object.keys(filter).length > 0
-
-  const workspaceId = typeof router.query.id === 'string' ? router.query.id : undefined
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     // if (e.key === 'Enter') // dispatch(getAllTransactionThunk({}))
   }
 
   useEffect(() => {
-    if (!workspaceId) return
+    if (!activeWorkspaceId) return
 
     dispatch(
       getAllTransactionThunk({
         filter: {
           ...filter,
-          workspaceId,
+          workspaceId: activeWorkspaceId,
         },
       }),
     )
-  }, [dispatch, filter, workspaceId])
+  }, [dispatch, filter, activeWorkspaceId])
 
   return (
     <HStack width={'100%'} backgroundColor={'#111111'} padding={2} borderRadius={8}>

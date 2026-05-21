@@ -6,19 +6,19 @@ import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import TransactionCreateRow from './TransactionCreateRow'
 import { BaseTransactionType } from '@/entities/transaction/types/transaction.type'
-import { useRouter } from 'next/router'
 
 const TransactionTable = () => {
   const dispatch = useDispatch<AppDispatch>()
-  const router = useRouter()
   const { transaction } = useSelector((state: RootState) => state.transactions)
+  const { activeWorkspaceId } = useSelector((state: RootState) => state.workspaces)
 
   const [newTransitions, setNewTransitions] = useState<BaseTransactionType | null>(null)
 
   const createNewTransitions = () => {
+    if (!activeWorkspaceId) return
+
     if (newTransitions && newTransitions.amount !== '0') {
-      const workspaceId = router.query.id as string
-      dispatch(postTransactionThunk({ ...newTransitions, workspaceId }))
+      dispatch(postTransactionThunk({ ...newTransitions, workspaceId: activeWorkspaceId }))
       setNewTransitions(null)
       return
     }
@@ -29,16 +29,15 @@ const TransactionTable = () => {
       date: new Date(),
       fromAccountId: undefined,
       toAccountId: undefined,
-      workspaceId: router.query.id as string
+      workspaceId: activeWorkspaceId
     })
   }
 
   useEffect(() => {
-    if (router.query.id) {
-      const filter = { workspaceId: router.query.id as string }
-      dispatch(getAllTransactionThunk({ filter }))
+    if (activeWorkspaceId) {
+      dispatch(getAllTransactionThunk({ filter: { workspaceId: activeWorkspaceId } }))
     }
-  }, [dispatch, router.query.id])
+  }, [dispatch, activeWorkspaceId])
 
   return (
     <>

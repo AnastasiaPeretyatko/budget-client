@@ -7,12 +7,7 @@ const SidebarItem = (props: SidebarItemProps) => {
   const router = useRouter()
 
   const onClick = () => {
-    const { id } = router.query
-    console.log({
-      query: router.query,
-      path: `/workspaces/${id + props.path}`
-    });
-    router.push(`/workspaces/${id + props.path}`)
+    router.push(props.path)
   }
 
   return (

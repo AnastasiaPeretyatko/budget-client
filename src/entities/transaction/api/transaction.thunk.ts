@@ -20,35 +20,29 @@ export type GetAllTransactionArgs = {
   };
 };
 
-type RejectType = string; // или кастомный тип ошибки
-
 export const postTransactionThunk = createAsyncThunk<
-  {data: TransactionType, message: string},
+  TransactionType,
   BaseTransactionType,
-  { rejectValue: RejectType }
->('/transaction.create', async (data, { rejectWithValue }) => {
+  { rejectValue: string }
+>('transaction/create', async (data, { rejectWithValue }) => {
   try {
     const res = await postTransactionRequest(data);
-    return {
-      data: res.data,
-      message: ''
-    }
+    return res.data;
   } catch (error) {
     return rejectWithValue(
       error instanceof Error ? error.message : 'Unknown error'
     );
   }
-})
+});
 
 export const getAllTransactionThunk = createAsyncThunk<
   GetAllTransactionResponse,
   GetAllTransactionArgs,
-  { rejectValue: RejectType }
+  { rejectValue: string }
 >(
   'transaction/getAll',
   async ({ paging, filter }, { rejectWithValue }) => {
     try {
-      console.log({ filter });
       const res = await getAllTransactionRequest({ paging, filter });
 
       return {

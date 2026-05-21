@@ -5,8 +5,8 @@ import { TransactionType } from '../types/transaction.type'
 type TInitialState = {
   transaction: TransactionType[]
   count: number
-  error?: string
   isLoading: boolean
+  error?: string
 }
 
 const initialState: TInitialState = {
@@ -21,12 +21,18 @@ const transactions = createSlice({
   reducers: {},
   extraReducers: builder => {
     builder
-      .addCase(postTransactionThunk.pending, state => {})
+      .addCase(postTransactionThunk.pending, state => {
+        state.error = undefined
+      })
       .addCase(postTransactionThunk.fulfilled, (state, { payload }) => {
-        state.transaction.push(payload.data)
+        state.transaction.push(payload)
       })
       .addCase(postTransactionThunk.rejected, (state, { payload }) => {
         state.error = payload
+      })
+      .addCase(getAllTransactionThunk.pending, state => {
+        state.isLoading = true
+        state.error = undefined
       })
       .addCase(getAllTransactionThunk.fulfilled, (state, { payload }) => {
         state.transaction = payload.rows
@@ -36,9 +42,6 @@ const transactions = createSlice({
       .addCase(getAllTransactionThunk.rejected, (state, { payload }) => {
         state.error = payload
         state.isLoading = false
-      })
-      .addCase(getAllTransactionThunk.pending, state => {
-        state.isLoading = true
       })
   }
 })

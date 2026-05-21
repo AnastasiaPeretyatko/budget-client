@@ -28,6 +28,10 @@ http.interceptors.request.use(
     if (token) {
       config.headers['Authorization'] = `Bearer ${token}`;
     }
+    const workspaceId = localStorage.getItem('workspaceId');
+    if (workspaceId) {
+      config.headers['X-Workspace-Id'] = workspaceId;
+    }
     return config;
   },
   (error) => {
