@@ -20,7 +20,7 @@ export type GetAllTransactionArgs = {
   };
 };
 
-export const postTransactionThunk = createAsyncThunk<
+export const createTransactionThunk = createAsyncThunk<
   TransactionType,
   BaseTransactionType,
   { rejectValue: string }
@@ -35,7 +35,7 @@ export const postTransactionThunk = createAsyncThunk<
   }
 });
 
-export const getAllTransactionThunk = createAsyncThunk<
+export const fetchTransactionsThunk = createAsyncThunk<
   GetAllTransactionResponse,
   GetAllTransactionArgs,
   { rejectValue: string }

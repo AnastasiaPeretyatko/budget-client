@@ -1,5 +1,5 @@
-import Header from '@/features/Header/Header'
-import Sidebar from '@/widgets/sidebar/Sidebar'
+import { Header } from '@/widgets/header'
+import { Sidebar } from '@/widgets/sidebar'
 import { Container, HStack, VStack } from '@chakra-ui/react'
 import { ReactNode } from 'react'
 

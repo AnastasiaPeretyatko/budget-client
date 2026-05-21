@@ -1,8 +1,8 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { LoginRequest, loginRequest } from './auth.service';
+import { LoginResponse, loginRequest } from './auth.service';
 
 export const loginThunk = createAsyncThunk<
-  LoginRequest,
+  LoginResponse,
   { email: string; password: string },
   { rejectValue: string }
 >('auth/login', async (data, { rejectWithValue }) => {

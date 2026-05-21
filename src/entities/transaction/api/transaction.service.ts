@@ -1,4 +1,4 @@
-import { http } from '@/common/services.config';
+import { http } from '@/shared/api';
 import { BaseTransactionType, TransactionType } from '../types/transaction.type';
 import { AxiosResponse } from 'axios';
 import { GetAllTransactionArgs, GetAllTransactionResponse } from './transaction.thunk';

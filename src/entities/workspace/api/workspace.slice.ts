@@ -1,15 +1,15 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { getAllWorkspaceThunk, postWorkspaceThunk } from './workspace.thunk'
+import { fetchWorkspacesThunk, createWorkspaceThunk } from './workspace.thunk'
 import { WorkspaceListType } from '../types/workspace.type'
 
-type TInitialState = {
+type WorkspaceState = {
   workspaces: WorkspaceListType[]
   activeWorkspaceId: string | null
   isLoading: boolean
   error?: string
 }
 
-const initialState: TInitialState = {
+const initialState: WorkspaceState = {
   workspaces: [],
   activeWorkspaceId: null,
   isLoading: false
@@ -28,25 +28,25 @@ const workspaces = createSlice({
   },
   extraReducers: builder => {
     builder
-      .addCase(getAllWorkspaceThunk.pending, state => {
+      .addCase(fetchWorkspacesThunk.pending, state => {
         state.isLoading = true
         state.error = undefined
       })
-      .addCase(getAllWorkspaceThunk.fulfilled, (state, { payload }) => {
+      .addCase(fetchWorkspacesThunk.fulfilled, (state, { payload }) => {
         state.isLoading = false
         state.workspaces = payload
       })
-      .addCase(getAllWorkspaceThunk.rejected, (state, { payload }) => {
+      .addCase(fetchWorkspacesThunk.rejected, (state, { payload }) => {
         state.isLoading = false
         state.error = payload
       })
-      .addCase(postWorkspaceThunk.pending, state => {
+      .addCase(createWorkspaceThunk.pending, state => {
         state.error = undefined
       })
-      .addCase(postWorkspaceThunk.fulfilled, (state, { payload }) => {
+      .addCase(createWorkspaceThunk.fulfilled, (state, { payload }) => {
         state.workspaces.push(payload)
       })
-      .addCase(postWorkspaceThunk.rejected, (state, { payload }) => {
+      .addCase(createWorkspaceThunk.rejected, (state, { payload }) => {
         state.error = payload
       })
   }

@@ -1,9 +1,9 @@
 import PrivateLayout from '@/app/layouts/PrivateLayout'
-import { NO_WORKSPACE_ROUTES, PUBLIC_ROUTES } from '@/common/router.config'
-import { AppDispatch, RootState } from '@/common/store.config'
-import { setToken, setIsLoading } from '@/entities/auth/api/auth.slice';
-import { setActiveWorkspace } from '@/entities/workspace/api/workspace.slice';
-import LoadingComponent from '@/shared/assets/animated/LoadingComponent';
+import { NO_WORKSPACE_ROUTES, PUBLIC_ROUTES } from '@/shared/config/routes'
+import { AppDispatch, RootState } from '@/app/store'
+import { setToken, setIsLoading } from '@/entities/auth';
+import { setActiveWorkspace } from '@/entities/workspace';
+import LoadingAnimation from '@/shared/assets/animated/LoadingComponent';
 import { NextComponentType, NextPageContext } from 'next';
 import { useRouter } from 'next/router'
 import { useEffect } from 'react';
@@ -59,7 +59,7 @@ export function AppGuard({ Component, pageProps }: AppGuardProps) {
   }, [isLoading, isPublic, requiresWorkspace, activeWorkspaceId])
 
   if (isLoading) {
-    return <LoadingComponent/>
+    return <LoadingAnimation/>
   }
 
   if (isPublic) {

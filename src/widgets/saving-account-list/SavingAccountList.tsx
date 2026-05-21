@@ -1,23 +1,27 @@
-import { AppDispatch, RootState } from '@/common/store.config'
-import { getAllSavingThunk } from '@/entities/saving-account/api/saving-account.thunk'
-import SavingAccountCard from '@/entities/saving-account/components/SavingAccountCard'
-import CreateSavingModal from '@/features/CreateSavingModal'
+import { AppDispatch, RootState } from '@/app/store'
+import { fetchSavingAccountsThunk } from '@/entities/saving-account'
+import { SavingAccountCard } from '@/entities/saving-account'
+import { CreateSavingModal } from '@/features/saving-account-management'
 import { Flex } from '@chakra-ui/react'
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
 const SavingAccountList = () => {
   const dispatch = useDispatch<AppDispatch>()
-  const { saving } = useSelector((state: RootState) => state.saving)
+  const { savingAccounts } = useSelector((state: RootState) => state.savingAccounts)
 
   useEffect(() => {
-    dispatch(getAllSavingThunk())
+    dispatch(fetchSavingAccountsThunk())
   }, [dispatch])
 
   return (
     <Flex gap={4}>
       <CreateSavingModal/>
-      {saving.map((item) => (<SavingAccountCard key={item.id} saving={item}/>))}
+      {
+        savingAccounts.map((account) => (
+          <SavingAccountCard key={account.id} savingAccount={account}/>
+        ))
+      }
     </Flex>
   )
 }

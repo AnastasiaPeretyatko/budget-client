@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { loginThunk } from './auth.thunk'
 import { AuthUser } from '../types/user.type'
 
-type TInitialState = {
+type AuthState = {
   user: AuthUser | null
   token: string | null
   isAuth: boolean
@@ -10,7 +10,7 @@ type TInitialState = {
   error?: string
 }
 
-const initialState: TInitialState = {
+const initialState: AuthState = {
   user: null,
   token: null,
   isAuth: false,

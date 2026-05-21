@@ -1,16 +1,16 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { getAllTransactionThunk, postTransactionThunk } from './transaction.thunk'
+import { fetchTransactionsThunk, createTransactionThunk } from './transaction.thunk'
 import { TransactionType } from '../types/transaction.type'
 
-type TInitialState = {
-  transaction: TransactionType[]
+type TransactionState = {
+  transactions: TransactionType[]
   count: number
   isLoading: boolean
   error?: string
 }
 
-const initialState: TInitialState = {
-  transaction: [],
+const initialState: TransactionState = {
+  transactions: [],
   count: 0,
   isLoading: false
 }
@@ -21,25 +21,25 @@ const transactions = createSlice({
   reducers: {},
   extraReducers: builder => {
     builder
-      .addCase(postTransactionThunk.pending, state => {
+      .addCase(createTransactionThunk.pending, state => {
         state.error = undefined
       })
-      .addCase(postTransactionThunk.fulfilled, (state, { payload }) => {
-        state.transaction.push(payload)
+      .addCase(createTransactionThunk.fulfilled, (state, { payload }) => {
+        state.transactions.push(payload)
       })
-      .addCase(postTransactionThunk.rejected, (state, { payload }) => {
+      .addCase(createTransactionThunk.rejected, (state, { payload }) => {
         state.error = payload
       })
-      .addCase(getAllTransactionThunk.pending, state => {
+      .addCase(fetchTransactionsThunk.pending, state => {
         state.isLoading = true
         state.error = undefined
       })
-      .addCase(getAllTransactionThunk.fulfilled, (state, { payload }) => {
-        state.transaction = payload.rows
+      .addCase(fetchTransactionsThunk.fulfilled, (state, { payload }) => {
+        state.transactions = payload.rows
         state.count = payload.count
         state.isLoading = false
       })
-      .addCase(getAllTransactionThunk.rejected, (state, { payload }) => {
+      .addCase(fetchTransactionsThunk.rejected, (state, { payload }) => {
         state.error = payload
         state.isLoading = false
       })

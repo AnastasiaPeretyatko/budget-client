@@ -6,14 +6,14 @@ import { useRouter } from 'next/router'
 const SidebarItem = (props: SidebarItemProps) => {
   const router = useRouter()
 
-  const onClick = () => {
+  const handleClick = () => {
     router.push(props.path)
   }
 
   return (
     <HStack
       as={'button'}
-      onClick={onClick}
+      onClick={handleClick}
       width={'100%'}
       padding={2}
       borderRadius={8}

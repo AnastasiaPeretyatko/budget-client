@@ -1,55 +1,55 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { SavingAccountType } from '../types/saving_account.type'
-import { deleteSavingThunk, getAllSavingThunk, postSavingThunk } from './saving-account.thunk'
+import { SavingAccountType } from '../types/saving-account.type'
+import { deleteSavingAccountThunk, fetchSavingAccountsThunk, createSavingAccountThunk } from './saving-account.thunk'
 
-type TInitialState = {
-  saving: SavingAccountType[]
+type SavingAccountState = {
+  savingAccounts: SavingAccountType[]
   isLoading: boolean
   error?: string
 }
 
-const initialState: TInitialState = {
-  saving: [],
+const initialState: SavingAccountState = {
+  savingAccounts: [],
   isLoading: false
 }
 
-const saving = createSlice({
-  name: 'saving',
+const savingAccountSlice = createSlice({
+  name: 'savingAccounts',
   initialState,
   reducers: {},
   extraReducers: builder => {
     builder
-      .addCase(getAllSavingThunk.pending, state => {
+      .addCase(fetchSavingAccountsThunk.pending, state => {
         state.isLoading = true
         state.error = undefined
       })
-      .addCase(getAllSavingThunk.fulfilled, (state, { payload }) => {
-        state.saving = payload
+      .addCase(fetchSavingAccountsThunk.fulfilled, (state, { payload }) => {
+        state.savingAccounts = payload
         state.isLoading = false
       })
-      .addCase(getAllSavingThunk.rejected, (state, { payload }) => {
+      .addCase(fetchSavingAccountsThunk.rejected, (state, { payload }) => {
         state.isLoading = false
         state.error = payload
       })
-      .addCase(postSavingThunk.pending, state => {
+      .addCase(createSavingAccountThunk.pending, state => {
         state.error = undefined
       })
-      .addCase(postSavingThunk.fulfilled, (state, { payload }) => {
-        state.saving.push(payload)
+      .addCase(createSavingAccountThunk.fulfilled, (state, { payload }) => {
+        state.savingAccounts.push(payload)
       })
-      .addCase(postSavingThunk.rejected, (state, { payload }) => {
+      .addCase(createSavingAccountThunk.rejected, (state, { payload }) => {
         state.error = payload
       })
-      .addCase(deleteSavingThunk.pending, state => {
+      .addCase(deleteSavingAccountThunk.pending, state => {
         state.error = undefined
       })
-      .addCase(deleteSavingThunk.fulfilled, (state, { payload }) => {
-        state.saving = state.saving.filter(item => item.id !== payload)
+      .addCase(deleteSavingAccountThunk.fulfilled, (state, { payload }) => {
+        state.savingAccounts = state.savingAccounts.filter(item => item.id !== payload)
       })
-      .addCase(deleteSavingThunk.rejected, (state, { payload }) => {
+      .addCase(deleteSavingAccountThunk.rejected, (state, { payload }) => {
         state.error = payload
       })
   }
 })
 
-export default saving.reducer;
+export default savingAccountSlice.reducer;

@@ -1,4 +1,4 @@
-import { http } from '@/common/services.config';
+import { http } from '@/shared/api';
 import { BaseWorkspaceType, WorkspaceListType } from '../types/workspace.type';
 import { AxiosResponse } from 'axios';
 

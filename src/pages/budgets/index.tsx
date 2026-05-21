@@ -1,4 +1,4 @@
-import SavingAccountList from '@/widgets/saving-account-list/SavingAccountList'
+import { SavingAccountList } from '@/widgets/saving-account-list'
 import { Heading } from '@chakra-ui/react'
 
 const BudgetsPage = () => {

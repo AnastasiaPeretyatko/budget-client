@@ -1,4 +1,4 @@
-import { SavingAccountType } from '@/entities/saving-account/types/saving_account.type';
+import { SavingAccountType } from '@/entities/saving-account';
 
 export type BaseTransactionType = {
   fromAccountId?: string;

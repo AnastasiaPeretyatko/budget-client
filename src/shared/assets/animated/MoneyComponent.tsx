@@ -2,7 +2,7 @@ import { Flex } from '@chakra-ui/react'
 import Lottie from 'lottie-react'
 import * as moneyLottie from './Money.json'
 
-const MoneyComponent = () => {
+const MoneyAnimation = () => {
   return (
     <Flex>
       <Lottie animationData={moneyLottie} loop style={{ maxHeight: '400px', maxWidth: '400px' }}/>
@@ -10,4 +10,4 @@ const MoneyComponent = () => {
   )
 }
 
-export default MoneyComponent
+export default MoneyAnimation

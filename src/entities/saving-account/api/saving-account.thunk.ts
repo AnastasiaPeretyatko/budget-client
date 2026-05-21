@@ -1,9 +1,9 @@
 
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { BaseSavingAccountType, SavingAccountType } from '../types/saving_account.type';
+import { BaseSavingAccountType, SavingAccountType } from '../types/saving-account.type';
 import { deleteSavingRequest, getAllSavingRequest, postSavingRequest } from './saving-account.service';
 
-export const postSavingThunk = createAsyncThunk<
+export const createSavingAccountThunk = createAsyncThunk<
   SavingAccountType,
   BaseSavingAccountType,
   { rejectValue: string }
@@ -18,7 +18,7 @@ export const postSavingThunk = createAsyncThunk<
   }
 });
 
-export const getAllSavingThunk = createAsyncThunk<
+export const fetchSavingAccountsThunk = createAsyncThunk<
   SavingAccountType[],
   void,
   { rejectValue: string }
@@ -33,7 +33,7 @@ export const getAllSavingThunk = createAsyncThunk<
   }
 });
 
-export const deleteSavingThunk = createAsyncThunk<
+export const deleteSavingAccountThunk = createAsyncThunk<
   string,
   string,
   { rejectValue: string }

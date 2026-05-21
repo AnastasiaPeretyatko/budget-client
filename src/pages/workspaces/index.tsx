@@ -1,5 +1,5 @@
-import WorkspaceCreateModal from '@/features/WorkspaceCreateModal'
-import WorkspaceListWidget from '@/widgets/workspace-list/WorkspaceListWidget'
+import { WorkspaceCreateModal } from '@/features/workspace-management'
+import { WorkspaceListWidget } from '@/widgets/workspace-list'
 import { VStack } from '@chakra-ui/react'
 
 const WorkspacePage = () => {

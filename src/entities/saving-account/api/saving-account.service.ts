@@ -1,5 +1,5 @@
-import { http } from '@/common/services.config';
-import { BaseSavingAccountType } from '../types/saving_account.type';
+import { http } from '@/shared/api';
+import { BaseSavingAccountType } from '../types/saving-account.type';
 
 export const getAllSavingRequest = () => http.get('/saving')
 

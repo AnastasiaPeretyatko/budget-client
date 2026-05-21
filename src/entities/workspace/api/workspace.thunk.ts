@@ -3,7 +3,7 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { getAllWorkspaceRequest, postWorkspaceRequest } from './workspace.service';
 import { BaseWorkspaceType, WorkspaceListType } from '../types/workspace.type';
 
-export const postWorkspaceThunk = createAsyncThunk<
+export const createWorkspaceThunk = createAsyncThunk<
   WorkspaceListType,
   BaseWorkspaceType,
   { rejectValue: string }
@@ -18,7 +18,7 @@ export const postWorkspaceThunk = createAsyncThunk<
   }
 });
 
-export const getAllWorkspaceThunk = createAsyncThunk<
+export const fetchWorkspacesThunk = createAsyncThunk<
   WorkspaceListType[],
   void,
   { rejectValue: string }
