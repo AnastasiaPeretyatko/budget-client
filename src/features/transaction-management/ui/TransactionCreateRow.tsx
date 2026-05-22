@@ -32,6 +32,7 @@ const TransactionCreateRow = ({ transaction, setTransaction }: Props) => {
     <Table.Row height={'45px'}>
       <Table.Cell onDoubleClick={handleDoubleClick} p={0}>{isEdit ? <SavingAccountSelect onChange={(fromAccountId) => setTransaction({ ...transaction, fromAccountId })}/> : ''}</Table.Cell>
       <Table.Cell onDoubleClick={handleDoubleClick} p={0}>{isEdit ? <SavingAccountSelect onChange={(toAccountId) => setTransaction({ ...transaction, toAccountId })}/> : ''}</Table.Cell>
+      <Table.Cell onDoubleClick={handleDoubleClick} p={0}>{isEdit ? <Input border={'none'} placeholder="Категория" onChange={(e) => setTransaction({ ...transaction, categoryId: e.target.value })}/> : ''}</Table.Cell>
       <Table.Cell onDoubleClick={handleDoubleClick} p={0}>{isEdit ? <Input border={'none'} onChange={(e) => setTransaction({ ...transaction, amount: e.target.value })}/> : ''}</Table.Cell>
       <Table.Cell onDoubleClick={handleDoubleClick} p={0}>{isEdit ? <Input border={'none'} type='date' defaultValue={moment(new Date()).format('YYYY-MM-DD')} onChange={(e) => setTransaction({ ...transaction, date: new Date(e.target.value) })}/> : ''}</Table.Cell>
       <Table.Cell onDoubleClick={handleDoubleClick} p={0}>{isEdit ? <Input border={'none'} onChange={(e) => setTransaction({ ...transaction, description: e.target.value })}/> : ''}</Table.Cell>

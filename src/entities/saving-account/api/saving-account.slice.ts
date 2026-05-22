@@ -1,15 +1,17 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { SavingAccountType } from '../types/saving-account.type'
-import { deleteSavingAccountThunk, fetchSavingAccountsThunk, createSavingAccountThunk } from './saving-account.thunk'
+import { deleteSavingAccountThunk, fetchSavingAccountByIdThunk, fetchSavingAccountsThunk, createSavingAccountThunk } from './saving-account.thunk'
 
 type SavingAccountState = {
   savingAccounts: SavingAccountType[]
+  activeSavingAccount: SavingAccountType | null
   isLoading: boolean
   error?: string
 }
 
 const initialState: SavingAccountState = {
   savingAccounts: [],
+  activeSavingAccount: null,
   isLoading: false
 }
 
@@ -47,6 +49,18 @@ const savingAccountSlice = createSlice({
         state.savingAccounts = state.savingAccounts.filter(item => item.id !== payload)
       })
       .addCase(deleteSavingAccountThunk.rejected, (state, { payload }) => {
+        state.error = payload
+      })
+      .addCase(fetchSavingAccountByIdThunk.pending, state => {
+        state.isLoading = true
+        state.error = undefined
+      })
+      .addCase(fetchSavingAccountByIdThunk.fulfilled, (state, { payload }) => {
+        state.activeSavingAccount = payload
+        state.isLoading = false
+      })
+      .addCase(fetchSavingAccountByIdThunk.rejected, (state, { payload }) => {
+        state.isLoading = false
         state.error = payload
       })
   }
