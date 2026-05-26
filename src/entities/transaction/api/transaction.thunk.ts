@@ -16,7 +16,8 @@ export type GetAllTransactionArgs = {
     fromAccountId?: string;
     toAccountId?: string;
     categoryId?: string;
-    workspaceId: string;
+    accountId?: string;
+    date: {between: string[]}
   };
 };
 

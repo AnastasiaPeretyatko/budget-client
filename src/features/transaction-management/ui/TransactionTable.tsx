@@ -5,7 +5,11 @@ import moment from 'moment'
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
-const TransactionTable = () => {
+type Props = {
+  accountId?: string
+}
+
+const TransactionTable = ({ accountId }: Props) => {
   const dispatch = useDispatch<AppDispatch>()
   const { transactions } = useSelector((state: RootState) => state.transactions)
   const { activeWorkspaceId } = useSelector((state: RootState) => state.workspaces)
@@ -33,9 +37,10 @@ const TransactionTable = () => {
 
   useEffect(() => {
     if (activeWorkspaceId) {
-      dispatch(fetchTransactionsThunk({ filter: { workspaceId: activeWorkspaceId } }))
+      const filter = accountId ? { accountId }: {}
+      dispatch(fetchTransactionsThunk({ filter }))
     }
-  }, [dispatch, activeWorkspaceId])
+  }, [dispatch, activeWorkspaceId, accountId])
 
   return (
     <>

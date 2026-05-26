@@ -22,7 +22,8 @@ export function AppGuard({ Component, pageProps }: AppGuardProps) {
   const { activeWorkspaceId } = useSelector((state: RootState) => state.workspaces)
 
   const isPublic = PUBLIC_ROUTES.includes(router.pathname)
-  const requiresWorkspace = !isPublic && !NO_WORKSPACE_ROUTES.includes(router.pathname)
+  const isWorkspacePage = NO_WORKSPACE_ROUTES.includes(router.pathname)
+  const requiresWorkspace = !isPublic && !isWorkspacePage
 
   useEffect(() => {
     if (!token && isLoading) {
@@ -62,7 +63,7 @@ export function AppGuard({ Component, pageProps }: AppGuardProps) {
     return <LoadingAnimation/>
   }
 
-  if (isPublic) {
+  if (isPublic || isWorkspacePage) {
     return <Component {...pageProps} />
   }
 

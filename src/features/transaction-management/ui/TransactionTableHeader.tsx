@@ -1,55 +1,38 @@
 /* eslint-disable max-len */
-import { AppDispatch, RootState } from '@/app/store'
-import { Button, HStack, Input } from '@chakra-ui/react'
+import { AppDispatch } from '@/app/store'
+import { Button, HStack } from '@chakra-ui/react'
 import React, { useEffect, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { SavingAccountSelect } from '@/features/saving-account-management'
+import { useDispatch } from 'react-redux'
+import { SavingAccountSearchSelect } from '@/features/saving-account-management'
 import { fetchTransactionsThunk } from '@/entities/transaction'
+import FilterTransitionPopover from './FilterTransitionPopover'
 
 const TransactionTableHeader = () => {
   const dispatch = useDispatch<AppDispatch>()
-  const { activeWorkspaceId } = useSelector((state: RootState) => state.workspaces)
 
   const [filter, setFilter] = useState<{ fromAccountId?: string; toAccountId?: string; categoryId?: string }>({})
   const isDisplayReset = Object.keys(filter).length > 0
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    // if (e.key === 'Enter') // dispatch(fetchTransactionsThunk({}))
-  }
-
   useEffect(() => {
-    if (!activeWorkspaceId) return
-
-    dispatch(
-      fetchTransactionsThunk({
-        filter: {
-          ...filter,
-          workspaceId: activeWorkspaceId,
-        },
-      }),
-    )
-  }, [dispatch, filter, activeWorkspaceId])
+    dispatch(fetchTransactionsThunk({ filter }))
+  }, [dispatch, filter])
 
   return (
-    <HStack width={'100%'} backgroundColor={'#111111'} padding={2} borderRadius={8}>
-      <Input placeholder='Поиск' size={'sm'} width={80} onKeyDown={handleKeyDown}/>
-      <HStack width='100%' justify={'end'}>
-        <SavingAccountSelect
-          onChange={(val) => setFilter(prev => ({ ...prev, fromAccountId: val }))}
-          placeholder='От'
-          maxWidth='30%'
-          value={filter?.fromAccountId || ''}
-        />
-        <SavingAccountSelect
-          onChange={(val) => setFilter(prev => ({ ...prev, toAccountId: val }))}
-          placeholder='До'
-          maxWidth='30%'
-          value={filter?.toAccountId}
-        />
+    <HStack width={'100%'} backgroundColor={'#111111'} padding={2} borderRadius={8} justify={'space-between'}>
+      <HStack width='50%'>
+        <SavingAccountSearchSelect onChange={(val) => setFilter(prev => ({ ...prev, fromAccountId: val }))} value={filter?.fromAccountId || ''}/>
+        <SavingAccountSearchSelect onChange={(val) => setFilter(prev => ({ ...prev, fromAccountId: val }))} value={filter?.toAccountId || ''}/>
         {
           isDisplayReset && <Button size={'xs'} variant={'surface'} onClick={() => setFilter({})}>Reset</Button>
         }
       </HStack>
+
+      <FilterTransitionPopover/>
+      {/* <HStack>
+        <Button size={'sm'}>WEEKLY</Button>
+        <Button size={'sm'}>MONTH</Button>
+        <BaseDatePicker selectionMode='range'/>
+      </HStack> */}
     </HStack>
   )
 }

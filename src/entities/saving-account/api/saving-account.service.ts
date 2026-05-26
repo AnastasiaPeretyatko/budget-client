@@ -4,7 +4,7 @@ import { BaseSavingAccountType, SavingAccountType } from '../types/saving-accoun
 export const getAllSavingRequest = (search?: string) =>
   http.get<SavingAccountType[]>('/saving', { params: { search } })
 
-export const postSavingRequest = (data: BaseSavingAccountType) => http.post('/saving', data)
+export const postSavingRequest = (data: BaseSavingAccountType) => http.post<SavingAccountType>('/saving', data)
 
 export const getSavingByIdRequest = (id: string) =>
   http.get<SavingAccountType>(`/saving/${id}`)

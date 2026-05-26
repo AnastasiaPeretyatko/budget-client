@@ -1,2 +1,2 @@
 export type { CategoryType } from './types/category.type'
-export { getAllCategoryRequest } from './api/category.service'
+export { getAllCategoryRequest, postCategoryRequest } from './api/category.service'

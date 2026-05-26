@@ -8,7 +8,6 @@ export type BaseTransactionType = {
   amount: string;
   description?: string | null;
   date: Date;
-  workspaceId: string;
 }
 
 export type TransactionType = {

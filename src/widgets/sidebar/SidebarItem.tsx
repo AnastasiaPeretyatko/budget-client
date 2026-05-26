@@ -1,30 +1,50 @@
-import { HStack, Text } from '@chakra-ui/react'
+import { HStack, Icon, Portal, Text, Tooltip } from '@chakra-ui/react'
 import React from 'react'
-import { SidebarItemProps } from './Sidebar'
+import { SidebarItemProps, useSidebarContext } from './Sidebar'
 import { useRouter } from 'next/router'
 
-const SidebarItem = (props: SidebarItemProps) => {
+const SidebarItem = ({ title, icon, path }: SidebarItemProps) => {
   const router = useRouter()
+  const { collapsed } = useSidebarContext()
+  const isActive = router.pathname === path || router.pathname.startsWith(path + '/')
 
-  const handleClick = () => {
-    router.push(props.path)
-  }
-
-  return (
+  const button = (
     <HStack
-      as={'button'}
-      onClick={handleClick}
-      width={'100%'}
-      padding={2}
-      borderRadius={8}
-      justify={'start'}
-      _hover={{ backgroundColor: 'gray.700' }}
-      cursor={'pointer'}
+      as="button"
+      onClick={() => router.push(path)}
+      width="100%"
+      px={3}
+      py={2}
+      borderRadius="md"
+      justify={collapsed ? 'center' : 'start'}
+      gap={3}
+      cursor="pointer"
+      bg={isActive ? 'colorPalette.subtle' : 'transparent'}
+      color={isActive ? 'colorPalette.fg' : 'fg.muted'}
+      fontWeight={isActive ? 'semibold' : 'normal'}
+      _hover={{ bg: isActive ? 'colorPalette.subtle' : 'bg.subtle' }}
+      transition="background 0.15s, color 0.15s"
+      colorPalette="blue"
     >
-      {props.icon}
-      <Text>{props.title}</Text>
+      <Icon fontSize="lg">{icon}</Icon>
+      {!collapsed && <Text fontSize="sm" truncate>{title}</Text>}
     </HStack>
   )
+
+  if (collapsed) {
+    return (
+      <Tooltip.Root openDelay={200}>
+        <Tooltip.Trigger asChild>{button}</Tooltip.Trigger>
+        <Portal>
+          <Tooltip.Positioner>
+            <Tooltip.Content>{title}</Tooltip.Content>
+          </Tooltip.Positioner>
+        </Portal>
+      </Tooltip.Root>
+    )
+  }
+
+  return button
 }
 
 export default SidebarItem

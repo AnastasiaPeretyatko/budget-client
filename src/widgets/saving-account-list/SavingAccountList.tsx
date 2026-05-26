@@ -3,12 +3,23 @@ import { fetchSavingAccountsThunk } from '@/entities/saving-account'
 import { SavingAccountCard } from '@/entities/saving-account'
 import { CreateSavingModal } from '@/features/saving-account-management'
 import { Flex } from '@chakra-ui/react'
-import React, { useEffect } from 'react'
+import { useRouter } from 'next/router'
+import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
-const SavingAccountList = () => {
+type Props = {
+  isDisplayCreteModal?: boolean
+}
+
+const SavingAccountList = ({ isDisplayCreteModal = false }: Props) => {
   const dispatch = useDispatch<AppDispatch>()
+  const router = useRouter()
+
   const { savingAccounts } = useSelector((state: RootState) => state.savingAccounts)
+
+  const handleOpenBudgetClick = (id: string) => {
+    router.push(`/budgets/${id}`)
+  }
 
   useEffect(() => {
     dispatch(fetchSavingAccountsThunk())
@@ -16,10 +27,14 @@ const SavingAccountList = () => {
 
   return (
     <Flex gap={4}>
-      <CreateSavingModal/>
+      {isDisplayCreteModal && <CreateSavingModal/>}
       {
         savingAccounts.map((account) => (
-          <SavingAccountCard key={account.id} savingAccount={account}/>
+          <SavingAccountCard
+            key={account.id}
+            savingAccount={account}
+            onClick={handleOpenBudgetClick}
+          />
         ))
       }
     </Flex>
