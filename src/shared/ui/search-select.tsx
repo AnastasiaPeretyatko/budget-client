@@ -12,6 +12,7 @@ import {
   createListCollection,
 } from "@chakra-ui/react"
 import { useCallback, useEffect, useMemo, useRef, useState } from "react"
+import { COLOR } from '../config/colors'
 
 export type SearchSelectOption = {
   label: string
@@ -19,12 +20,13 @@ export type SearchSelectOption = {
 }
 
 type Props = {
-  fetchOptions: (search: string) => Promise<SearchSelectOption[]>
-  value?: string
-  onChange?: (value: string, option: SearchSelectOption) => void
-  onCreate?: (name: string) => Promise<SearchSelectOption>
-  placeholder?: string
-  debounceMs?: number
+  fetchOptions: (search: string) => Promise<SearchSelectOption[]>;
+  value?: string;
+  onChange?: (value: string, option: SearchSelectOption) => void;
+  onCreate?: (name: string) => Promise<SearchSelectOption>;
+  placeholder?: string;
+  debounceMs?: number;
+  label?: string;
 }
 
 const SearchSelect = ({
@@ -32,8 +34,9 @@ const SearchSelect = ({
   value,
   onChange,
   onCreate,
-  placeholder = "Выберите...",
+  placeholder = "Select...",
   debounceMs = 400,
+  label
 }: Props) => {
   const [items, setItems] = useState<SearchSelectOption[]>([])
   const [isLoading, setIsLoading] = useState(false)
@@ -139,9 +142,10 @@ const SearchSelect = ({
         size="sm"
         width="100%"
       >
-        <Combobox.Control>
-          <Combobox.Input placeholder={placeholder} />
-          <Combobox.IndicatorGroup>
+        <Combobox.Control display={"flex"} flexDir={'column'} gap={"1.5"}>
+          {label && <Combobox.Label color={COLOR.LABEL}>{label}</Combobox.Label>}
+          <Combobox.Input borderColor={COLOR.BORDER} placeholder={placeholder}  borderRadius={12}/>
+          <Combobox.IndicatorGroup bottom={"10px"} top={'auto'}>
             <Combobox.ClearTrigger />
             <Combobox.Trigger />
           </Combobox.IndicatorGroup>

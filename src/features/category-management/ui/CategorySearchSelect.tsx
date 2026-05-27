@@ -7,9 +7,10 @@ type Props = {
   onChange?: (value: string) => void
   placeholder?: string
   creatable?: boolean
+  label?: string
 }
 
-const CategorySearchSelect = ({ value, onChange, placeholder = "Категория", creatable = true }: Props) => {
+const CategorySearchSelect = ({ value, onChange, placeholder = "Select category", creatable = true, ...props }: Props) => {
   const fetchOptions = useCallback(async (search: string): Promise<SearchSelectOption[]> => {
     const res = await getAllCategoryRequest(search)
     return res.data.map((item) => ({
@@ -30,6 +31,7 @@ const CategorySearchSelect = ({ value, onChange, placeholder = "Категори
       onChange={(val) => onChange?.(val)}
       onCreate={creatable ? handleCreate : undefined}
       placeholder={placeholder}
+      {...props}
     />
   )
 }

@@ -12,12 +12,12 @@ export type GetAllTransactionArgs = {
     limit?: number;
     offset?: number;
   };
-  filter: {
+  filter?: {
     fromAccountId?: string;
     toAccountId?: string;
     categoryId?: string;
     accountId?: string;
-    date: {between: string[]}
+    date?: {between: string[]}
   };
 };
 

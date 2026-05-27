@@ -1,8 +1,7 @@
 import { AppDispatch, RootState } from '@/app/store'
-import { fetchSavingAccountByIdThunk, SavingAccountCard } from '@/entities/saving-account'
-import { TransactionTable, TransactionTableHeader } from '@/features/transaction-management'
-import CreateTransactionModal from '@/features/transaction-management/ui/CreateTransactionModal'
-import { Heading, HStack, VStack } from '@chakra-ui/react'
+import { fetchSavingAccountByIdThunk } from '@/entities/saving-account'
+import TransactionTabs from '@/widgets/transaction-page/TransactionTabs'
+import { Heading, VStack } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
@@ -22,13 +21,9 @@ const BudgetPage = () => {
 
   return (
     <VStack width={'100%'} padding={4} gap={4} align={'start'}>
-      <Heading size={'2xl'}>{activeSavingAccount.name}</Heading>
-      <HStack width={'100%'} justify={'space-between'} gap={4}>
-        <SavingAccountCard savingAccount={activeSavingAccount} />
-        <CreateTransactionModal />
-      </HStack>
-      <TransactionTableHeader/>
-      <TransactionTable accountId={id}/>
+      <TransactionTabs>
+        <Heading size={'2xl'} mt={1} whiteSpace={'nowrap'}>{activeSavingAccount.name}</Heading>
+      </TransactionTabs>
     </VStack>
   )
 }

@@ -25,7 +25,7 @@ const transactions = createSlice({
         state.error = undefined
       })
       .addCase(createTransactionThunk.fulfilled, (state, { payload }) => {
-        state.transactions.push(payload)
+        state.transactions.unshift(payload)
       })
       .addCase(createTransactionThunk.rejected, (state, { payload }) => {
         state.error = payload

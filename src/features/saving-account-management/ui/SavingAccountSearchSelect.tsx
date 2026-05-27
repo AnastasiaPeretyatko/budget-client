@@ -7,9 +7,10 @@ type Props = {
   onChange?: (value: string) => void
   placeholder?: string
   creatable?: boolean
+  label?: string
 }
 
-const SavingAccountSearchSelect = ({ value, onChange, placeholder = "Накопительный счёт", creatable = true }: Props) => {
+const SavingAccountSearchSelect = ({ value, onChange, placeholder = "Накопительный счёт", creatable = true, ...props }: Props) => {
   const fetchOptions = useCallback(async (search: string): Promise<SearchSelectOption[]> => {
     const res = await getAllSavingRequest(search)
     return res.data.map((item) => ({
@@ -30,6 +31,7 @@ const SavingAccountSearchSelect = ({ value, onChange, placeholder = "Накоп�
       onChange={(val) => onChange?.(val)}
       onCreate={creatable ? handleCreate : undefined}
       placeholder={placeholder}
+      {...props}
     />
   )
 }

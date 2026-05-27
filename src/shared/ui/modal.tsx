@@ -4,18 +4,21 @@ import React, { useState } from 'react'
 type Props = {
   title: string;
   description?: string;
-  children: React.ReactNode;
+  children: React.ReactNode | ((close: () => void) => React.ReactNode);
   buttonTrigger: React.ReactNode;
-  onClickSave: (close: () => void) => void
+  onClickSave?: (close: () => void) => void;
+  showFooter?: boolean;
 }
 
-const BaseModal = ({ title, description, children, buttonTrigger, onClickSave }: Props) => {
+const BaseModal = ({ title, description, children, buttonTrigger, onClickSave, showFooter = true }: Props) => {
   const [open, setOpen] = useState(false)
 
   const close = () => setOpen(false)
 
+  const renderedChildren = typeof children === 'function' ? children(close) : children
+
   return (
-    <Dialog.Root placement={'center'} open={open} onOpenChange={e => setOpen(e.open)}>
+    <Dialog.Root size={'md'} placement={'center'} open={open} onOpenChange={e => setOpen(e.open)}>
       <Dialog.Trigger>
         {buttonTrigger}
       </Dialog.Trigger>
@@ -27,14 +30,16 @@ const BaseModal = ({ title, description, children, buttonTrigger, onClickSave }:
               <Dialog.Title>{title}</Dialog.Title>
             </Dialog.Header>
             <Dialog.Body display={'flex'} flexDir={'column'} gap={4}>
-              {children}
+              {renderedChildren}
             </Dialog.Body>
-            <Dialog.Footer>
-              <Dialog.ActionTrigger asChild>
-                <Button variant="outline">Отмена</Button>
-              </Dialog.ActionTrigger>
-              <Button onClick={() =>onClickSave(close)}>Сохранить</Button>
-            </Dialog.Footer>
+            {showFooter && (
+              <Dialog.Footer>
+                <Dialog.ActionTrigger asChild>
+                  <Button variant="outline">Отмена</Button>
+                </Dialog.ActionTrigger>
+                <Button size="sm" onClick={() => onClickSave?.(close)}>Сохранить</Button>
+              </Dialog.Footer>
+            )}
             <Dialog.CloseTrigger asChild>
               <CloseButton size="sm" />
             </Dialog.CloseTrigger>
