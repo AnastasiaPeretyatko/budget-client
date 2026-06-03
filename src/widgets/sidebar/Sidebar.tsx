@@ -1,9 +1,10 @@
-import { Box, Flex, Heading, IconButton, Separator, Spacer, Text, VStack } from '@chakra-ui/react'
+import { Flex, Heading, IconButton, Separator, VStack } from '@chakra-ui/react'
 import React, { createContext, ReactElement, useContext, useState } from 'react'
 import SidebarItem from './SidebarItem'
 import PiggyBankIcon from '@/shared/icon/PiggyBankIcon'
 import { LuLayoutDashboard, LuUser, LuPanelLeftClose, LuPanelLeftOpen } from 'react-icons/lu'
 import { ColorModeButton } from '@/shared/ui/color-mode'
+import { MdCalendarViewMonth, MdOutlineSettings } from 'react-icons/md'
 
 export type SidebarItemProps = {
   title: string
@@ -30,6 +31,16 @@ const SIDEBAR_LIST: SidebarItemProps[] = [
     icon: <LuUser />,
     path: '/profile',
   },
+  {
+    title: 'Settings',
+    icon: <MdOutlineSettings/>,
+    path: '/settings'
+  },
+  {
+    title: 'View',
+    icon: <MdCalendarViewMonth/>,
+    path: '/view'
+  }
 ]
 
 const SIDEBAR_WIDTH_EXPANDED = '240px'

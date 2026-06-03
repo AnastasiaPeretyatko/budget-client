@@ -1,7 +1,8 @@
 
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { getAllWorkspaceRequest, postWorkspaceRequest } from './workspace.service';
-import { BaseWorkspaceType, WorkspaceListType } from '../types/workspace.type';
+import { getAllWorkspaceRequest, getCurrentWorkspaceRequest, inviteUser, postWorkspaceRequest } from './workspace.service';
+import { AuthUser } from '@/entities/auth';
+import { BaseWorkspaceType, WorkspaceListType, WorkspaceType } from '../types/workspace.type';
 
 export const createWorkspaceThunk = createAsyncThunk<
   WorkspaceListType,
@@ -26,6 +27,36 @@ export const fetchWorkspacesThunk = createAsyncThunk<
   try {
     const res = await getAllWorkspaceRequest();
     return res.data;
+  } catch (error) {
+    return rejectWithValue(
+      error instanceof Error ? error.message : 'Unknown error'
+    );
+  }
+});
+
+export const fetchCurrentWorkspaceThunk = createAsyncThunk<
+  WorkspaceType,
+  void,
+  { rejectValue: string }
+>('workspace/getCurrent', async (_, { rejectWithValue }) => {
+  try {
+    const res = await getCurrentWorkspaceRequest();
+    return res.data;
+  } catch (error) {
+    return rejectWithValue(
+      error instanceof Error ? error.message : 'Unknown error'
+    );
+  }
+});
+
+export const inviteUserThunk = createAsyncThunk<
+  AuthUser[],
+  { emails: string[] },
+  { rejectValue: string }
+>('workspace/inviteUser', async (data, { rejectWithValue }) => {
+  try {
+    const res = await inviteUser(data);
+    return res.data.data;
   } catch (error) {
     return rejectWithValue(
       error instanceof Error ? error.message : 'Unknown error'

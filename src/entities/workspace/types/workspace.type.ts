@@ -1,3 +1,5 @@
+import { AuthUser } from '@/entities/auth'
+
 export type BaseWorkspaceType = {
   title: string
 }
@@ -13,6 +15,7 @@ export type WorkspaceType = BaseWorkspaceType & {
   createdAt: string
   updatedAt: string
   deletedAt: string | null
+  users: AuthUser[]
 }
 
 export type WorkspaceListType = WorkspaceType & {

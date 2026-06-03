@@ -1,6 +1,7 @@
 import { AppDispatch, RootState } from '@/app/store'
 import { fetchTransactionsThunk } from '@/entities/transaction'
 import TransactionCard from '@/entities/transaction/ui/TransactionCard'
+import { COLOR } from '@/shared/config/colors'
 import { Text, VStack } from '@chakra-ui/react'
 import moment from 'moment'
 import React, { useEffect } from 'react'
@@ -18,9 +19,13 @@ const TransactionList = ({ accountId }: Props) => {
   useEffect(() => {
     if (accountId) {
       // const filter = accountId ? { accountId }: {}
-      dispatch(fetchTransactionsThunk({ filter: {} }))
+      dispatch(fetchTransactionsThunk({ filter: { accountId } }))
     }
   }, [dispatch, accountId])
+
+  if (!transactions.length) {
+    return <Text fontSize={'sm'} color={COLOR.LABEL}>You have no transactions for the current period</Text>
+  }
 
   return (
     <VStack width={'100%'} align={'start'}>

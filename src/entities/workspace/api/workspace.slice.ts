@@ -1,9 +1,10 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { fetchWorkspacesThunk, createWorkspaceThunk } from './workspace.thunk'
-import { WorkspaceListType } from '../types/workspace.type'
+import { fetchWorkspacesThunk, createWorkspaceThunk, fetchCurrentWorkspaceThunk, inviteUserThunk } from './workspace.thunk'
+import { WorkspaceListType, WorkspaceType } from '../types/workspace.type'
 
 type WorkspaceState = {
   workspaces: WorkspaceListType[]
+  currentWorkspace: WorkspaceType | null
   activeWorkspaceId: string | null
   isLoading: boolean
   error?: string
@@ -11,6 +12,7 @@ type WorkspaceState = {
 
 const initialState: WorkspaceState = {
   workspaces: [],
+  currentWorkspace: null,
   activeWorkspaceId: null,
   isLoading: false
 }
@@ -47,6 +49,26 @@ const workspaces = createSlice({
         state.workspaces.push(payload)
       })
       .addCase(createWorkspaceThunk.rejected, (state, { payload }) => {
+        state.error = payload
+      })
+      .addCase(fetchCurrentWorkspaceThunk.pending, state => {
+        state.isLoading = true
+        state.error = undefined
+      })
+      .addCase(fetchCurrentWorkspaceThunk.fulfilled, (state, { payload }) => {
+        state.isLoading = false
+        state.currentWorkspace = payload
+      })
+      .addCase(fetchCurrentWorkspaceThunk.rejected, (state, { payload }) => {
+        state.isLoading = false
+        state.error = payload
+      })
+      .addCase(inviteUserThunk.fulfilled, (state, { payload }) => {
+        if (state.currentWorkspace) {
+          state.currentWorkspace.users = [...state.currentWorkspace.users, ...payload]
+        }
+      })
+      .addCase(inviteUserThunk.rejected, (state, { payload }) => {
         state.error = payload
       })
   }

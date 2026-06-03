@@ -32,7 +32,7 @@ export function AppGuard({ Component, pageProps }: AppGuardProps) {
       if (localToken) {
         dispatch(setToken(localToken));
         if (isPublic) {
-          router.push('/')
+          router.push('/dashboard')
         }
       }
 

@@ -10,7 +10,7 @@ const TransactionsHistoryBlock = () => {
   return (
     <VStack width={'100%'} align={'start'} gap={4}>
       <HStack width={'100%'} justify={'space-between'}>
-        <Heading size={'md'} color={'gray.400'}>Transactions</Heading>
+        <Heading size={'md'}>Transactions</Heading>
         <AddTransactionModal/>
       </HStack>
       <TransactionList accountId={activeSavingAccount!.id}/>

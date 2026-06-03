@@ -20,7 +20,7 @@ const BaseDatePicker = ({ selectionMode, label, defaultDate, onChangeValue }: Pr
   }
 
   return (
-    <DatePicker.Root selectionMode={selectionMode} maxWidth="20rem" value={value} onValueChange={handleChengeDate}>
+    <DatePicker.Root selectionMode={selectionMode} maxWidth="20rem" value={value} onValueChange={handleChengeDate} locale="en-GB">
       {label && <DatePicker.Label>{label}</DatePicker.Label>}
       <DatePicker.Control>
         <DatePicker.Input index={0} />
