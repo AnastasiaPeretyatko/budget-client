@@ -1,3 +1,4 @@
-export { default as TransactionTable } from './ui/TransactionTable'
-export { default as TransactionCreateRow } from './ui/TransactionCreateRow'
-export { default as TransactionTableHeader } from './ui/TransactionTableHeader'
+export { default as AddTransactionModal } from './ui/AddTransactionModal'
+export { default as ExpenceTransactionModal } from './ui/ExpenceTransactionModal'
+export { default as IncomeTransactionModal } from './ui/IncomeTransactionModal'
+export { default as TransferTransactionModal } from './ui/TransferTransactionModal'
