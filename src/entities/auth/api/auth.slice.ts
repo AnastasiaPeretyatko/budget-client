@@ -7,6 +7,7 @@ type AuthState = {
   token: string | null
   isAuth: boolean
   isLoading: boolean
+  isSubmitting: boolean
   error?: string
 }
 
@@ -14,7 +15,8 @@ const initialState: AuthState = {
   user: null,
   token: null,
   isAuth: false,
-  isLoading: true
+  isLoading: true,
+  isSubmitting: false
 }
 
 const auth = createSlice({
@@ -37,30 +39,32 @@ const auth = createSlice({
   extraReducers: builder => {
     builder
       .addCase(loginThunk.pending, state => {
-        state.isLoading = true
+        state.isSubmitting = true
         state.error = undefined
       })
       .addCase(loginThunk.fulfilled, (state, { payload }) => {
         state.user = payload.user
+        state.token = payload.token
         state.isAuth = true
-        state.isLoading = false
+        state.isSubmitting = false
       })
       .addCase(loginThunk.rejected, (state, { payload }) => {
         state.error = payload
-        state.isLoading = false
+        state.isSubmitting = false
       })
       .addCase(registerThunk.pending, state => {
-        state.isLoading = true
+        state.isSubmitting = true
         state.error = undefined
       })
       .addCase(registerThunk.fulfilled, (state, { payload }) => {
         state.user = payload.user
+        state.token = payload.token
         state.isAuth = true
-        state.isLoading = false
+        state.isSubmitting = false
       })
       .addCase(registerThunk.rejected, (state, { payload }) => {
         state.error = payload
-        state.isLoading = false
+        state.isSubmitting = false
       })
   }
 })

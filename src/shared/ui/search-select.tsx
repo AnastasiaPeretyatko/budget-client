@@ -6,6 +6,7 @@ import {
   CloseButton,
   Combobox,
   Dialog,
+  Field,
   Portal,
   Spinner,
   Text,
@@ -27,6 +28,8 @@ type Props = {
   placeholder?: string;
   debounceMs?: number;
   label?: string;
+  invalid?: boolean;
+  errorText?: string;
 }
 
 const SearchSelect = ({
@@ -36,7 +39,9 @@ const SearchSelect = ({
   onCreate,
   placeholder = "Select...",
   debounceMs = 400,
-  label
+  label,
+  invalid,
+  errorText
 }: Props) => {
   const [items, setItems] = useState<SearchSelectOption[]>([])
   const [isLoading, setIsLoading] = useState(false)
@@ -144,7 +149,7 @@ const SearchSelect = ({
       >
         <Combobox.Control display={"flex"} flexDir={'column'} gap={"1.5"}>
           {label && <Combobox.Label color={COLOR.LABEL}>{label}</Combobox.Label>}
-          <Combobox.Input borderColor={COLOR.BORDER} placeholder={placeholder}  borderRadius={12}/>
+          <Combobox.Input borderColor={invalid ? 'red.500' : COLOR.BORDER} placeholder={placeholder}  borderRadius={12}/>
           <Combobox.IndicatorGroup bottom={"10px"} top={'auto'}>
             <Combobox.ClearTrigger />
             <Combobox.Trigger />
@@ -183,6 +188,11 @@ const SearchSelect = ({
           </Combobox.Content>
         </Combobox.Positioner>
       </Combobox.Root>
+      {invalid && errorText && (
+        <Field.Root invalid>
+          <Field.ErrorText>{errorText}</Field.ErrorText>
+        </Field.Root>
+      )}
 
       <Dialog.Root open={isConfirmOpen} onOpenChange={(e) => { if (!e.open) handleCancelCreate() }} placement="center">
         <Portal>

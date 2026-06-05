@@ -12,12 +12,14 @@ const RegisterForm = () => {
   const { showErrorMessage } = useNotifications()
   const router = useRouter()
 
-  const { isLoading } = useSelector((state: RootState) => state.auth)
+  const { isSubmitting } = useSelector((state: RootState) => state.auth)
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     const data = new FormData(event.currentTarget)
     const credentials = {
+      firstName: data.get('firstName')?.toString() || '',
+      lastName: data.get('lastName')?.toString() || '',
       email: data.get('email')?.toString() || '',
       password: data.get('password')?.toString() || '',
     }
@@ -29,10 +31,12 @@ const RegisterForm = () => {
   }
   return (
     <chakra.form onSubmit={handleSubmit} autoComplete="on" display="flex" flexDirection="column" gap={4}>
+      <FieldInput placeholder='Имя' label='First Name' name='firstName' type='text' autoComplete='given-name'/>
+      <FieldInput placeholder='Фамилия' label='Last Name' name='lastName' type='text' autoComplete='family-name'/>
       <FieldInput placeholder='Email' label='Email' name='email' type='email' autoComplete='email'/>
       <FieldInput placeholder='Пароль' label='Password' name='password' type='password' autoComplete='current-password'/>
       <Link width={'100%'} justifyContent={'end'} color={'gray.400'}>Забыл пароль?</Link>
-      <Button width={'100%'} type='submit' loading={isLoading}>Войти</Button>
+      <Button width={'100%'} type='submit' loading={isSubmitting}>Войти</Button>
     </chakra.form>
   )
 }

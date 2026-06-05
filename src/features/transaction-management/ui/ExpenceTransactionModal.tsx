@@ -21,9 +21,19 @@ const ExpenceTransactionModal = ({ onClose }: Props) => {
   const [date, setDate] = useState('')
   const [categoryId, setCategoryId] = useState('')
   const [isLoading, setIsLoading] = useState(false)
+  const [errors, setErrors] = useState<Record<string, string>>({})
+
+  const validate = () => {
+    const newErrors: Record<string, string> = {}
+    if (!amount.trim()) newErrors.amount = 'Обязательное поле'
+    if (!description.trim()) newErrors.description = 'Обязательное поле'
+    setErrors(newErrors)
+    return Object.keys(newErrors).length === 0
+  }
 
   const handleSave = async () => {
     if (!activeSavingAccount) return
+    if (!validate()) return
     setIsLoading(true)
     try {
       await dispatch(createTransactionThunk({
@@ -44,8 +54,8 @@ const ExpenceTransactionModal = ({ onClose }: Props) => {
   return (
     <VStack width={'100%'} gap={4}>
       <HStack width={'100%'} gap={4}>
-        <FieldInput label="Amount" onChange={(e) => setAmount(e.target.value)} required/>
-        <FieldInput label="Description" onChange={(e) => setDescription(e.target.value)} required/>
+        <FieldInput label="Amount" onChange={(e) => { setAmount(e.target.value); setErrors((prev) => ({ ...prev, amount: '' })) }} required invalid={!!errors.amount} errorText={errors.amount}/>
+        <FieldInput label="Description" onChange={(e) => { setDescription(e.target.value); setErrors((prev) => ({ ...prev, description: '' })) }} required invalid={!!errors.description} errorText={errors.description}/>
       </HStack>
       <CategorySearchSelect label='Category' value={categoryId} onChange={(val) => setCategoryId(val)}/>
       <FieldInput label='Event day' onChange={(e) => setDate(e.target.value)} type='date'/>

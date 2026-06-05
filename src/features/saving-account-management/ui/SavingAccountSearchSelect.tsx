@@ -8,6 +8,8 @@ type Props = {
   placeholder?: string
   creatable?: boolean
   label?: string
+  invalid?: boolean
+  errorText?: string
 }
 
 const SavingAccountSearchSelect = ({ value, onChange, placeholder = "Накопительный счёт", creatable = true, ...props }: Props) => {

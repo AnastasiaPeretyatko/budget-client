@@ -4,43 +4,33 @@ import { COLOR } from '../config/colors';
 
 type Props = {
   required?: boolean;
-  // placeholder?: string;
   helperText?: string;
   label?: string;
-  // onChange: (val: string) => void;
+  invalid?: boolean;
+  errorText?: string;
   type?: React.HTMLInputTypeAttribute;
 } & InputProps
 
 const FieldInput = ({
   required,
-  // placeholder,
   helperText,
   label,
-  // onChange,
-  // type,
+  invalid,
+  errorText,
   ...props
 }:Props) => {
-  // const [value, setValue] = useState('')
-
-  // useEffect(() => {
-  //   onChange(value)
-  // }, [onChange, value])
-
   return (
-    <Field.Root required={required}>
+    <Field.Root required={required} invalid={invalid}>
       {label && <Field.Label color={COLOR.LABEL}>
         {label} {required && <Field.RequiredIndicator />}
       </Field.Label>}
       <Input
-        // placeholder={placeholder}
-        // value={value}
-        // onChange={(e) => setValue(e.target.value)}
-        // type={type}
         borderRadius={12}
-        borderColor={COLOR.BORDER}
+        borderColor={invalid ? 'red.500' : COLOR.BORDER}
         {...props}
       />
-      {helperText && <Field.HelperText>{helperText}</Field.HelperText>}
+      {errorText && <Field.ErrorText>{errorText}</Field.ErrorText>}
+      {helperText && !errorText && <Field.HelperText>{helperText}</Field.HelperText>}
     </Field.Root>
   )
 }
