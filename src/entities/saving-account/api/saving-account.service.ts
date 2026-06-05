@@ -11,3 +11,5 @@ export const getSavingByIdRequest = (id: string) =>
 
 export const deleteSavingRequest = (id: string) => http.delete(`/saving/${id}`)
 
+export const archiveSavingRequest = (id: string) => http.delete(`/saving/${id}/archive`)
+

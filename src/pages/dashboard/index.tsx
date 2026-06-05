@@ -1,6 +1,5 @@
 import AddBillingPerodButton from '@/features/billing_period/AddBillingPerodButton';
 import { SavingAccountList } from '@/widgets/saving-account-list';
-import DashboardAnalytics from '@/widgets/dashboard/DashboardAnalytics';
 import DashboardTransactions from '@/widgets/dashboard/DashboardTransactions';
 import DashboardSummaryCards from '@/widgets/dashboard/DashboardSummaryCards';
 import DashboardActivityCalendar from '@/widgets/dashboard/DashboardActivityCalendar';
@@ -19,7 +18,7 @@ export default function DashboardPage() {
           <VStack width={'100%'} align={'start'} gap={6}>
             <DashboardSummaryCards/>
             <DashboardActivityCalendar/>
-            <DashboardAnalytics/>
+            {/* <DashboardAnalytics/> */}
             <DashboardTransactions/>
           </VStack>
         </GridItem>

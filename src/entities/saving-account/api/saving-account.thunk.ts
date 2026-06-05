@@ -1,7 +1,7 @@
 
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { BaseSavingAccountType, SavingAccountType } from '../types/saving-account.type';
-import { deleteSavingRequest, getAllSavingRequest, getSavingByIdRequest, postSavingRequest } from './saving-account.service';
+import { archiveSavingRequest, deleteSavingRequest, getAllSavingRequest, getSavingByIdRequest, postSavingRequest } from './saving-account.service';
 
 export const createSavingAccountThunk = createAsyncThunk<
   SavingAccountType,
@@ -55,6 +55,21 @@ export const deleteSavingAccountThunk = createAsyncThunk<
 >('saving/delete', async (id, { rejectWithValue }) => {
   try {
     await deleteSavingRequest(id);
+    return id;
+  } catch (error) {
+    return rejectWithValue(
+      error instanceof Error ? error.message : 'Unknown error'
+    );
+  }
+});
+
+export const archiveSavingAccountThunk = createAsyncThunk<
+  string,
+  string,
+  { rejectValue: string }
+>('saving/archive', async (id, { rejectWithValue }) => {
+  try {
+    await archiveSavingRequest(id);
     return id;
   } catch (error) {
     return rejectWithValue(

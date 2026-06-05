@@ -33,9 +33,9 @@ const SidebarItem = ({ title, icon, path }: SidebarItemProps) => {
 
   if (collapsed) {
     return (
-      <Tooltip.Root openDelay={200}>
-        <Tooltip.Trigger asChild>{button}</Tooltip.Trigger>
-        <Portal>
+      <Tooltip.Root openDelay={200} positioning={{ placement: 'right' }}>
+        <Tooltip.Trigger asChild >{button}</Tooltip.Trigger>
+        <Portal >
           <Tooltip.Positioner>
             <Tooltip.Content>{title}</Tooltip.Content>
           </Tooltip.Positioner>

@@ -1,6 +1,6 @@
 
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { getAllWorkspaceRequest, getCurrentWorkspaceRequest, inviteUser, postWorkspaceRequest } from './workspace.service';
+import { getAllWorkspaceRequest, getCurrentWorkspaceRequest, inviteUser, postWorkspaceRequest, removeWorkspaceUser } from './workspace.service';
 import { AuthUser } from '@/entities/auth';
 import { BaseWorkspaceType, WorkspaceListType, WorkspaceType } from '../types/workspace.type';
 
@@ -42,6 +42,21 @@ export const fetchCurrentWorkspaceThunk = createAsyncThunk<
   try {
     const res = await getCurrentWorkspaceRequest();
     return res.data;
+  } catch (error) {
+    return rejectWithValue(
+      error instanceof Error ? error.message : 'Unknown error'
+    );
+  }
+});
+
+export const removeWorkspaceUserThunk = createAsyncThunk<
+  string,
+  string,
+  { rejectValue: string }
+>('workspace/removeUser', async (userId, { rejectWithValue }) => {
+  try {
+    await removeWorkspaceUser(userId);
+    return userId;
   } catch (error) {
     return rejectWithValue(
       error instanceof Error ? error.message : 'Unknown error'

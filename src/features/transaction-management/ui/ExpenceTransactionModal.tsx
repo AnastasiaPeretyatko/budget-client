@@ -6,6 +6,7 @@ import FieldInput from '@/shared/ui/FieldInput'
 import { Button, HStack, VStack } from '@chakra-ui/react'
 import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import { TransactionTypeEnum } from '@/entities/transaction/types/transaction.type'
 
 type Props = {
   onClose: () => void
@@ -31,6 +32,7 @@ const ExpenceTransactionModal = ({ onClose }: Props) => {
         amount,
         description: description || null,
         date: new Date(date),
+        type: TransactionTypeEnum.EXPENSE
       })).unwrap()
       dispatch(fetchSavingAccountByIdThunk(activeSavingAccount.id))
       onClose()
@@ -42,11 +44,11 @@ const ExpenceTransactionModal = ({ onClose }: Props) => {
   return (
     <VStack width={'100%'} gap={4}>
       <HStack width={'100%'} gap={4}>
-        <FieldInput label="Amount" onChange={(val) => setAmount(val)} required/>
-        <FieldInput label="Description" onChange={(val) => setDescription(val)} required/>
+        <FieldInput label="Amount" onChange={(e) => setAmount(e.target.value)} required/>
+        <FieldInput label="Description" onChange={(e) => setDescription(e.target.value)} required/>
       </HStack>
       <CategorySearchSelect label='Category' value={categoryId} onChange={(val) => setCategoryId(val)}/>
-      <FieldInput label='Event day' onChange={(val) => setDate(val)} type='date'/>
+      <FieldInput label='Event day' onChange={(e) => setDate(e.target.value)} type='date'/>
       <Button width={'100%'} size="sm" borderRadius={10} onClick={handleSave} loading={isLoading}>
         Save
       </Button>

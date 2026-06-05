@@ -8,9 +8,11 @@ type Props = {
   buttonTrigger: React.ReactNode;
   onClickSave?: (close: () => void) => void;
   showFooter?: boolean;
+  confirmLabel?: string;
+  confirmColorPalette?: string;
 }
 
-const BaseModal = ({ title, description, children, buttonTrigger, onClickSave, showFooter = true }: Props) => {
+const BaseModal = ({ title, description, children, buttonTrigger, onClickSave, showFooter = true, confirmLabel = 'Сохранить', confirmColorPalette }: Props) => {
   const [open, setOpen] = useState(false)
 
   const close = () => setOpen(false)
@@ -37,7 +39,7 @@ const BaseModal = ({ title, description, children, buttonTrigger, onClickSave, s
                 <Dialog.ActionTrigger asChild>
                   <Button variant="outline">Отмена</Button>
                 </Dialog.ActionTrigger>
-                <Button size="sm" onClick={() => onClickSave?.(close)}>Сохранить</Button>
+                <Button size="sm" colorPalette={confirmColorPalette} onClick={() => onClickSave?.(close)}>{confirmLabel}</Button>
               </Dialog.Footer>
             )}
             <Dialog.CloseTrigger asChild>

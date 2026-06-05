@@ -9,6 +9,7 @@ export type BaseTransactionType = {
   amount: string;
   description?: string | null;
   date: Date;
+  type: TransactionTypeEnum;
 }
 
 export type TransactionType = {
@@ -17,5 +18,12 @@ export type TransactionType = {
   toAccount?: SavingAccountType | null;
   category?: CategoryType | null;
   createdById: string | null;
-  createdBy: BaseUserType | null
+  createdBy: BaseUserType | null;
+  type: TransactionTypeEnum;
 } & BaseTransactionType
+
+export enum TransactionTypeEnum {
+  EXPENSE = 'expense',
+  INCOME = 'income',
+  TRANSFER = 'transfer',
+}

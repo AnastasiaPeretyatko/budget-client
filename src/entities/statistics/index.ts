@@ -4,6 +4,8 @@ export type {
   StatisticsByCategoryDto,
   PeriodComparisonResponse,
   ActivityItem,
+  TotalSummaryResponse,
+  TopExpenseItem,
 } from './types/statistics.type'
-export { fetchStatisticsByCategoryThunk, fetchPeriodComparisonThunk, fetchActivityThunk } from './api/statistics.thunk'
+export { fetchStatisticsByCategoryThunk, fetchPeriodComparisonThunk, fetchActivityThunk, fetchTotalSummaryThunk, fetchTopExpensesThunk } from './api/statistics.thunk'
 export { default as statisticsReducer } from './api/statistics.slice'

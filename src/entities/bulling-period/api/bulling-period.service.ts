@@ -18,3 +18,6 @@ export const updateBillingPeriodRequest = (
 
 export const getDaysFromStartRequest = (): Promise<AxiosResponse<{ days: number }>> =>
   http.get('/billing-period/days-from-start')
+
+export const getLatestActivePeriod = (): Promise<AxiosResponse<{startDate: string; endDate: string}>> =>
+  http.get('/billing-period/latest')

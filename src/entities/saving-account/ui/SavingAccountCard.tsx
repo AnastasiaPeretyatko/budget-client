@@ -9,7 +9,7 @@ type Props = {
 
 const SavingAccountCard = ({ savingAccount, onClick }: Props) => {
   return (
-    <Card.Root width={64} minH={'100%'} _hover={{ cursor: 'pointer', backgroundColor: 'gray.900' }} onClick={() => onClick && onClick(savingAccount.id)}>
+    <Card.Root width="100%" minW={72} minH={'100%'} _hover={{ cursor: 'pointer', backgroundColor: 'gray.900' }} onClick={() => onClick && onClick(savingAccount.id)}>
       <Card.Body display={'flex'} flexDirection={'column'} padding={4} gap={4}>
         <HStack width={'100%'} gap={4}>
           <Box minW={10} minH={10} borderRadius={"100%"} backgroundColor={'gray.800'}/>

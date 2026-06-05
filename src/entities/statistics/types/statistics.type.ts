@@ -30,7 +30,25 @@ export type PeriodComparisonResponse = {
   previous: StatisticsByCategoryResponse
 }
 
+export type TotalSummaryResponse = {
+  totalSpent: string
+  totalIncome: string
+}
+
+export type TopExpenseItem = {
+  id: string
+  amount: string
+  description?: string | null
+  date: string
+  category?: {
+    id: string
+    name: string
+    icon?: string
+  } | null
+}
+
 export type ActivityItem = {
   date: string
   count: number
 }
+

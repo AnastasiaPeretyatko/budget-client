@@ -18,6 +18,7 @@ export type GetAllTransactionArgs = {
     categoryId?: string;
     accountId?: string;
     date?: {between: string[]}
+    type?: string;
   };
 };
 

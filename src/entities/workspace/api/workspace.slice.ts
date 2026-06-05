@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { fetchWorkspacesThunk, createWorkspaceThunk, fetchCurrentWorkspaceThunk, inviteUserThunk } from './workspace.thunk'
+import { fetchWorkspacesThunk, createWorkspaceThunk, fetchCurrentWorkspaceThunk, inviteUserThunk, removeWorkspaceUserThunk } from './workspace.thunk'
 import { WorkspaceListType, WorkspaceType } from '../types/workspace.type'
 
 type WorkspaceState = {
@@ -70,6 +70,11 @@ const workspaces = createSlice({
       })
       .addCase(inviteUserThunk.rejected, (state, { payload }) => {
         state.error = payload
+      })
+      .addCase(removeWorkspaceUserThunk.fulfilled, (state, { payload }) => {
+        if (state.currentWorkspace) {
+          state.currentWorkspace.users = state.currentWorkspace.users.filter(u => u.id !== payload)
+        }
       })
   }
 })

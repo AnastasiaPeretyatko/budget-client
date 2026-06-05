@@ -7,6 +7,7 @@ import { workspacesReducer } from '@/entities/workspace'
 import { billingPeriodReducer } from '@/entities/bulling-period'
 import { categoryReducer } from '@/entities/category'
 import { statisticsReducer } from '@/entities/statistics'
+import { userReducer } from '@/entities/user'
 
 export const store = configureStore({
   reducer: {
@@ -17,6 +18,7 @@ export const store = configureStore({
     billingPeriod: billingPeriodReducer,
     categories: categoryReducer,
     statistics: statisticsReducer,
+    user: userReducer,
   }
 })
 

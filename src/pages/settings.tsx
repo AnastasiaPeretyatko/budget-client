@@ -1,25 +1,50 @@
 import InvitePersonBlock from '@/widgets/workspace-settings/InvitePersonBlock'
 import { Heading, VStack } from '@chakra-ui/react'
 import { useEffect } from 'react'
-import { useDispatch } from 'react-redux'
-import { AppDispatch } from '@/app/store'
+import { useAppDispatch } from '@/app/store'
 import { fetchCurrentWorkspaceThunk } from '@/entities/workspace'
 import WorkspaceStartDay from '@/features/workspace-management/ui/WorkspaceStartDay'
+import BaseTabs from '@/shared/ui/tabs'
+import MyDetailsForm from '@/features/user-settings/ui/MyDetailsForm'
+import { LuSettings, LuUser } from 'react-icons/lu'
 
-const SettingsPage = () => {
-  const dispatch = useDispatch<AppDispatch>()
-  // const { currentWorkspace, isLoading } = useSelector((state: RootState) => state.workspaces)
+const WorkspaceSettingsTab = () => {
+  const dispatch = useAppDispatch()
 
   useEffect(() => {
     dispatch(fetchCurrentWorkspaceThunk())
   }, [dispatch])
 
   return (
-    <VStack width={'100%'} align={'start'}>
-      <Heading size={'2xl'}>Settings</Heading>
+    <VStack width={'100%'} align={'start'} gap={6} pt={4}>
+      <WorkspaceStartDay />
+      <InvitePersonBlock />
+    </VStack>
+  )
+}
 
-      <InvitePersonBlock/>
-      <WorkspaceStartDay/>
+const SettingsPage = () => {
+  const tabs = [
+    {
+      value: 'Мой профиль',
+      icon: <LuUser />,
+      component: (
+        <VStack width={'100%'} align={'start'} gap={6} pt={4}>
+          <MyDetailsForm />
+        </VStack>
+      ),
+    },
+    {
+      value: 'Рабочее пространство',
+      icon: <LuSettings />,
+      component: <WorkspaceSettingsTab />,
+    },
+  ]
+
+  return (
+    <VStack width={'100%'} align={'start'} gap={6}>
+      <Heading size={'2xl'}>Настройки</Heading>
+      <BaseTabs list={tabs} isBorder fitted={false} />
     </VStack>
   )
 }

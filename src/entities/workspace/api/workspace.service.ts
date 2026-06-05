@@ -11,3 +11,5 @@ export const postWorkspaceRequest = ({ title }: BaseWorkspaceType): Promise<Axio
 import { AuthUser } from '@/entities/auth';
 
 export const inviteUser = ({ emails }: {emails: string[]}): Promise<AxiosResponse<{ message: string, data: AuthUser[] }>> => http.post('/workspace/invite', { emails })
+
+export const removeWorkspaceUser = (userId: string): Promise<AxiosResponse<void>> => http.delete(`/workspace/users/${userId}`)

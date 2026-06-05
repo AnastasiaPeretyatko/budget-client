@@ -1,13 +1,14 @@
-import { Flex, Heading, IconButton, Separator, VStack } from '@chakra-ui/react'
+import { Flex, Heading, IconButton, Separator, Text, VStack } from '@chakra-ui/react'
 import React, { createContext, ReactElement, useContext, useState } from 'react'
 import SidebarItem from './SidebarItem'
 import PiggyBankIcon from '@/shared/icon/PiggyBankIcon'
-import { LuLayoutDashboard, LuUser, LuPanelLeftClose, LuPanelLeftOpen, LuLogOut } from 'react-icons/lu'
+import { LuLayoutDashboard, LuUser, LuPanelLeftClose, LuPanelLeftOpen, LuLogOut, LuArrowLeftRight } from 'react-icons/lu'
 import { ColorModeButton } from '@/shared/ui/color-mode'
-import { MdCalendarViewMonth, MdOutlineSettings } from 'react-icons/md'
+import { MdCalendarViewMonth, MdOutlineAnalytics, MdOutlineSettings } from 'react-icons/md'
 import { useRouter } from 'next/router'
 import { useAppDispatch } from '@/app/store'
 import { deleteToken, setIsAuth } from '@/entities/auth'
+import { clearActiveWorkspace } from '@/entities/workspace'
 
 export type SidebarItemProps = {
   title: string
@@ -25,9 +26,19 @@ const SIDEBAR_LIST: SidebarItemProps[] = [
     path: '/dashboard',
   },
   {
+    title: 'Analitics',
+    icon: <MdOutlineAnalytics/>,
+    path: '/analitics'
+  },
+  {
     title: 'Budgets',
     icon: <PiggyBankIcon size="md" />,
     path: '/budgets',
+  },
+  {
+    title: 'View',
+    icon: <MdCalendarViewMonth/>,
+    path: '/view'
   },
   {
     title: 'Profile',
@@ -39,11 +50,6 @@ const SIDEBAR_LIST: SidebarItemProps[] = [
     icon: <MdOutlineSettings/>,
     path: '/settings'
   },
-  {
-    title: 'View',
-    icon: <MdCalendarViewMonth/>,
-    path: '/view'
-  }
 ]
 
 const SIDEBAR_WIDTH_EXPANDED = '240px'
@@ -60,6 +66,12 @@ const Sidebar = () => {
     dispatch(deleteToken())
     dispatch(setIsAuth(false))
     router.push('/login')
+  }
+
+  const handleSwitchWorkspace = () => {
+    localStorage.removeItem('workspaceId')
+    dispatch(clearActiveWorkspace())
+    router.push('/workspaces')
   }
 
   return (
@@ -79,7 +91,7 @@ const Sidebar = () => {
       >
         <Flex align="center" justify={collapsed ? 'center' : 'start'} px={2} mb={4} minH="40px">
           {!collapsed && (
-            <Heading size="sm" textTransform="uppercase" truncate>
+            <Heading size="lg" textTransform="uppercase" truncate>
               Budget
             </Heading>
           )}
@@ -96,6 +108,27 @@ const Sidebar = () => {
         <VStack gap={1} align="stretch">
           <Flex justify={collapsed ? 'center' : 'start'} px={collapsed ? 0 : 1}>
             <ColorModeButton />
+          </Flex>
+          <Flex
+            align="center"
+            gap={2}
+            px={collapsed ? 0 : 1}
+            justify={collapsed ? 'center' : 'start'}
+            cursor="pointer"
+            onClick={handleSwitchWorkspace}
+            _hover={{ opacity: 0.8 }}
+          >
+            <IconButton
+              aria-label="Switch workspace"
+              variant="ghost"
+              size="sm"
+              as="span"
+            >
+              <LuArrowLeftRight />
+            </IconButton>
+            {!collapsed && (
+              <Text fontSize="sm" truncate>Switch workspace</Text>
+            )}
           </Flex>
           <Flex justify={collapsed ? 'center' : 'start'} px={collapsed ? 0 : 1}>
             <IconButton

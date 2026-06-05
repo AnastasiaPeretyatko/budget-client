@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { fetchStatisticsByCategoryThunk, fetchPeriodComparisonThunk, fetchActivityThunk } from './statistics.thunk'
-import { ActivityItem, CategoryStatisticsItem, UncategorizedStatistics, PeriodComparisonResponse } from '../types/statistics.type'
+import { fetchStatisticsByCategoryThunk, fetchPeriodComparisonThunk, fetchActivityThunk, fetchTotalSummaryThunk, fetchTopExpensesThunk } from './statistics.thunk'
+import { ActivityItem, CategoryStatisticsItem, TopExpenseItem, UncategorizedStatistics, PeriodComparisonResponse } from '../types/statistics.type'
 
 type StatisticsState = {
   totalSpent: number
@@ -12,6 +12,11 @@ type StatisticsState = {
   isComparisonLoading: boolean
   activity: ActivityItem[]
   isActivityLoading: boolean
+  workspaceTotalSpent: number
+  workspaceTotalIncome: number
+  isSummaryLoading: boolean
+  topExpenses: TopExpenseItem[]
+  isTopExpensesLoading: boolean
 }
 
 const initialState: StatisticsState = {
@@ -23,6 +28,11 @@ const initialState: StatisticsState = {
   isComparisonLoading: false,
   activity: [],
   isActivityLoading: false,
+  workspaceTotalSpent: 0,
+  workspaceTotalIncome: 0,
+  isSummaryLoading: false,
+  topExpenses: [],
+  isTopExpensesLoading: false,
 }
 
 const statisticsSlice = createSlice({
@@ -64,6 +74,27 @@ const statisticsSlice = createSlice({
       })
       .addCase(fetchActivityThunk.rejected, state => {
         state.isActivityLoading = false
+      })
+      .addCase(fetchTotalSummaryThunk.pending, state => {
+        state.isSummaryLoading = true
+      })
+      .addCase(fetchTotalSummaryThunk.fulfilled, (state, { payload }) => {
+        state.isSummaryLoading = false
+        state.workspaceTotalSpent = Number(payload.totalSpent)
+        state.workspaceTotalIncome = Number(payload.totalIncome)
+      })
+      .addCase(fetchTotalSummaryThunk.rejected, state => {
+        state.isSummaryLoading = false
+      })
+      .addCase(fetchTopExpensesThunk.pending, state => {
+        state.isTopExpensesLoading = true
+      })
+      .addCase(fetchTopExpensesThunk.fulfilled, (state, { payload }) => {
+        state.isTopExpensesLoading = false
+        state.topExpenses = payload
+      })
+      .addCase(fetchTopExpensesThunk.rejected, state => {
+        state.isTopExpensesLoading = false
       })
   },
 })

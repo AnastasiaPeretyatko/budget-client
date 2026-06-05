@@ -1,6 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit'
-import { getActivityRequest, getStatisticsByCategoryRequest } from './statistics.service'
-import { ActivityItem, StatisticsByCategoryDto, StatisticsByCategoryResponse, PeriodComparisonResponse } from '../types/statistics.type'
+import { getActivityRequest, getStatisticsByCategoryRequest, getTopExpensesRequest, getTotalSummaryRequest } from './statistics.service'
+import { ActivityItem, StatisticsByCategoryDto, StatisticsByCategoryResponse, PeriodComparisonResponse, TopExpenseItem, TotalSummaryResponse } from '../types/statistics.type'
 import { RootState } from '@/app/store'
 
 export const fetchStatisticsByCategoryThunk = createAsyncThunk<
@@ -62,6 +62,21 @@ export const fetchPeriodComparisonThunk = createAsyncThunk<
   }
 })
 
+export const fetchTotalSummaryThunk = createAsyncThunk<
+  TotalSummaryResponse,
+  void,
+  { rejectValue: string }
+>('statistics/fetchTotalSummary', async (_, { rejectWithValue }) => {
+  try {
+    const res = await getTotalSummaryRequest()
+    return res.data
+  } catch (error) {
+    return rejectWithValue(
+      error instanceof Error ? error.message : 'Unknown error'
+    )
+  }
+})
+
 export const fetchActivityThunk = createAsyncThunk<
   ActivityItem[],
   void,
@@ -69,6 +84,21 @@ export const fetchActivityThunk = createAsyncThunk<
 >('statistics/fetchActivity', async (_, { rejectWithValue }) => {
   try {
     const res = await getActivityRequest()
+    return res.data
+  } catch (error) {
+    return rejectWithValue(
+      error instanceof Error ? error.message : 'Unknown error'
+    )
+  }
+})
+
+export const fetchTopExpensesThunk = createAsyncThunk<
+  TopExpenseItem[],
+  void,
+  { rejectValue: string }
+>('statistics/fetchTopExpenses', async (_, { rejectWithValue }) => {
+  try {
+    const res = await getTopExpensesRequest()
     return res.data
   } catch (error) {
     return rejectWithValue(
