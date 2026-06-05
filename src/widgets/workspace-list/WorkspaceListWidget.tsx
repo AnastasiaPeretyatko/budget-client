@@ -1,5 +1,5 @@
 import { AppDispatch, RootState } from '@/app/store'
-import { Text, VStack } from '@chakra-ui/react'
+import { SimpleGrid, Text } from '@chakra-ui/react'
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { WorkspaceCardWidget } from '@/widgets/workspace-card'
@@ -20,11 +20,11 @@ const WorkspaceListWidget = () => {
   if (!workspaces.length) return <Text>Workspaces not found</Text>
 
   return (
-    <VStack gap={4}>
+    <SimpleGrid width={'100%'} height={'100%'} minChildWidth={'300px'} gap={4}>
       {
         workspaces.map(workspace => <WorkspaceCardWidget key={workspace.id} workspace={workspace}/>)
       }
-    </VStack>
+    </SimpleGrid>
   )
 }
 

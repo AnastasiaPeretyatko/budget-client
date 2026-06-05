@@ -1,8 +1,8 @@
 import { Flex, Heading, IconButton, Separator, Text, VStack } from '@chakra-ui/react'
-import React, { createContext, ReactElement, useContext, useState } from 'react'
+import { createContext, ReactElement, useContext, useState } from 'react'
 import SidebarItem from './SidebarItem'
 import PiggyBankIcon from '@/shared/icon/PiggyBankIcon'
-import { LuLayoutDashboard, LuUser, LuPanelLeftClose, LuPanelLeftOpen, LuLogOut, LuArrowLeftRight } from 'react-icons/lu'
+import { LuLayoutDashboard, LuPanelLeftClose, LuPanelLeftOpen, LuLogOut, LuArrowLeftRight } from 'react-icons/lu'
 import { ColorModeButton } from '@/shared/ui/color-mode'
 import { MdCalendarViewMonth, MdOutlineAnalytics, MdOutlineSettings } from 'react-icons/md'
 import { useRouter } from 'next/router'
@@ -26,9 +26,9 @@ const SIDEBAR_LIST: SidebarItemProps[] = [
     path: '/dashboard',
   },
   {
-    title: 'Analitics',
+    title: 'Analytics',
     icon: <MdOutlineAnalytics/>,
-    path: '/analitics'
+    path: '/analytics'
   },
   {
     title: 'Budgets',
@@ -39,11 +39,6 @@ const SIDEBAR_LIST: SidebarItemProps[] = [
     title: 'View',
     icon: <MdCalendarViewMonth/>,
     path: '/view'
-  },
-  {
-    title: 'Profile',
-    icon: <LuUser />,
-    path: '/profile',
   },
   {
     title: 'Settings',
