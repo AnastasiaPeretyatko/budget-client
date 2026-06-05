@@ -9,3 +9,6 @@ export type LoginResponse = {
 }
 
 export const loginRequest = (data: { email: string; password: string }): Promise<AxiosResponse<LoginResponse>> => http.post('/auth/login', data)
+
+export const registerRequest = (data: { email: string; password: string }): Promise<AxiosResponse<LoginResponse>> => http.post('/auth/register', data)
+

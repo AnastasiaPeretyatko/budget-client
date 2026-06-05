@@ -3,6 +3,7 @@ import { updateCategoryThunk, CategoryType } from '@/entities/category'
 import { HStack, Input, IconButton } from '@chakra-ui/react'
 import { useState } from 'react'
 import { MdCheck, MdClose } from 'react-icons/md'
+import EmojiPickerButton from '@/shared/ui/emoji-picker-button'
 
 type Props = {
   category: CategoryType
@@ -13,11 +14,12 @@ const EditCategoryRow = ({ category, onClose }: Props) => {
   const dispatch = useAppDispatch()
   const [name, setName] = useState(category.name)
   const [description, setDescription] = useState(category.description || '')
+  const [icon, setIcon] = useState<string | undefined>(category.icon)
 
   const handleSave = () => {
     dispatch(updateCategoryThunk({
       id: category.id,
-      data: { name, description: description || undefined },
+      data: { name, description: description || undefined, icon },
     })).then(() => onClose())
   }
 
@@ -29,6 +31,7 @@ const EditCategoryRow = ({ category, onClose }: Props) => {
       borderColor="blue.500"
       gap={2}
     >
+      <EmojiPickerButton value={icon} onChange={setIcon} />
       <Input
         size="sm"
         value={name}

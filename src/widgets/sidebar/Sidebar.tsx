@@ -2,9 +2,12 @@ import { Flex, Heading, IconButton, Separator, VStack } from '@chakra-ui/react'
 import React, { createContext, ReactElement, useContext, useState } from 'react'
 import SidebarItem from './SidebarItem'
 import PiggyBankIcon from '@/shared/icon/PiggyBankIcon'
-import { LuLayoutDashboard, LuUser, LuPanelLeftClose, LuPanelLeftOpen } from 'react-icons/lu'
+import { LuLayoutDashboard, LuUser, LuPanelLeftClose, LuPanelLeftOpen, LuLogOut } from 'react-icons/lu'
 import { ColorModeButton } from '@/shared/ui/color-mode'
 import { MdCalendarViewMonth, MdOutlineSettings } from 'react-icons/md'
+import { useRouter } from 'next/router'
+import { useAppDispatch } from '@/app/store'
+import { deleteToken, setIsAuth } from '@/entities/auth'
 
 export type SidebarItemProps = {
   title: string
@@ -48,6 +51,16 @@ const SIDEBAR_WIDTH_COLLAPSED = '68px'
 
 const Sidebar = () => {
   const [collapsed, setCollapsed] = useState(false)
+  const router = useRouter()
+  const dispatch = useAppDispatch()
+
+  const handleLogout = () => {
+    localStorage.removeItem('token')
+    localStorage.removeItem('refreshToken')
+    dispatch(deleteToken())
+    dispatch(setIsAuth(false))
+    router.push('/login')
+  }
 
   return (
     <SidebarContext.Provider value={{ collapsed }}>
@@ -83,6 +96,17 @@ const Sidebar = () => {
         <VStack gap={1} align="stretch">
           <Flex justify={collapsed ? 'center' : 'start'} px={collapsed ? 0 : 1}>
             <ColorModeButton />
+          </Flex>
+          <Flex justify={collapsed ? 'center' : 'start'} px={collapsed ? 0 : 1}>
+            <IconButton
+              aria-label="Logout"
+              variant="ghost"
+              size="sm"
+              colorPalette="red"
+              onClick={handleLogout}
+            >
+              <LuLogOut />
+            </IconButton>
           </Flex>
           <Flex justify={collapsed ? 'center' : 'start'} px={collapsed ? 0 : 1}>
             <IconButton

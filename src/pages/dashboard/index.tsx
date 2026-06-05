@@ -3,6 +3,7 @@ import { SavingAccountList } from '@/widgets/saving-account-list';
 import DashboardAnalytics from '@/widgets/dashboard/DashboardAnalytics';
 import DashboardTransactions from '@/widgets/dashboard/DashboardTransactions';
 import DashboardSummaryCards from '@/widgets/dashboard/DashboardSummaryCards';
+import DashboardActivityCalendar from '@/widgets/dashboard/DashboardActivityCalendar';
 import { Grid, GridItem, Heading, HStack, VStack } from '@chakra-ui/react';
 
 export default function DashboardPage() {
@@ -17,6 +18,7 @@ export default function DashboardPage() {
         <GridItem>
           <VStack width={'100%'} align={'start'} gap={6}>
             <DashboardSummaryCards/>
+            <DashboardActivityCalendar/>
             <DashboardAnalytics/>
             <DashboardTransactions/>
           </VStack>

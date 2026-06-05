@@ -1,14 +1,14 @@
 import { createAsyncThunk } from '@reduxjs/toolkit'
 import { getAllCategoryRequest, postCategoryRequest, updateCategoryRequest, archiveCategoryRequest } from './category.service'
-import { CategoryType, UpdateCategoryDto } from '../types/category.type'
+import { CategoryType, CreateCategoryDto, UpdateCategoryDto } from '../types/category.type'
 
 export const createCategoryThunk = createAsyncThunk<
   CategoryType,
-  string,
+  CreateCategoryDto,
   { rejectValue: string }
->('categories/create', async (name, { rejectWithValue }) => {
+>('categories/create', async (data, { rejectWithValue }) => {
   try {
-    const res = await postCategoryRequest(name)
+    const res = await postCategoryRequest(data)
     return res.data
   } catch (error) {
     return rejectWithValue(

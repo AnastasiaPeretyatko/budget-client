@@ -1,44 +1,30 @@
-import { AppDispatch, RootState } from '@/app/store'
-import { loginThunk } from '@/entities/auth'
-import { useNotifications } from '@/shared/hooks/useNotifications'
-import { Button, Container, Heading, Input, Link, VStack } from '@chakra-ui/react'
-import { useRouter } from 'next/router'
-import { useDispatch, useSelector } from 'react-redux'
+import LoginForm from '@/features/auth/ui/LoginForm'
+import RegisterForm from '@/features/auth/ui/RegisterForm'
+import { COLOR } from '@/shared/config/colors'
+import BaseTabs from '@/shared/ui/tabs'
+import { Container, Flex } from '@chakra-ui/react'
+import { useMemo } from 'react'
 
 const LoginPage = () => {
-  const dispatch = useDispatch<AppDispatch>()
-  const { showErrorMessage } = useNotifications()
-  const router = useRouter()
-
-  const { isLoading } = useSelector((state: RootState) => state.auth)
-
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault()
-    const data = new FormData(event.currentTarget)
-    const credentials = {
-      email: data.get('email')?.toString() || '',
-      password: data.get('password')?.toString() || '',
-    }
-
-    dispatch(loginThunk(credentials))
-      .unwrap()
-      .then(() => router.push('/workspaces'))
-      .catch(() => showErrorMessage('Неправильный логин или пароль'))
-  }
+  const tabs = useMemo(() => {
+    return [
+      {
+        value: 'Login',
+        component: <LoginForm/>
+      },
+      {
+        value: 'Registration',
+        component: <RegisterForm/>
+      }
+    ]
+  }, [])
 
   return (
-    <Container display={'flex'} flexDirection={'column'} alignItems={'center'} justifyContent={'center'} height={'100vh'}>
-
-      <form onSubmit={handleSubmit} style={{ width: '40%' }} autoComplete="on">
-        <VStack width={'100%'} gap={6} backgroundColor={'gray.900'} borderRadius={10} padding={8} border={'1px solid #3f3f46'}>
-          <Heading size={'3xl'} mb={4}>Авторизация</Heading>
-          <Input placeholder='Email' name='email' type='email' autoComplete='email'/>
-          <Input placeholder='Пароль' name='password' type='password' autoComplete='current-password'/>
-          <Link width={'100%'} justifyContent={'end'} color={'gray.400'}>Забыл пароль?</Link>
-          <Button width={'100%'} type='submit' loading={isLoading}>Войти</Button>
-        </VStack>
-      </form>
-    </Container>
+    <Flex width={'100vw'} height={'100vh'} justify={'center'} pt={'20%'}>
+      <Container maxW={'600px'} height={'max-content'} border={` 1px solid ${COLOR.BORDER}`} padding={6} borderRadius={10}>
+        <BaseTabs list={tabs}/>
+      </Container>
+    </Flex>
   )
 }
 

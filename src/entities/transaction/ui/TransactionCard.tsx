@@ -57,7 +57,9 @@ const TransactionCard = ({ accountId, transaction }: Props) => {
     // </Card.Root>
     <Card.Root width={'100%'} margin={0} padding={0} borderRadius={12} border={'none'}>
       <Card.Body display={'flex'} flexDir={'row'} gap={2} alignItems={'center'}>
-        <Box minW={12} minH={12} borderRadius={'50%'} backgroundColor={'gray.900'}/>
+        <Box minW={12} minH={12} borderRadius={'50%'} backgroundColor={'gray.900'} display="flex" alignItems="center" justifyContent="center" fontSize="xl">
+          {transaction.category?.icon}
+        </Box>
         <VStack width={'100%'} align={'start'}>
           <Text fontWeight={600}>{transaction.category?.name}</Text>
           {transaction.createdBy && <HStack>

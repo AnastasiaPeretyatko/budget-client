@@ -1,6 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit'
-import { getStatisticsByCategoryRequest } from './statistics.service'
-import { StatisticsByCategoryDto, StatisticsByCategoryResponse, PeriodComparisonResponse } from '../types/statistics.type'
+import { getActivityRequest, getStatisticsByCategoryRequest } from './statistics.service'
+import { ActivityItem, StatisticsByCategoryDto, StatisticsByCategoryResponse, PeriodComparisonResponse } from '../types/statistics.type'
 import { RootState } from '@/app/store'
 
 export const fetchStatisticsByCategoryThunk = createAsyncThunk<
@@ -55,6 +55,21 @@ export const fetchPeriodComparisonThunk = createAsyncThunk<
     ])
 
     return { current: currentRes.data, previous: previousRes.data }
+  } catch (error) {
+    return rejectWithValue(
+      error instanceof Error ? error.message : 'Unknown error'
+    )
+  }
+})
+
+export const fetchActivityThunk = createAsyncThunk<
+  ActivityItem[],
+  void,
+  { rejectValue: string }
+>('statistics/fetchActivity', async (_, { rejectWithValue }) => {
+  try {
+    const res = await getActivityRequest()
+    return res.data
   } catch (error) {
     return rejectWithValue(
       error instanceof Error ? error.message : 'Unknown error'

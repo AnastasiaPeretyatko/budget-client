@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { fetchStatisticsByCategoryThunk, fetchPeriodComparisonThunk } from './statistics.thunk'
-import { CategoryStatisticsItem, UncategorizedStatistics, PeriodComparisonResponse } from '../types/statistics.type'
+import { fetchStatisticsByCategoryThunk, fetchPeriodComparisonThunk, fetchActivityThunk } from './statistics.thunk'
+import { ActivityItem, CategoryStatisticsItem, UncategorizedStatistics, PeriodComparisonResponse } from '../types/statistics.type'
 
 type StatisticsState = {
   totalSpent: number
@@ -10,6 +10,8 @@ type StatisticsState = {
   error?: string
   periodComparison: PeriodComparisonResponse | null
   isComparisonLoading: boolean
+  activity: ActivityItem[]
+  isActivityLoading: boolean
 }
 
 const initialState: StatisticsState = {
@@ -19,6 +21,8 @@ const initialState: StatisticsState = {
   isLoading: false,
   periodComparison: null,
   isComparisonLoading: false,
+  activity: [],
+  isActivityLoading: false,
 }
 
 const statisticsSlice = createSlice({
@@ -50,6 +54,16 @@ const statisticsSlice = createSlice({
       })
       .addCase(fetchPeriodComparisonThunk.rejected, state => {
         state.isComparisonLoading = false
+      })
+      .addCase(fetchActivityThunk.pending, state => {
+        state.isActivityLoading = true
+      })
+      .addCase(fetchActivityThunk.fulfilled, (state, { payload }) => {
+        state.isActivityLoading = false
+        state.activity = payload
+      })
+      .addCase(fetchActivityThunk.rejected, state => {
+        state.isActivityLoading = false
       })
   },
 })

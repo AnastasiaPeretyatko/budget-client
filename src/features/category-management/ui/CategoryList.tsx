@@ -1,16 +1,16 @@
 import { useAppDispatch, useAppSelector } from '@/app/store'
-import { createCategoryThunk, fetchCategoriesThunk, archiveCategoryThunk } from '@/entities/category'
+import { fetchCategoriesThunk, archiveCategoryThunk } from '@/entities/category'
 import { useEffect, useState } from 'react'
 import { VStack, HStack, Text, IconButton, Spinner, Input } from '@chakra-ui/react'
 import { MdArchive, MdEdit, MdAdd } from 'react-icons/md'
 import EditCategoryRow from './EditCategoryRow'
+import CreateCategoryRow from './CreateCategoryRow'
 
 const CategoryList = () => {
   const dispatch = useAppDispatch()
   const { categories, isLoading } = useAppSelector(state => state.categories)
   const [editingId, setEditingId] = useState<string | null>(null)
   const [search, setSearch] = useState('')
-  const [newName, setNewName] = useState('')
   const [isAdding, setIsAdding] = useState(false)
 
   useEffect(() => {
@@ -19,14 +19,6 @@ const CategoryList = () => {
 
   const handleArchive = (id: string) => {
     dispatch(archiveCategoryThunk(id))
-  }
-
-  const handleCreate = async () => {
-    const trimmed = newName.trim()
-    if (!trimmed) return
-    await dispatch(createCategoryThunk(trimmed))
-    setNewName('')
-    setIsAdding(false)
   }
 
   const filtered = categories.filter(c =>
@@ -58,27 +50,7 @@ const CategoryList = () => {
         </IconButton>
       </HStack>
       {isAdding && (
-        <HStack gap={2}>
-          <Input
-            placeholder="Название категории"
-            value={newName}
-            onChange={e => setNewName(e.target.value)}
-            size="sm"
-            borderRadius={8}
-            autoFocus
-            onKeyDown={e => e.key === 'Enter' && handleCreate()}
-          />
-          <IconButton
-            aria-label="Создать"
-            size="sm"
-            variant="solid"
-            colorPalette="green"
-            disabled={!newName.trim()}
-            onClick={handleCreate}
-          >
-            <MdAdd />
-          </IconButton>
-        </HStack>
+        <CreateCategoryRow onCreated={() => setIsAdding(false)} />
       )}
       {filtered.length === 0 && (
         <Text color="gray.500" fontSize="sm">Категории не найдены</Text>
@@ -99,12 +71,15 @@ const CategoryList = () => {
             borderColor="gray.700"
             justifyContent="space-between"
           >
-            <VStack align="start" gap={0}>
-              <Text fontWeight={600} fontSize="sm">{category.name}</Text>
-              {category.description && (
-                <Text color="gray.500" fontSize="xs">{category.description}</Text>
-              )}
-            </VStack>
+            <HStack gap={2}>
+              {category.icon && <Text fontSize="lg">{category.icon}</Text>}
+              <VStack align="start" gap={0}>
+                <Text fontWeight={600} fontSize="sm">{category.name}</Text>
+                {category.description && (
+                  <Text color="gray.500" fontSize="xs">{category.description}</Text>
+                )}
+              </VStack>
+            </HStack>
             <HStack gap={1}>
               <IconButton
                 aria-label="Редактировать"

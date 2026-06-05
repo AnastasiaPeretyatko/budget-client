@@ -20,7 +20,7 @@ const CategorySearchSelect = ({ value, onChange, placeholder = "Select category"
   }, [])
 
   const handleCreate = useCallback(async (name: string): Promise<SearchSelectOption> => {
-    const res = await postCategoryRequest(name)
+    const res = await postCategoryRequest({ name })
     return { label: res.data.name, value: res.data.id }
   }, [])
 

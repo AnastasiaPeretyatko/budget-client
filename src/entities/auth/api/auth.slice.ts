@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { loginThunk } from './auth.thunk'
+import { loginThunk, registerThunk } from './auth.thunk'
 import { AuthUser } from '../types/user.type'
 
 type AuthState = {
@@ -46,6 +46,19 @@ const auth = createSlice({
         state.isLoading = false
       })
       .addCase(loginThunk.rejected, (state, { payload }) => {
+        state.error = payload
+        state.isLoading = false
+      })
+      .addCase(registerThunk.pending, state => {
+        state.isLoading = true
+        state.error = undefined
+      })
+      .addCase(registerThunk.fulfilled, (state, { payload }) => {
+        state.user = payload.user
+        state.isAuth = true
+        state.isLoading = false
+      })
+      .addCase(registerThunk.rejected, (state, { payload }) => {
         state.error = payload
         state.isLoading = false
       })

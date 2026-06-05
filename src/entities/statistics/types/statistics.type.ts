@@ -29,3 +29,8 @@ export type PeriodComparisonResponse = {
   current: StatisticsByCategoryResponse
   previous: StatisticsByCategoryResponse
 }
+
+export type ActivityItem = {
+  date: string
+  count: number
+}

@@ -4,8 +4,8 @@ import { CategoryType, CreateCategoryDto, UpdateCategoryDto } from '../types/cat
 export const getAllCategoryRequest = (search?: string) =>
   http.get<CategoryType[]>('/categories/all', { params: { search } })
 
-export const postCategoryRequest = (name: string) =>
-  http.post<CategoryType>('/categories', { name })
+export const postCategoryRequest = (data: CreateCategoryDto) =>
+  http.post<CategoryType>('/categories', data)
 
 export const updateCategoryRequest = (id: string, data: UpdateCategoryDto) =>
   http.patch<CategoryType>(`/categories/${id}`, data)
