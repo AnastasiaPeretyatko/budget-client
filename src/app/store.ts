@@ -5,6 +5,8 @@ import { savingReducer } from '@/entities/saving-account'
 import { transactionsReducer } from '@/entities/transaction'
 import { workspacesReducer } from '@/entities/workspace'
 import { billingPeriodReducer } from '@/entities/bulling-period'
+import { categoryReducer } from '@/entities/category'
+import { statisticsReducer } from '@/entities/statistics'
 
 export const store = configureStore({
   reducer: {
@@ -12,7 +14,9 @@ export const store = configureStore({
     transactions: transactionsReducer,
     savingAccounts: savingReducer,
     workspaces: workspacesReducer,
-    billingPeriod: billingPeriodReducer
+    billingPeriod: billingPeriodReducer,
+    categories: categoryReducer,
+    statistics: statisticsReducer,
   }
 })
 

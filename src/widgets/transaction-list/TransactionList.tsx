@@ -8,20 +8,20 @@ import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
 type Props = {
-  accountId: string
+  accountId?: string
+  limit?: number
 }
 
-const TransactionList = ({ accountId }: Props) => {
+const TransactionList = ({ accountId, limit }: Props) => {
   const dispatch = useDispatch<AppDispatch>()
 
   const { transactions } = useSelector((state: RootState) => state.transactions)
 
   useEffect(() => {
-    if (accountId) {
-      // const filter = accountId ? { accountId }: {}
-      dispatch(fetchTransactionsThunk({ filter: { accountId } }))
-    }
-  }, [dispatch, accountId])
+    const filter = accountId ? { accountId } : {}
+    const paging = limit ? { limit } : undefined
+    dispatch(fetchTransactionsThunk({ filter, paging }))
+  }, [dispatch, accountId, limit])
 
   if (!transactions.length) {
     return <Text fontSize={'sm'} color={COLOR.LABEL}>You have no transactions for the current period</Text>

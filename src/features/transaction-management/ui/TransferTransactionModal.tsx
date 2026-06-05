@@ -1,11 +1,12 @@
-import { AppDispatch } from '@/app/store'
+import { AppDispatch, RootState } from '@/app/store'
 import { createTransactionThunk } from '@/entities/transaction'
+import { fetchSavingAccountByIdThunk } from '@/entities/saving-account'
 import { CategorySearchSelect } from '@/features/category-management'
 import { SavingAccountSearchSelect } from '@/features/saving-account-management'
 import FieldInput from '@/shared/ui/FieldInput'
 import { Button, HStack, VStack } from '@chakra-ui/react'
 import { useState } from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { FaArrowRightLong } from 'react-icons/fa6'
 
 type Props = {
@@ -14,6 +15,7 @@ type Props = {
 
 const TransferTransactionModal = ({ onClose }: Props) => {
   const dispatch = useDispatch<AppDispatch>()
+  const { activeSavingAccount } = useSelector((state: RootState) => state.savingAccounts)
 
   const [amount, setAmount] = useState('')
   const [description, setDescription] = useState('')
@@ -34,6 +36,9 @@ const TransferTransactionModal = ({ onClose }: Props) => {
         description: description || null,
         date: new Date(date),
       })).unwrap()
+      if (activeSavingAccount) {
+        dispatch(fetchSavingAccountByIdThunk(activeSavingAccount.id))
+      }
       onClose()
     } finally {
       setIsLoading(false)

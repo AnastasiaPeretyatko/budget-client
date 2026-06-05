@@ -9,14 +9,15 @@ import { FaArrowRightLong } from 'react-icons/fa6';
 // import { FaArrowRightLong } from 'react-icons/fa6';
 
 type Props = {
-  accountId: string;
+  accountId?: string;
   transaction: TransactionType
 }
 
 const TransactionCard = ({ accountId, transaction }: Props) => {
   const isExpense = useMemo(() => {
-    return accountId === transaction.fromAccountId
-  }, [accountId, transaction.fromAccountId])
+    if (accountId) return accountId === transaction.fromAccountId
+    return !!transaction.fromAccount && !transaction.toAccount
+  }, [accountId, transaction.fromAccountId, transaction.fromAccount, transaction.toAccount])
 
   return (
   // <Card.Root width={'100%'} margin={0} padding={0} borderRadius={12} border={'none'}>
@@ -56,7 +57,7 @@ const TransactionCard = ({ accountId, transaction }: Props) => {
     // </Card.Root>
     <Card.Root width={'100%'} margin={0} padding={0} borderRadius={12} border={'none'}>
       <Card.Body display={'flex'} flexDir={'row'} gap={2} alignItems={'center'}>
-        <Box minW={16} minH={16} borderRadius={'50%'} backgroundColor={'gray.900'}/>
+        <Box minW={12} minH={12} borderRadius={'50%'} backgroundColor={'gray.900'}/>
         <VStack width={'100%'} align={'start'}>
           <Text fontWeight={600}>{transaction.category?.name}</Text>
           {transaction.createdBy && <HStack>

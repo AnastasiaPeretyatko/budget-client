@@ -17,7 +17,7 @@ const BudgetPage = () => {
     if (id) dispatch(fetchSavingAccountByIdThunk(id))
   }, [dispatch, id])
 
-  if (isLoading || !activeSavingAccount) return null
+  if (!activeSavingAccount) return null
 
   return (
     <VStack width={'100%'} padding={4} gap={4} align={'start'}>

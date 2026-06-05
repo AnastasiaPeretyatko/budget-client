@@ -9,9 +9,10 @@ import { useDispatch, useSelector } from 'react-redux'
 
 type Props = {
   isDisplayCreteModal?: boolean
+  direction?: 'row' | 'column'
 }
 
-const SavingAccountList = ({ isDisplayCreteModal = false }: Props) => {
+const SavingAccountList = ({ isDisplayCreteModal = false, direction = 'row' }: Props) => {
   const dispatch = useDispatch<AppDispatch>()
   const router = useRouter()
 
@@ -26,7 +27,7 @@ const SavingAccountList = ({ isDisplayCreteModal = false }: Props) => {
   }, [dispatch])
 
   return (
-    <Flex gap={4}>
+    <Flex gap={4} direction={direction}>
       {isDisplayCreteModal && <CreateSavingModal/>}
       {
         savingAccounts.map((account) => (

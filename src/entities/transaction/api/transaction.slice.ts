@@ -1,6 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { fetchTransactionsThunk, createTransactionThunk } from './transaction.thunk'
 import { TransactionType } from '../types/transaction.type'
+import { insertSortedByDate } from '@/shared/lib/insertSorted'
 
 type TransactionState = {
   transactions: TransactionType[]
@@ -25,7 +26,7 @@ const transactions = createSlice({
         state.error = undefined
       })
       .addCase(createTransactionThunk.fulfilled, (state, { payload }) => {
-        state.transactions.unshift(payload)
+        insertSortedByDate(state.transactions, payload, t => t.date)
       })
       .addCase(createTransactionThunk.rejected, (state, { payload }) => {
         state.error = payload

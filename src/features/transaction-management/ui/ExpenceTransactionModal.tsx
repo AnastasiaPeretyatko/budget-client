@@ -1,5 +1,6 @@
 import { AppDispatch, RootState } from '@/app/store'
 import { createTransactionThunk } from '@/entities/transaction'
+import { fetchSavingAccountByIdThunk } from '@/entities/saving-account'
 import { CategorySearchSelect } from '@/features/category-management'
 import FieldInput from '@/shared/ui/FieldInput'
 import { Button, HStack, VStack } from '@chakra-ui/react'
@@ -31,6 +32,7 @@ const ExpenceTransactionModal = ({ onClose }: Props) => {
         description: description || null,
         date: new Date(date),
       })).unwrap()
+      dispatch(fetchSavingAccountByIdThunk(activeSavingAccount.id))
       onClose()
     } finally {
       setIsLoading(false)
