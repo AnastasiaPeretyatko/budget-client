@@ -1,17 +1,19 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { getAllTransactionThunk, postTransactionThunk } from './transaction.thunk'
+import { fetchTransactionsThunk, createTransactionThunk } from './transaction.thunk'
 import { TransactionType } from '../types/transaction.type'
+import { insertSortedByDate } from '@/shared/lib/insertSorted'
 
-export type TParams = {}
-
-type TInitialState = {
-  transaction: TransactionType[]
+type TransactionState = {
+  transactions: TransactionType[]
   count: number
+  isLoading: boolean
+  error?: string
 }
 
-const initialState: TInitialState = {
-  transaction: [],
-  count: 0
+const initialState: TransactionState = {
+  transactions: [],
+  count: 0,
+  isLoading: false
 }
 
 const transactions = createSlice({
@@ -20,15 +22,29 @@ const transactions = createSlice({
   reducers: {},
   extraReducers: builder => {
     builder
-      .addCase(postTransactionThunk.pending, state => {})
-      .addCase(postTransactionThunk.fulfilled, (state, {payload}) => {
-        state.transaction.push(payload.data)
+      .addCase(createTransactionThunk.pending, state => {
+        state.error = undefined
       })
-      .addCase(getAllTransactionThunk.fulfilled, (state, {payload}) => {
-        state.transaction = payload.rows
+      .addCase(createTransactionThunk.fulfilled, (state, { payload }) => {
+        insertSortedByDate(state.transactions, payload, t => t.date)
+      })
+      .addCase(createTransactionThunk.rejected, (state, { payload }) => {
+        state.error = payload
+      })
+      .addCase(fetchTransactionsThunk.pending, state => {
+        state.isLoading = true
+        state.error = undefined
+      })
+      .addCase(fetchTransactionsThunk.fulfilled, (state, { payload }) => {
+        state.transactions = payload.rows
         state.count = payload.count
+        state.isLoading = false
       })
-    }
+      .addCase(fetchTransactionsThunk.rejected, (state, { payload }) => {
+        state.error = payload
+        state.isLoading = false
+      })
+  }
 })
 
 export default transactions.reducer;

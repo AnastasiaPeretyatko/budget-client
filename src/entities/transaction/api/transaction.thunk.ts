@@ -2,30 +2,59 @@ import { createAsyncThunk } from '@reduxjs/toolkit'
 import { BaseTransactionType, TransactionType } from '../types/transaction.type'
 import { getAllTransactionRequest, postTransactionRequest } from './transaction.service'
 
-export const postTransactionThunk = createAsyncThunk<{data: TransactionType, message: string}, BaseTransactionType>('/transaction.create', async (data) => {
+export type GetAllTransactionResponse = {
+  rows: TransactionType[];
+  count: number;
+};
+
+export type GetAllTransactionArgs = {
+  paging?: {
+    limit?: number;
+    offset?: number;
+  };
+  filter?: {
+    fromAccountId?: string;
+    toAccountId?: string;
+    categoryId?: string;
+    accountId?: string;
+    date?: {between: string[]}
+    type?: string;
+  };
+};
+
+export const createTransactionThunk = createAsyncThunk<
+  TransactionType,
+  BaseTransactionType,
+  { rejectValue: string }
+>('transaction/create', async (data, { rejectWithValue }) => {
   try {
     const res = await postTransactionRequest(data);
-    return {
-      data: res.data.data,
-      message: ''
-    }
+    return res.data;
   } catch (error) {
-    console.log(error)
-  }
-})
-
-export const getAllTransactionThunk = createAsyncThunk<
-  { rows: TransactionType[]; count: number },
-  void
->('transaction/getAll', async (_, { rejectWithValue }) => {
-  try {
-    const res = await getAllTransactionRequest();
-
-    return {
-      rows: res.data.rows,
-      count: res.data.count,
-    };
-  } catch (error) {
-    return rejectWithValue(error);
+    return rejectWithValue(
+      error instanceof Error ? error.message : 'Unknown error'
+    );
   }
 });
+
+export const fetchTransactionsThunk = createAsyncThunk<
+  GetAllTransactionResponse,
+  GetAllTransactionArgs,
+  { rejectValue: string }
+>(
+  'transaction/getAll',
+  async ({ paging, filter }, { rejectWithValue }) => {
+    try {
+      const res = await getAllTransactionRequest({ paging, filter });
+
+      return {
+        rows: res.data.rows,
+        count: res.data.count,
+      };
+    } catch (error) {
+      return rejectWithValue(
+        error instanceof Error ? error.message : 'Unknown error'
+      );
+    }
+  }
+);

@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { AppGuard } from '@/app/providers/AppGuard';
-import { store } from '@/common/store.config';
-import { Provider as ChakraProvider } from '@/components/ui/provider';
-import { Toaster } from '@/components/ui/toaster';
+import { store } from '@/app/store';
+import { Provider as ChakraProvider } from '@/shared/ui/provider';
+import { Toaster } from '@/shared/ui/toaster';
 import moment from 'moment';
 import type { AppProps } from "next/app";
 import { Provider } from 'react-redux';
