@@ -6,7 +6,7 @@ import { useState } from 'react'
 import { useAppDispatch, useAppSelector } from '@/app/store'
 import { createBillingPeriodThunk } from '@/entities/bulling-period'
 
-const AddBillingPerodButton = () => {
+const AddBillingPeriodButton = () => {
   const dispatch = useAppDispatch()
   const { isLoading } = useAppSelector(state => state.billingPeriod)
   const [dates, setDates] = useState<string[]>([])
@@ -20,7 +20,7 @@ const AddBillingPerodButton = () => {
   }
 
   return (
-    <BasePopover TriggerButton={<Button size={'sm'}>New Period</Button>}>
+    <BasePopover TriggerButton={<Button size={'xs'} bgColor={COLOR.PRIMARY_COLOR}>+ Новый период</Button>}>
       <VStack align={'start'} gap={4}>
         <Text color={COLOR.LABEL} fontSize={'sm'} fontWeight={600}>Select a new period</Text>
         <BaseDatePicker selectionMode='range' onChangeValue={(dates) => setDates(dates)} />
@@ -38,4 +38,4 @@ const AddBillingPerodButton = () => {
   )
 }
 
-export default AddBillingPerodButton
+export default AddBillingPeriodButton

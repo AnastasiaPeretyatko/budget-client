@@ -19,6 +19,11 @@ const BaseModal = ({ title, description, children, buttonTrigger, onClickSave, s
 
   const renderedChildren = typeof children === 'function' ? children(close) : children
 
+  const handleSave = () => {
+    onClickSave?.(close)
+    close()
+  }
+
   return (
     <Dialog.Root size={'md'} placement={'center'} open={open} onOpenChange={e => setOpen(e.open)}>
       <Dialog.Trigger>
@@ -39,7 +44,7 @@ const BaseModal = ({ title, description, children, buttonTrigger, onClickSave, s
                 <Dialog.ActionTrigger asChild>
                   <Button variant="outline">Отмена</Button>
                 </Dialog.ActionTrigger>
-                <Button size="sm" colorPalette={confirmColorPalette} onClick={() => onClickSave?.(close)}>{confirmLabel}</Button>
+                <Button size="sm" colorPalette={confirmColorPalette} onClick={handleSave}>{confirmLabel}</Button>
               </Dialog.Footer>
             )}
             <Dialog.CloseTrigger asChild>

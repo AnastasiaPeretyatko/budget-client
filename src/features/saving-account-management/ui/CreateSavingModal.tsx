@@ -5,16 +5,24 @@ import { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { AppDispatch } from '@/app/store'
 import { createSavingAccountThunk } from '@/entities/saving-account'
+import { useNotifications } from '@/shared/hooks/useNotifications'
 
 const CreateSavingModal = () => {
+  const dispatch = useDispatch<AppDispatch>()
+  const { showErrorMessage, showSuccessMessage } = useNotifications()
+
   const [name, setName] = useState('')
   const [amount, setAmount] = useState('')
   const [description, setDescription] = useState('')
 
-  const dispatch = useDispatch<AppDispatch>()
-
   const handleSave = (close: () => void) => {
-    dispatch(createSavingAccountThunk({ name, amount, description })).then(() => close())
+    dispatch(createSavingAccountThunk({ name, amount, description }))
+      .unwrap()
+      .then(() => {
+        showSuccessMessage('Накопительный счет успешно создан')
+        close()
+      })
+      .catch(() => showErrorMessage('Ошибка создания накопительного счета'))
   }
 
   return (

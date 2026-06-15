@@ -20,7 +20,7 @@ const WorkspaceListWidget = () => {
   if (!workspaces.length) return <EmptyUI icon={<MdOutlineWorkspaces/>} title={'No workspaces'} description={'You have not created any workspaces yet'}/>
 
   return (
-    <SimpleGrid width={'100%'} height={'100%'} minChildWidth={'300px'} gap={4}>
+    <SimpleGrid width={'100%'} height={'100%'} columns={[1, 2, 3, 4]} gap={4}>
       {
         workspaces.map(workspace => <WorkspaceCardWidget key={workspace.id} workspace={workspace}/>)
       }

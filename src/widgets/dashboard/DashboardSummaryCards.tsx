@@ -43,8 +43,8 @@ const DashboardSummaryCards = () => {
 
   return (
     <HStack width="100%" gap={4} align="stretch">
-      <Card.Root flex={1}>
-        <Card.Body display="flex" flexDir="column" gap={2} justifyContent="center">
+      <Card.Root flex={1} p={0}>
+        <Card.Body display="flex" flexDir="column" gap={2} justifyContent="center" padding={2}>
           <Text color={COLOR.LABEL} fontWeight={500} fontSize="sm">
             Общие расходы
           </Text>
