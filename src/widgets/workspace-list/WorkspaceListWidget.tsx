@@ -4,6 +4,8 @@ import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { WorkspaceCardWidget } from '@/widgets/workspace-card'
 import { fetchWorkspacesThunk } from '@/entities/workspace'
+import EmptyUI from '@/shared/ui/empty'
+import { MdOutlineWorkspaces } from 'react-icons/md'
 
 const WorkspaceListWidget = () => {
   const dispatch = useDispatch<AppDispatch>()
@@ -13,11 +15,9 @@ const WorkspaceListWidget = () => {
     dispatch(fetchWorkspacesThunk())
   }, [dispatch])
 
-  if (!workspaces.length) return <Text>Workspaces not found</Text>
-
   if (isLoading) return <Text>Loading...</Text>
 
-  if (!workspaces.length) return <Text>Workspaces not found</Text>
+  if (!workspaces.length) return <EmptyUI icon={<MdOutlineWorkspaces/>} title={'No workspaces'} description={'You have not created any workspaces yet'}/>
 
   return (
     <SimpleGrid width={'100%'} height={'100%'} minChildWidth={'300px'} gap={4}>
