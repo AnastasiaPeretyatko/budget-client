@@ -2,6 +2,9 @@ export const COLOR = {
   LABEL: "#a1a1aa",
   BORDER: "#3f3f46",
   INCOME_TEXT: "#61d161",
+  EXPENSE_TEXT: "#f97316",
+  DANGER_TEXT: "#f87171",
+  PERIOD_TEXT: "#3b82f6",
   PRIMARY_COLOR: '#AE90FE',
   BACKGROUND: '#121214',
 }
