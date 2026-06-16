@@ -18,20 +18,11 @@ export default function DashboardPage() {
         <Text>Привет, {''}! 👋</Text>
         <Text color={COLOR.LABEL} fontSize={'sm'}>Вот что происходит с вашими финансами</Text>
       </VStack>
-
-      {/* <Grid width={'100%'} templateColumns="2fr 1fr" gap={6}>
-        <GridItem> */}
       <VStack width={'100%'} align={'start'} gap={6}>
         <DashboardSummaryCards/>
         <DashboardActivityCalendar/>
-        {/* <DashboardAnalytics/> */}
         <DashboardTransactions/>
       </VStack>
-      {/* </GridItem> */}
-      {/* <GridItem>
-          <SavingAccountList direction="column"/>
-        </GridItem> */}
-      {/* </Grid> */}
     </VStack>
   );
 }
