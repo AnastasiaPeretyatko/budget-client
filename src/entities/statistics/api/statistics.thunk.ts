@@ -1,6 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit'
-import { getActivityRequest, getStatisticsByCategoryRequest, getTopExpensesRequest, getTotalSummaryRequest } from './statistics.service'
-import { ActivityItem, StatisticsByCategoryDto, StatisticsByCategoryResponse, PeriodComparisonResponse, TopExpenseItem, TotalSummaryResponse } from '../types/statistics.type'
+import { AxiosError } from 'axios'
+import { getActivityRequest, getDashboardSummaryRequest, getStatisticsByCategoryRequest, getTopExpensesRequest, getTotalSummaryRequest } from './statistics.service'
+import { ActivityItem, DashboardSummaryResponse, StatisticsByCategoryDto, StatisticsByCategoryResponse, PeriodComparisonResponse, TopExpenseItem, TotalSummaryResponse } from '../types/statistics.type'
 import { RootState } from '@/app/store'
 
 export const fetchStatisticsByCategoryThunk = createAsyncThunk<
@@ -103,6 +104,22 @@ export const fetchTopExpensesThunk = createAsyncThunk<
   } catch (error) {
     return rejectWithValue(
       error instanceof Error ? error.message : 'Unknown error'
+    )
+  }
+})
+
+export const fetchDashboardSummaryThunk = createAsyncThunk<
+  DashboardSummaryResponse,
+  void,
+  { rejectValue: string }
+>('statistics/fetchDashboardSummary', async (_, { rejectWithValue }) => {
+  try {
+    const res = await getDashboardSummaryRequest()
+    return res.data
+  } catch (error) {
+    const axiosError = error as AxiosError<{ message: string }>
+    return rejectWithValue(
+      axiosError.response?.data?.message ?? axiosError.message ?? 'Unknown error'
     )
   }
 })

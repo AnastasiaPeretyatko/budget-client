@@ -2,17 +2,18 @@ import { AppDispatch, RootState } from '@/app/store'
 import { fetchSavingAccountsThunk } from '@/entities/saving-account'
 import { SavingAccountCard } from '@/entities/saving-account'
 import { CreateSavingModal } from '@/features/saving-account-management'
-import { Flex } from '@chakra-ui/react'
+import { Box } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
 type Props = {
   isDisplayCreteModal?: boolean
-  direction?: 'row' | 'column'
+  limit?: number
+  wrap?: boolean
 }
 
-const SavingAccountList = ({ isDisplayCreteModal = false, direction = 'row' }: Props) => {
+const SavingAccountList = ({ isDisplayCreteModal = false, limit, wrap = false }: Props) => {
   const dispatch = useDispatch<AppDispatch>()
   const router = useRouter()
 
@@ -26,19 +27,25 @@ const SavingAccountList = ({ isDisplayCreteModal = false, direction = 'row' }: P
     dispatch(fetchSavingAccountsThunk())
   }, [dispatch])
 
+  const visibleAccounts = limit ? savingAccounts.slice(0, limit) : savingAccounts
+
   return (
-    <Flex gap={4} direction={direction}>
-      {isDisplayCreteModal && <CreateSavingModal/>}
-      {
-        savingAccounts.map((account) => (
-          <SavingAccountCard
-            key={account.id}
-            savingAccount={account}
-            onClick={handleOpenBudgetClick}
-          />
-        ))
-      }
-    </Flex>
+    <Box
+      display={'grid'}
+      gridTemplateColumns={'repeat(auto-fill, minmax(280px, 350px))'}
+      alignItems={'stretch'}
+      gap={4}
+      width={'100%'}
+    >
+      {visibleAccounts.map((account) => (
+        <SavingAccountCard
+          key={account.id}
+          savingAccount={account}
+          onClick={handleOpenBudgetClick}
+        />
+      ))}
+      {isDisplayCreteModal && <CreateSavingModal />}
+    </Box>
   )
 }
 

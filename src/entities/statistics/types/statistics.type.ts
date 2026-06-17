@@ -52,3 +52,17 @@ export type ActivityItem = {
   count: number
 }
 
+export type DashboardChangeItem = {
+  percent: number
+  sign: '+' | '-'
+}
+
+export type DashboardSummaryResponse = {
+  totalIncome: string
+  totalExpenses: string
+  balance: string
+  incomeChange: DashboardChangeItem
+  expensesChange: DashboardChangeItem
+  balanceChange: DashboardChangeItem
+}
+

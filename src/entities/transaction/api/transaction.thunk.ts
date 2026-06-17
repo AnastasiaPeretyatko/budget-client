@@ -1,4 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit'
+import { AxiosError } from 'axios'
 import { BaseTransactionType, TransactionType } from '../types/transaction.type'
 import { getAllTransactionRequest, postTransactionRequest } from './transaction.service'
 
@@ -31,8 +32,9 @@ export const createTransactionThunk = createAsyncThunk<
     const res = await postTransactionRequest(data);
     return res.data;
   } catch (error) {
+    const axiosError = error as AxiosError<{ message: string }>;
     return rejectWithValue(
-      error instanceof Error ? error.message : 'Unknown error'
+      axiosError.response?.data?.message ?? axiosError.message ?? 'Unknown error'
     );
   }
 });
@@ -52,8 +54,9 @@ export const fetchTransactionsThunk = createAsyncThunk<
         count: res.data.count,
       };
     } catch (error) {
+      const axiosError = error as AxiosError<{ message: string }>;
       return rejectWithValue(
-        error instanceof Error ? error.message : 'Unknown error'
+        axiosError.response?.data?.message ?? axiosError.message ?? 'Unknown error'
       );
     }
   }

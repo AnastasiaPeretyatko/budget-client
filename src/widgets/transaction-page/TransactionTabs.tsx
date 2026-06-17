@@ -1,34 +1,37 @@
 import { COLOR } from '@/shared/config/colors'
 import SavingAccountAmoundCard from '@/entities/saving-account/ui/SavingAccountAmoundCard'
 import { archiveSavingAccountThunk } from '@/entities/saving-account'
-import { getLatestActivePeriod } from '@/entities/bulling-period/api/bulling-period.service'
 import { Box, Button, Card, Grid, GridItem, Heading, HStack, Tabs, Text, VStack } from '@chakra-ui/react'
 import moment from 'moment'
 import { useRouter } from 'next/router'
-import { PropsWithChildren, useEffect, useMemo, useState } from 'react'
+import { PropsWithChildren, useEffect, useMemo } from 'react'
 import { useSelector } from 'react-redux'
 import { RootState, useAppDispatch } from '@/app/store'
 import { MdOutlineAddChart, MdOutlineSettings } from 'react-icons/md'
 import { TbHistory } from 'react-icons/tb'
 import TransactionsHistoryBlock from './TransactionsHistoryBlock'
 import AnalyticsBlock from './AnalyticsBlock'
-import { fetchDaysFromStartThunk } from '@/entities/bulling-period'
+import { fetchLatestPeriodThunk } from '@/entities/bulling-period'
 
 const TransactionTabs = ({ children }: PropsWithChildren) => {
   const dispatch = useAppDispatch()
   const router = useRouter()
   const { activeSavingAccount } = useSelector((state: RootState) => state.savingAccounts)
-  const { daysFromStart } = useSelector((state: RootState) => state.billingPeriod)
-  const [totalDays, setTotalDays] = useState<number | null>(null)
+  const { latestPeriod } = useSelector((state: RootState) => state.billingPeriod)
 
   useEffect(() => {
-    dispatch(fetchDaysFromStartThunk())
-    getLatestActivePeriod()
-      .then(({ data }) => {
-        setTotalDays(moment(data.endDate).diff(moment(data.startDate), 'days'))
-      })
-      .catch(() => {})
-  }, [])
+    dispatch(fetchLatestPeriodThunk())
+  }, [dispatch])
+
+  const totalDays = useMemo(() => {
+    if (!latestPeriod) return null
+    return moment(latestPeriod.endDate).diff(moment(latestPeriod.startDate), 'days')
+  }, [latestPeriod])
+
+  const daysFromStart = useMemo(() => {
+    if (!latestPeriod) return 0
+    return moment().diff(moment(latestPeriod.startDate), 'days')
+  }, [latestPeriod])
 
   const percent = useMemo(() => {
     if (!totalDays || totalDays <= 0) return 0

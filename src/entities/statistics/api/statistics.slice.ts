@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { fetchStatisticsByCategoryThunk, fetchPeriodComparisonThunk, fetchActivityThunk, fetchTotalSummaryThunk, fetchTopExpensesThunk } from './statistics.thunk'
-import { ActivityItem, CategoryStatisticsItem, TopExpenseItem, UncategorizedStatistics, PeriodComparisonResponse } from '../types/statistics.type'
+import { fetchStatisticsByCategoryThunk, fetchPeriodComparisonThunk, fetchActivityThunk, fetchTotalSummaryThunk, fetchTopExpensesThunk, fetchDashboardSummaryThunk } from './statistics.thunk'
+import { ActivityItem, CategoryStatisticsItem, DashboardSummaryResponse, TopExpenseItem, UncategorizedStatistics, PeriodComparisonResponse } from '../types/statistics.type'
 
 type StatisticsState = {
   totalSpent: number
@@ -17,6 +17,8 @@ type StatisticsState = {
   isSummaryLoading: boolean
   topExpenses: TopExpenseItem[]
   isTopExpensesLoading: boolean
+  dashboardSummary: DashboardSummaryResponse | null
+  isDashboardSummaryLoading: boolean
 }
 
 const initialState: StatisticsState = {
@@ -33,6 +35,8 @@ const initialState: StatisticsState = {
   isSummaryLoading: false,
   topExpenses: [],
   isTopExpensesLoading: false,
+  dashboardSummary: null,
+  isDashboardSummaryLoading: false,
 }
 
 const statisticsSlice = createSlice({
@@ -95,6 +99,16 @@ const statisticsSlice = createSlice({
       })
       .addCase(fetchTopExpensesThunk.rejected, state => {
         state.isTopExpensesLoading = false
+      })
+      .addCase(fetchDashboardSummaryThunk.pending, state => {
+        state.isDashboardSummaryLoading = true
+      })
+      .addCase(fetchDashboardSummaryThunk.fulfilled, (state, { payload }) => {
+        state.isDashboardSummaryLoading = false
+        state.dashboardSummary = payload
+      })
+      .addCase(fetchDashboardSummaryThunk.rejected, state => {
+        state.isDashboardSummaryLoading = false
       })
   },
 })

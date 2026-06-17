@@ -6,10 +6,13 @@ export type BaseSavingAccountType = {
 
 export type SavingAccountType = BaseSavingAccountType & {
   id: string;
+  workspaceId: string;
   createdAt: string;
   updatedAt: string;
-  deletedAt: string | null;
-  spend: string;
-  remaining: string;
-  transactionCount: number
+  periodIncome: string;
+  periodExpense: string;
+  periodStartBalance: string;
+  transactionCount: number;
+  emoji?: string | null;
+  workspaceName?: string | null;
 }

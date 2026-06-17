@@ -16,8 +16,5 @@ export const updateBillingPeriodRequest = (
 ): Promise<AxiosResponse<BillingPeriodType>> =>
   http.patch(`/billing-period/${id}`, data)
 
-export const getDaysFromStartRequest = (): Promise<AxiosResponse<{ days: number }>> =>
-  http.get('/billing-period/days-from-start')
-
-export const getLatestActivePeriod = (): Promise<AxiosResponse<{startDate: string; endDate: string}>> =>
+export const getLatestActivePeriod = (): Promise<AxiosResponse<{ data: { startDate: string; endDate: string } | null }>> =>
   http.get('/billing-period/latest')

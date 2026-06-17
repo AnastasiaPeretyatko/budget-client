@@ -1,19 +1,13 @@
-import { getLatestActivePeriod } from '@/entities/bulling-period/api/bulling-period.service'
 import { COLOR } from '@/shared/config/colors'
 import { Flex } from '@chakra-ui/react'
 import moment from 'moment'
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { FaArrowRightLong } from 'react-icons/fa6'
+import { useSelector } from 'react-redux'
+import { RootState } from '@/app/store'
 
 const LatestActivePeriodTag = () => {
-  const [latestPeriod, setLatestPeriod] =
-    useState<{startDate: string; endDate: string} | null>(null)
-
-  useEffect(() => {
-    getLatestActivePeriod()
-      .then(({ data }) => setLatestPeriod(data))
-      .catch(() => console.log('error'))
-  }, [])
+  const { latestPeriod } = useSelector((state: RootState) => state.billingPeriod)
 
   return (
     <Flex padding={'2px 6px'} borderRadius={4} fontSize={'sm'} align={'center'} gap={2} bgColor={COLOR.BORDER}>

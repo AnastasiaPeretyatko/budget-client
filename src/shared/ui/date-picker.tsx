@@ -3,6 +3,7 @@
 import { DatePicker, parseDate, Portal } from "@chakra-ui/react"
 import { useState } from 'react'
 import { LuCalendar } from "react-icons/lu"
+import { COLOR } from '../config/colors'
 
 type Props = {
   selectionMode: "single" | "multiple" | "range"
@@ -20,11 +21,11 @@ const BaseDatePicker = ({ selectionMode, label, defaultDate, onChangeValue }: Pr
   }
 
   return (
-    <DatePicker.Root selectionMode={selectionMode} maxWidth="20rem" value={value} onValueChange={handleChengeDate} locale="en-GB">
-      {label && <DatePicker.Label>{label}</DatePicker.Label>}
+    <DatePicker.Root selectionMode={selectionMode} width="100%" value={value} onValueChange={handleChengeDate} locale="en-GB">
+      {label && <DatePicker.Label color={COLOR.LABEL}>{label}</DatePicker.Label>}
       <DatePicker.Control>
-        <DatePicker.Input index={0} />
-        <DatePicker.Input index={1} />
+        <DatePicker.Input index={0} borderRadius={12} borderColor={COLOR.BORDER} />
+        {selectionMode === 'range' && <DatePicker.Input index={1} borderRadius={12} borderColor={COLOR.BORDER} />}
         <DatePicker.IndicatorGroup>
           <DatePicker.Trigger>
             <LuCalendar />
