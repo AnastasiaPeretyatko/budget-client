@@ -17,6 +17,16 @@ type Props = {
   transaction: TransactionType
 }
 
+const TAG_COLORS = [
+  'purple', 'teal', 'blue', 'cyan', 'green', 'orange', 'pink', 'red', 'yellow',
+]
+
+function getTagColor(name: string): string {
+  let hash = 0
+  for (let i = 0; i < name.length; i++) hash = name.charCodeAt(i) + ((hash << 5) - hash)
+  return TAG_COLORS[Math.abs(hash) % TAG_COLORS.length]
+}
+
 const TransactionCard = ({ accountId, transaction }: Props) => {
   const dispatch = useDispatch<AppDispatch>()
   const { showSuccessMessage, showErrorMessage } = useNotifications()
@@ -113,7 +123,7 @@ const TransactionCard = ({ accountId, transaction }: Props) => {
         )}
         {(transaction.category?.name || transaction.tags?.length) && (
           <HStack gap={1} flexWrap="wrap" mt={0.5}>
-            {/* {transaction.category?.name && (
+            {transaction.category?.name && (
               <Badge
                 size="sm"
                 colorPalette={getTagColor(transaction.category.name)}
@@ -123,7 +133,7 @@ const TransactionCard = ({ accountId, transaction }: Props) => {
               >
                 {transaction.category.name}
               </Badge>
-            )} */}
+            )}
             {transaction.tags?.map(tag => (
               <Badge
                 key={tag.id}
