@@ -12,3 +12,5 @@ export const loginRequest = (data: { email: string; password: string }): Promise
 
 export const registerRequest = (data: { email: string; password: string }): Promise<AxiosResponse<LoginResponse>> => http.post('/auth/register', data)
 
+export const verifyTokenRequest = (): Promise<AxiosResponse<AuthUser>> => http.get('/auth/me')
+

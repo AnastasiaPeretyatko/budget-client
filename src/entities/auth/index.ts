@@ -1,5 +1,5 @@
 export type { AuthUser } from './types/user.type'
 export type { LoginResponse } from './api/auth.service'
-export { loginThunk } from './api/auth.thunk'
+export { loginThunk, verifyTokenThunk } from './api/auth.thunk'
 export { setIsAuth, setToken, deleteToken, setIsLoading } from './api/auth.slice'
 export { default as authReducer } from './api/auth.slice'

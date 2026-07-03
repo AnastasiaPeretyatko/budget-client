@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { fetchTransactionsThunk, createTransactionThunk } from './transaction.thunk'
+import { fetchTransactionsThunk, createTransactionThunk, deleteTransactionThunk, updateTransactionThunk } from './transaction.thunk'
 import { TransactionType } from '../types/transaction.type'
 import { insertSortedByDate } from '@/shared/lib/insertSorted'
 
@@ -43,6 +43,14 @@ const transactions = createSlice({
       .addCase(fetchTransactionsThunk.rejected, (state, { payload }) => {
         state.error = payload
         state.isLoading = false
+      })
+      .addCase(deleteTransactionThunk.fulfilled, (state, { payload }) => {
+        state.transactions = state.transactions.filter(t => t.id !== payload)
+        state.count = Math.max(0, state.count - 1)
+      })
+      .addCase(updateTransactionThunk.fulfilled, (state, { payload }) => {
+        const index = state.transactions.findIndex(t => t.id === payload.id)
+        if (index !== -1) state.transactions[index] = payload
       })
   }
 })

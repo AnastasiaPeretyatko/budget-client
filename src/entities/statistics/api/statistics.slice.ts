@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { fetchStatisticsByCategoryThunk, fetchPeriodComparisonThunk, fetchActivityThunk, fetchTotalSummaryThunk, fetchTopExpensesThunk, fetchDashboardSummaryThunk } from './statistics.thunk'
-import { ActivityItem, CategoryStatisticsItem, DashboardSummaryResponse, TopExpenseItem, UncategorizedStatistics, PeriodComparisonResponse } from '../types/statistics.type'
+import { fetchStatisticsByCategoryThunk, fetchPeriodComparisonThunk, fetchActivityThunk, fetchTotalSummaryThunk, fetchTopExpensesThunk, fetchDashboardSummaryThunk, fetchBalanceHistoryThunk } from './statistics.thunk'
+import { ActivityItem, BalanceHistoryItem, CategoryStatisticsItem, DashboardSummaryResponse, TopExpenseItem, UncategorizedStatistics, PeriodComparisonResponse } from '../types/statistics.type'
 
 type StatisticsState = {
   totalSpent: number
@@ -19,6 +19,8 @@ type StatisticsState = {
   isTopExpensesLoading: boolean
   dashboardSummary: DashboardSummaryResponse | null
   isDashboardSummaryLoading: boolean
+  balanceHistory: BalanceHistoryItem[]
+  isBalanceHistoryLoading: boolean
 }
 
 const initialState: StatisticsState = {
@@ -37,6 +39,8 @@ const initialState: StatisticsState = {
   isTopExpensesLoading: false,
   dashboardSummary: null,
   isDashboardSummaryLoading: false,
+  balanceHistory: [],
+  isBalanceHistoryLoading: false,
 }
 
 const statisticsSlice = createSlice({
@@ -109,6 +113,16 @@ const statisticsSlice = createSlice({
       })
       .addCase(fetchDashboardSummaryThunk.rejected, state => {
         state.isDashboardSummaryLoading = false
+      })
+      .addCase(fetchBalanceHistoryThunk.pending, state => {
+        state.isBalanceHistoryLoading = true
+      })
+      .addCase(fetchBalanceHistoryThunk.fulfilled, (state, { payload }) => {
+        state.isBalanceHistoryLoading = false
+        state.balanceHistory = payload
+      })
+      .addCase(fetchBalanceHistoryThunk.rejected, state => {
+        state.isBalanceHistoryLoading = false
       })
   },
 })

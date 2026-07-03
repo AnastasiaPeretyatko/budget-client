@@ -1,5 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { LoginResponse, loginRequest, registerRequest } from './auth.service';
+import axios from 'axios';
+import { AuthUser } from '../types/user.type';
+import { LoginResponse, loginRequest, registerRequest, verifyTokenRequest } from './auth.service';
 
 export const loginThunk = createAsyncThunk<
   LoginResponse,
@@ -17,6 +19,22 @@ export const loginThunk = createAsyncThunk<
     return rejectWithValue(
       error instanceof Error ? error.message : 'Unknown error'
     );
+  }
+});
+
+export const verifyTokenThunk = createAsyncThunk<
+  AuthUser,
+  void,
+  { rejectValue: 'unavailable' | 'unauthorized' }
+>('auth/verify', async (_, { rejectWithValue }) => {
+  try {
+    const res = await verifyTokenRequest();
+    return res.data;
+  } catch (error) {
+    if (axios.isAxiosError(error) && !error.response) {
+      return rejectWithValue('unavailable');
+    }
+    return rejectWithValue('unauthorized');
   }
 });
 

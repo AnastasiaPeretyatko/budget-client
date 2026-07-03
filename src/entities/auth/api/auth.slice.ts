@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { loginThunk, registerThunk } from './auth.thunk'
+import { loginThunk, registerThunk, verifyTokenThunk } from './auth.thunk'
 import { AuthUser } from '../types/user.type'
 
 type AuthState = {
@@ -8,6 +8,7 @@ type AuthState = {
   isAuth: boolean
   isLoading: boolean
   isSubmitting: boolean
+  isServerAvailable: boolean
   error?: string
 }
 
@@ -16,7 +17,8 @@ const initialState: AuthState = {
   token: null,
   isAuth: false,
   isLoading: true,
-  isSubmitting: false
+  isSubmitting: false,
+  isServerAvailable: true,
 }
 
 const auth = createSlice({
@@ -65,6 +67,21 @@ const auth = createSlice({
       .addCase(registerThunk.rejected, (state, { payload }) => {
         state.error = payload
         state.isSubmitting = false
+      })
+      .addCase(verifyTokenThunk.pending, state => {
+        state.isLoading = true
+        state.isServerAvailable = true
+      })
+      .addCase(verifyTokenThunk.fulfilled, (state, { payload }) => {
+        state.user = payload
+        state.isAuth = true
+        state.isLoading = false
+      })
+      .addCase(verifyTokenThunk.rejected, (state, { payload }) => {
+        state.isLoading = false
+        if (payload === 'unavailable') {
+          state.isServerAvailable = false
+        }
       })
   }
 })

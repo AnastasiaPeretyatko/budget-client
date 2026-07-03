@@ -110,7 +110,10 @@ const TransactionTabs = ({ children }: PropsWithChildren) => {
         </GridItem>
         <GridItem colSpan={1}>
           <VStack width={'100%'} gap={4}>
-            <SavingAccountAmoundCard savingAccountAmound={activeSavingAccount!.amount}/>
+            <SavingAccountAmoundCard
+              accountId={activeSavingAccount!.id}
+              savingAccountAmound={activeSavingAccount!.amount}
+            />
             <Card.Root width="100%">
               <Card.Body display="flex" flexDir="column" gap={2}>
                 <Text color={COLOR.LABEL} fontWeight={500} fontSize="sm">

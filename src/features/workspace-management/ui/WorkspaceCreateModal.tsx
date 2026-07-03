@@ -12,10 +12,13 @@ const WorkspaceCreateModal = () => {
   const { showErrorMessage, showSuccessMessage } = useNotifications()
   const [title, setTitle] = useState('')
 
-  const handleSave = () => {
+  const handleSave = (close: () => void) => {
     dispatch(createWorkspaceThunk({ title }))
       .unwrap()
-      .then(() => showSuccessMessage('Workspace created successfully'))
+      .then(() => {
+        showSuccessMessage('Workspace created successfully')
+        close()
+      })
       .catch(() => showErrorMessage('Error creating workspace'))
   }
   return (

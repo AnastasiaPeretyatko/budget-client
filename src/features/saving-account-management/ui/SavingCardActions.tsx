@@ -11,11 +11,13 @@ const SavingCardActions = ({ id }: {id: string}) => {
   const menuItems = useMemo(() => {
     return [
       {
-        value: 'Edit',
+        value: 'edit',
+        label: 'Edit',
         onClick: () => console.log('edit')
       },
       {
-        value: 'Delete',
+        value: 'delete',
+        label: 'Delete',
         onClick: () => dispatch(deleteSavingAccountThunk(id))
       }
     ]

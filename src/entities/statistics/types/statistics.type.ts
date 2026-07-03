@@ -66,3 +66,8 @@ export type DashboardSummaryResponse = {
   balanceChange: DashboardChangeItem
 }
 
+export type BalanceHistoryItem = {
+  date: string
+  balance: number
+}
+
