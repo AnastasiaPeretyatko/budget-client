@@ -43,7 +43,7 @@ http.interceptors.response.use(
   (response: AxiosResponse) => response,
   async (error) => {
     const originalRequest = error.config;
-    if (error.response.status === 401 && !originalRequest._isRetry) {
+    if (error.response?.status === 401 && !originalRequest._isRetry) {
       if (!isRefreshing) {
         isRefreshing = true;
         originalRequest._isRetry = true;

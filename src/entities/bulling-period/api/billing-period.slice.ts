@@ -1,23 +1,27 @@
 import { createSlice } from '@reduxjs/toolkit'
 import {
   createBillingPeriodThunk,
-  fetchDaysFromStartThunk,
+  fetchLatestPeriodThunk,
   fetchBillingPeriodsThunk,
   updateBillingPeriodThunk,
   archiveBillingPeriodThunk
 } from './billing-period.thunk'
 import { BillingPeriodType } from '../types/billing-period.type'
 
+type LatestPeriod = { startDate: string; endDate: string }
+
 type BillingPeriodState = {
   billingPeriods: BillingPeriodType[]
-  daysFromStart: number
+  latestPeriod: LatestPeriod | null
+  hasNoActivePeriod: boolean
   isLoading: boolean
   error?: string
 }
 
 const initialState: BillingPeriodState = {
   billingPeriods: [],
-  daysFromStart: 0,
+  latestPeriod: null,
+  hasNoActivePeriod: false,
   isLoading: false,
 }
 
@@ -45,6 +49,7 @@ const billingPeriodSlice = createSlice({
       })
       .addCase(createBillingPeriodThunk.fulfilled, (state, { payload }) => {
         state.isLoading = false
+        state.hasNoActivePeriod = false
         state.billingPeriods.unshift(payload)
       })
       .addCase(createBillingPeriodThunk.rejected, (state, { payload }) => {
@@ -59,8 +64,13 @@ const billingPeriodSlice = createSlice({
         const idx = state.billingPeriods.findIndex(bp => bp.id === payload.id)
         if (idx !== -1) state.billingPeriods[idx] = payload
       })
-      .addCase(fetchDaysFromStartThunk.fulfilled, (state, { payload }) => {
-        state.daysFromStart = payload
+      .addCase(fetchLatestPeriodThunk.fulfilled, (state, { payload }) => {
+        state.hasNoActivePeriod = false
+        state.latestPeriod = payload
+      })
+      .addCase(fetchLatestPeriodThunk.rejected, state => {
+        state.hasNoActivePeriod = true
+        state.latestPeriod = null
       })
   },
 })

@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { fetchWorkspacesThunk, createWorkspaceThunk, fetchCurrentWorkspaceThunk, inviteUserThunk, removeWorkspaceUserThunk } from './workspace.thunk'
+import { fetchWorkspacesThunk, createWorkspaceThunk, fetchCurrentWorkspaceThunk, inviteUserThunk, removeWorkspaceUserThunk, deleteWorkspaceThunk, updateWorkspaceThunk } from './workspace.thunk'
 import { WorkspaceListType, WorkspaceType } from '../types/workspace.type'
 
 type WorkspaceState = {
@@ -75,6 +75,19 @@ const workspaces = createSlice({
         if (state.currentWorkspace) {
           state.currentWorkspace.users = state.currentWorkspace.users.filter(u => u.id !== payload)
         }
+      })
+      .addCase(deleteWorkspaceThunk.fulfilled, (state, { payload }) => {
+        state.workspaces = state.workspaces.filter(w => w.id !== payload)
+      })
+      .addCase(deleteWorkspaceThunk.rejected, (state, { payload }) => {
+        state.error = payload
+      })
+      .addCase(updateWorkspaceThunk.fulfilled, (state, { payload }) => {
+        const idx = state.workspaces.findIndex(w => w.id === payload.id)
+        if (idx !== -1) state.workspaces[idx] = payload
+      })
+      .addCase(updateWorkspaceThunk.rejected, (state, { payload }) => {
+        state.error = payload
       })
   }
 })

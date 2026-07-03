@@ -4,11 +4,13 @@ import { fetchSavingAccountByIdThunk } from '@/entities/saving-account'
 import { CategorySearchSelect } from '@/features/category-management'
 import { SavingAccountSearchSelect } from '@/features/saving-account-management'
 import FieldInput from '@/shared/ui/FieldInput'
+import BaseDatePicker from '@/shared/ui/date-picker'
 import { Button, HStack, VStack } from '@chakra-ui/react'
 import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { FaArrowRightLong } from 'react-icons/fa6'
 import { TransactionTypeEnum } from '@/entities/transaction/types/transaction.type'
+import { useNotifications } from '@/shared/hooks/useNotifications'
 
 type Props = {
   onClose: () => void
@@ -17,10 +19,11 @@ type Props = {
 const TransferTransactionModal = ({ onClose }: Props) => {
   const dispatch = useDispatch<AppDispatch>()
   const { activeSavingAccount } = useSelector((state: RootState) => state.savingAccounts)
+  const { showSuccessMessage, showErrorMessage } = useNotifications()
 
   const [amount, setAmount] = useState('')
   const [description, setDescription] = useState('')
-  const [date, setDate] = useState('')
+  const [date, setDate] = useState(new Date().toISOString().split('T')[0])
   const [categoryId, setCategoryId] = useState('')
   const [fromAccountId, setFromAccountId] = useState('')
   const [toAccountId, setToAccountId] = useState('')
@@ -40,23 +43,25 @@ const TransferTransactionModal = ({ onClose }: Props) => {
   const handleSave = async () => {
     if (!validate()) return
     setIsLoading(true)
-    try {
-      await dispatch(createTransactionThunk({
-        fromAccountId: fromAccountId || undefined,
-        toAccountId: toAccountId || undefined,
-        categoryId: categoryId || undefined,
-        amount,
-        description: description || null,
-        date: new Date(date),
-        type: TransactionTypeEnum.TRANSFER
-      })).unwrap()
-      if (activeSavingAccount) {
-        dispatch(fetchSavingAccountByIdThunk(activeSavingAccount.id))
-      }
-      onClose()
-    } finally {
-      setIsLoading(false)
-    }
+    dispatch(createTransactionThunk({
+      fromAccountId: fromAccountId || undefined,
+      toAccountId: toAccountId || undefined,
+      categoryId: categoryId || undefined,
+      amount,
+      description: description || null,
+      date: new Date(date),
+      type: TransactionTypeEnum.TRANSFER
+    }))
+      .unwrap()
+      .then(() => {
+        showSuccessMessage('Transaction created')
+        if (activeSavingAccount) {
+          dispatch(fetchSavingAccountByIdThunk(activeSavingAccount.id))
+        }
+        onClose()
+      })
+      .catch((err: string) => showErrorMessage(err))
+      .finally(() => setIsLoading(false))
   }
 
   return (
@@ -71,7 +76,7 @@ const TransferTransactionModal = ({ onClose }: Props) => {
         <FieldInput label="Description" onChange={(e) => { setDescription(e.target.value); setErrors((prev) => ({ ...prev, description: '' })) }} required invalid={!!errors.description} errorText={errors.description}/>
       </HStack>
       <CategorySearchSelect label='Category' value={categoryId} onChange={(val) => setCategoryId(val)}/>
-      <FieldInput label='Event day' onChange={(e) => setDate(e.target.value)} type='date'/>
+      <BaseDatePicker selectionMode='single' label='Event day' defaultDate={date} onChangeValue={(dates) => setDate(dates[0])} />
       <Button width={'100%'} size="sm" borderRadius={10} onClick={handleSave} loading={isLoading}>
         Save
       </Button>

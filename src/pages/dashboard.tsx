@@ -1,10 +1,11 @@
 import AddBillingPeriodButton from '@/features/billing_period/AddBillingPerodButton';
-import { SavingAccountList } from '@/widgets/saving-account-list';
-import DashboardTransactions from '@/widgets/dashboard/DashboardTransactions';
 import DashboardSummaryCards from '@/widgets/dashboard/DashboardSummaryCards';
 import DashboardActivityCalendar from '@/widgets/dashboard/DashboardActivityCalendar';
-import { Grid, GridItem, Heading, HStack, Text, VStack } from '@chakra-ui/react';
+import DashboardTransactions from '@/widgets/dashboard/DashboardTransactions';
+import { Heading, HStack, Link, Text, VStack } from '@chakra-ui/react';
 import { COLOR } from '@/shared/config/colors';
+import { SavingAccountList } from '@/widgets/saving-account-list';
+import NextLink from 'next/link';
 
 export default function DashboardPage() {
   return (
@@ -19,20 +20,20 @@ export default function DashboardPage() {
         <Text>Привет, {''}! 👋</Text>
         <Text color={COLOR.LABEL} fontSize={'sm'}>Вот что происходит с вашими финансами</Text>
       </VStack>
-
-      <Grid width={'100%'} templateColumns="2fr 1fr" gap={6}>
-        <GridItem>
-          <VStack width={'100%'} align={'start'} gap={6}>
-            <DashboardSummaryCards/>
-            <DashboardActivityCalendar/>
-            {/* <DashboardAnalytics/> */}
-            <DashboardTransactions/>
-          </VStack>
-        </GridItem>
-        <GridItem>
-          <SavingAccountList direction="column"/>
-        </GridItem>
-      </Grid>
+      <VStack width={'100%'} align={'start'} gap={6}>
+        <DashboardSummaryCards/>
+        <DashboardActivityCalendar/>
+        <VStack width={'100%'} align={'start'} gap={3}>
+          <HStack width={'100%'} justify={'space-between'}>
+            <Heading size={'md'}>Мои накопительные</Heading>
+            <Link as={NextLink} href={'/budgets'} fontSize={'sm'} color={COLOR.PRIMARY_COLOR}>
+              Все накопительные &rsaquo;
+            </Link>
+          </HStack>
+          <SavingAccountList isDisplayCreteModal limit={3} />
+        </VStack>
+        <DashboardTransactions />
+      </VStack>
     </VStack>
   );
 }

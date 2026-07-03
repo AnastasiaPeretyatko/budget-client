@@ -20,8 +20,11 @@ const BaseModal = ({ title, description, children, buttonTrigger, onClickSave, s
   const renderedChildren = typeof children === 'function' ? children(close) : children
 
   const handleSave = () => {
-    onClickSave?.(close)
-    close()
+    if (onClickSave) {
+      onClickSave(close)
+    } else {
+      close()
+    }
   }
 
   return (

@@ -5,7 +5,7 @@ const BudgetsPage = () => {
   return (
     <VStack width={'100%'} align={'start'}>
       <Heading>Budgets</Heading>
-      <SavingAccountList isDisplayCreteModal/>
+      <SavingAccountList isDisplayCreteModal wrap />
     </VStack>
   )
 }

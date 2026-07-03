@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { fetchStatisticsByCategoryThunk, fetchPeriodComparisonThunk, fetchActivityThunk, fetchTotalSummaryThunk, fetchTopExpensesThunk } from './statistics.thunk'
-import { ActivityItem, CategoryStatisticsItem, TopExpenseItem, UncategorizedStatistics, PeriodComparisonResponse } from '../types/statistics.type'
+import { fetchStatisticsByCategoryThunk, fetchPeriodComparisonThunk, fetchActivityThunk, fetchTotalSummaryThunk, fetchTopExpensesThunk, fetchDashboardSummaryThunk, fetchBalanceHistoryThunk } from './statistics.thunk'
+import { ActivityItem, BalanceHistoryItem, CategoryStatisticsItem, DashboardSummaryResponse, TopExpenseItem, UncategorizedStatistics, PeriodComparisonResponse } from '../types/statistics.type'
 
 type StatisticsState = {
   totalSpent: number
@@ -17,6 +17,10 @@ type StatisticsState = {
   isSummaryLoading: boolean
   topExpenses: TopExpenseItem[]
   isTopExpensesLoading: boolean
+  dashboardSummary: DashboardSummaryResponse | null
+  isDashboardSummaryLoading: boolean
+  balanceHistory: BalanceHistoryItem[]
+  isBalanceHistoryLoading: boolean
 }
 
 const initialState: StatisticsState = {
@@ -33,6 +37,10 @@ const initialState: StatisticsState = {
   isSummaryLoading: false,
   topExpenses: [],
   isTopExpensesLoading: false,
+  dashboardSummary: null,
+  isDashboardSummaryLoading: false,
+  balanceHistory: [],
+  isBalanceHistoryLoading: false,
 }
 
 const statisticsSlice = createSlice({
@@ -95,6 +103,26 @@ const statisticsSlice = createSlice({
       })
       .addCase(fetchTopExpensesThunk.rejected, state => {
         state.isTopExpensesLoading = false
+      })
+      .addCase(fetchDashboardSummaryThunk.pending, state => {
+        state.isDashboardSummaryLoading = true
+      })
+      .addCase(fetchDashboardSummaryThunk.fulfilled, (state, { payload }) => {
+        state.isDashboardSummaryLoading = false
+        state.dashboardSummary = payload
+      })
+      .addCase(fetchDashboardSummaryThunk.rejected, state => {
+        state.isDashboardSummaryLoading = false
+      })
+      .addCase(fetchBalanceHistoryThunk.pending, state => {
+        state.isBalanceHistoryLoading = true
+      })
+      .addCase(fetchBalanceHistoryThunk.fulfilled, (state, { payload }) => {
+        state.isBalanceHistoryLoading = false
+        state.balanceHistory = payload
+      })
+      .addCase(fetchBalanceHistoryThunk.rejected, state => {
+        state.isBalanceHistoryLoading = false
       })
   },
 })

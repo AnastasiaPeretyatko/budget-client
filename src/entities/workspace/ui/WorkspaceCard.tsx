@@ -1,10 +1,12 @@
-import { Box, Button, Card, HStack, Text } from '@chakra-ui/react'
+import { Box, Button, Card, HStack, Menu, Portal, Text } from '@chakra-ui/react'
 import { WorkspaceListType } from '../types/workspace.type'
 import { IoPeople } from 'react-icons/io5'
 import { CiMenuKebab } from 'react-icons/ci'
 import { COLOR } from '@/shared/config/colors'
 import { MdOutlineCalendarToday, MdOutlinePerson } from 'react-icons/md'
+import { MdEdit, MdDelete } from 'react-icons/md'
 import moment from 'moment'
+import { WorkspaceDeleteModal, WorkspaceEditModal } from '@/features/workspace-management'
 
 type Props = {
   workspace: WorkspaceListType
@@ -16,7 +18,35 @@ const WorkspaceCard = ({ workspace, onSelect }: Props) => {
     <Card.Root padding={4} onDoubleClick={() => onSelect?.(workspace.id)} display={'flex'} flexDir={'column'} gap={6} height={'max-content'} bgColor={COLOR.BACKGROUND}>
       <Card.Header width={'100%'} display={'flex'} flexDir={'row'} justifyContent={'space-between'} p={0}>
         <Box width={12} height={12} borderRadius={10} backgroundColor={'gray.800'}/>
-        <Button size={'xs'} variant={'ghost'}><CiMenuKebab/></Button>
+        <Menu.Root>
+          <Menu.Trigger asChild>
+            <Button size={'xs'} variant={'ghost'}><CiMenuKebab/></Button>
+          </Menu.Trigger>
+          <Portal>
+            <Menu.Positioner>
+              <Menu.Content>
+                <WorkspaceEditModal
+                  workspaceId={workspace.id}
+                  workspaceTitle={workspace.title}
+                  trigger={
+                    <Menu.Item value='edit' cursor={'pointer'}>
+                      <MdEdit/><Text>Редактировать</Text>
+                    </Menu.Item>
+                  }
+                />
+                <WorkspaceDeleteModal
+                  workspaceId={workspace.id}
+                  workspaceTitle={workspace.title}
+                  trigger={
+                    <Menu.Item value='delete' cursor={'pointer'} color={'red.400'}>
+                      <MdDelete/><Text>Удалить</Text>
+                    </Menu.Item>
+                  }
+                />
+              </Menu.Content>
+            </Menu.Positioner>
+          </Portal>
+        </Menu.Root>
       </Card.Header>
       <Card.Body padding={0} display={'flex'} flexDir={'column'} gap={2}>
         <Card.Title fontSize={'lg'}>{workspace.title}</Card.Title>

@@ -8,6 +8,7 @@ import { billingPeriodReducer } from '@/entities/bulling-period'
 import { categoryReducer } from '@/entities/category'
 import { statisticsReducer } from '@/entities/statistics'
 import { userReducer } from '@/entities/user'
+import { tagReducer } from '@/entities/tag'
 
 export const store = configureStore({
   reducer: {
@@ -19,6 +20,7 @@ export const store = configureStore({
     categories: categoryReducer,
     statistics: statisticsReducer,
     user: userReducer,
+    tags: tagReducer,
   }
 })
 

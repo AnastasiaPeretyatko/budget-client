@@ -1,7 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit'
 import {
   createBillingPeriodRequest,
-  getDaysFromStartRequest,
+  getLatestActivePeriod,
   getAllBillingPeriodsRequest,
   updateBillingPeriodRequest
 } from './bulling-period.service'
@@ -67,14 +67,15 @@ export const archiveBillingPeriodThunk = createAsyncThunk<
   }
 })
 
-export const fetchDaysFromStartThunk = createAsyncThunk<
-  number,
+export const fetchLatestPeriodThunk = createAsyncThunk<
+  { startDate: string; endDate: string },
   void,
   { rejectValue: string }
->('billingPeriod/daysFromStart', async (_, { rejectWithValue }) => {
+>('billingPeriod/fetchLatest', async (_, { rejectWithValue }) => {
   try {
-    const res = await getDaysFromStartRequest()
-    return res.data.days
+    const res = await getLatestActivePeriod()
+    if (!res.data.data) return rejectWithValue('No active billing period')
+    return res.data.data
   } catch (error) {
     return rejectWithValue(
       error instanceof Error ? error.message : 'Unknown error'

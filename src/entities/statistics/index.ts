@@ -6,6 +6,12 @@ export type {
   ActivityItem,
   TotalSummaryResponse,
   TopExpenseItem,
+  DashboardSummaryResponse,
+  DashboardChangeItem,
+  BalanceHistoryItem,
 } from './types/statistics.type'
-export { fetchStatisticsByCategoryThunk, fetchPeriodComparisonThunk, fetchActivityThunk, fetchTotalSummaryThunk, fetchTopExpensesThunk } from './api/statistics.thunk'
+export { fetchStatisticsByCategoryThunk, fetchPeriodComparisonThunk, fetchActivityThunk, fetchTotalSummaryThunk, fetchTopExpensesThunk, fetchDashboardSummaryThunk, fetchBalanceHistoryThunk } from './api/statistics.thunk'
+export { default as BalanceCard } from './ui/BalanceCard'
+export { default as TotalIncomeCard } from './ui/TotalIncomeCard'
+export { default as TotalSpentCard } from './ui/TotalSpentCard'
 export { default as statisticsReducer } from './api/statistics.slice'

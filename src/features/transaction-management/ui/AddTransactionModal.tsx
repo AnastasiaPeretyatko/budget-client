@@ -22,7 +22,7 @@ const getList = (onClose: () => void) => [
 
 const AddTransactionModal = () => {
   return (
-    <BaseModal title='Add Transaction' buttonTrigger={<Button size={'sm'}>Add Transaction</Button>} showFooter={false}>
+    <BaseModal title='Добавить транзакцию' buttonTrigger={<Button size={'sm'}>Добавить транзакцию</Button>} showFooter={false}>
       {(close) => <BaseTabs list={getList(close)} isBorder/>}
     </BaseModal>
   )
