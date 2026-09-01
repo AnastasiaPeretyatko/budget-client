@@ -12,17 +12,19 @@ type MenuItem = {
 type Props = {
   buttonTrigger: React.ReactNode;
   menuItems: MenuItem[]
+  positioning?: Menu.RootProps['positioning']
+  minW?: Menu.ContentProps['minW']
 }
 
-const DropdownMenu = ({ menuItems, buttonTrigger }: Props) => {
+const DropdownMenu = ({ menuItems, buttonTrigger, positioning, minW }: Props) => {
   return (
-    <Menu.Root>
+    <Menu.Root positioning={positioning}>
       <Menu.Trigger asChild>
         {buttonTrigger}
       </Menu.Trigger>
       <Portal>
         <Menu.Positioner>
-          <Menu.Content>
+          <Menu.Content minW={minW}>
             {menuItems.map((item) => (
               <Menu.Item
                 key={item.value}

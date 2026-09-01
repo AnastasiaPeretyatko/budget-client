@@ -3,7 +3,7 @@ import { getAllCategoryRequest, postCategoryRequest } from '@/entities/category'
 import { useCallback } from 'react'
 
 type Props = {
-  value?: string
+  value?: SearchSelectOption
   onChange?: (value: string) => void
   placeholder?: string
   creatable?: boolean

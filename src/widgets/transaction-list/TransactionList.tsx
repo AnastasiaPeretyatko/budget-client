@@ -15,9 +15,10 @@ type Props = {
   limit?: number
   type?: TransactionTypeEnum
   tagFilter?: CheckboxDropdownValue
+  dateBetween?: string[]
 }
 
-function buildTagFilter(tagFilter: CheckboxDropdownValue): TagFilterOperator | undefined {
+export function buildTagFilter(tagFilter: CheckboxDropdownValue): TagFilterOperator | undefined {
   const included = Object.entries(tagFilter).filter(([, s]) => s === 'included').map(([id]) => id)
   const excluded = Object.entries(tagFilter).filter(([, s]) => s === 'excluded').map(([id]) => id)
 
@@ -26,12 +27,13 @@ function buildTagFilter(tagFilter: CheckboxDropdownValue): TagFilterOperator | u
   return undefined
 }
 
-const TransactionList = ({ accountId, limit, type, tagFilter = {} }: Props) => {
+const TransactionList = ({ accountId, limit, type, tagFilter = {}, dateBetween }: Props) => {
   const dispatch = useDispatch<AppDispatch>()
 
   const { transactions } = useSelector((state: RootState) => state.transactions)
 
   const tagFilterKey = JSON.stringify(tagFilter)
+  const dateBetweenKey = JSON.stringify(dateBetween)
 
   useEffect(() => {
     const tag = buildTagFilter(tagFilter)
@@ -40,11 +42,12 @@ const TransactionList = ({ accountId, limit, type, tagFilter = {} }: Props) => {
         ...(accountId ? { accountId } : {}),
         ...(type ? { type } : {}),
         ...(tag ? { tag } : {}),
+        ...(dateBetween && dateBetween.length === 2 ? { date: { between: dateBetween } } : {}),
       },
       paging: limit ? { limit } : undefined,
     }))
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dispatch, accountId, limit, type, tagFilterKey])
+  }, [dispatch, accountId, limit, type, tagFilterKey, dateBetweenKey])
 
   if (!transactions.length) {
     return <Text fontSize={'sm'} color={COLOR.LABEL}>You have no transactions for the current period</Text>

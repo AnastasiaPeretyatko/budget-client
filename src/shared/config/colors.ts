@@ -1,6 +1,6 @@
 export const COLOR = {
   LABEL: "#a1a1aa",
-  BORDER: "#3f3f46",
+  BORDER: "#d4d4d8",
   INCOME_TEXT: "#61d161",
   EXPENSE_TEXT: "#f97316",
   DANGER_TEXT: "#f87171",

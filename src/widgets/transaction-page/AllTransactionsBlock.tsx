@@ -1,14 +1,15 @@
-import AddTransactionModal from '@/features/transaction-management/ui/AddTransactionModal'
 import { TransactionTypeEnum } from '@/entities/transaction/types/transaction.type'
+import { fetchTransactionsThunk } from '@/entities/transaction'
 import { fetchTagsThunk } from '@/entities/tag'
 import { fetchBillingPeriodsThunk } from '@/entities/bulling-period'
 import CheckboxDropdown, { CheckboxDropdownValue } from '@/shared/ui/checkbox-dropdown'
-import { Box, Button, Heading, HStack, VStack } from '@chakra-ui/react'
-import TransactionList from '../transaction-list/TransactionList'
-import PeriodFilter from './PeriodFilter'
+import { Box, Button, HStack, VStack } from '@chakra-ui/react'
 import { useEffect, useMemo, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { RootState, useAppDispatch } from '@/app/store'
+import PeriodFilter from './PeriodFilter'
+import TransactionsTable from './TransactionsTable'
+import { buildTagFilter } from '../transaction-list/TransactionList'
 
 const typeFilters = [
   { label: 'Все', value: undefined },
@@ -17,27 +18,20 @@ const typeFilters = [
   { label: 'Переводы', value: TransactionTypeEnum.TRANSFER },
 ] as const
 
-const TransactionsHistoryBlock = () => {
+const AllTransactionsBlock = () => {
   const dispatch = useAppDispatch()
-  const { activeSavingAccount } = useSelector((state: RootState) => state.savingAccounts)
   const { tags } = useSelector((state: RootState) => state.tags)
   const { billingPeriods } = useSelector((state: RootState) => state.billingPeriod)
+  const { transactions, isLoading } = useSelector((state: RootState) => state.transactions)
+
   const [activeType, setActiveType] = useState<TransactionTypeEnum | undefined>(undefined)
   const [tagFilter, setTagFilter] = useState<CheckboxDropdownValue>({})
-  // undefined = не трогали (по умолчанию активный период), null = явно выбраны все периоды
-  const [userPeriodId, setUserPeriodId] = useState<string | null | undefined>(undefined)
+  const [periodId, setPeriodId] = useState<string | undefined>(undefined)
 
   useEffect(() => {
     dispatch(fetchTagsThunk(undefined))
     dispatch(fetchBillingPeriodsThunk())
   }, [dispatch])
-
-  const activePeriodId = useMemo(
-    () => billingPeriods.find(p => p.status === 'active')?.id,
-    [billingPeriods]
-  )
-
-  const periodId = userPeriodId === undefined ? activePeriodId : (userPeriodId ?? undefined)
 
   const handleTypeChange = (value: TransactionTypeEnum | undefined) => {
     setActiveType(prev => prev === value ? undefined : value)
@@ -50,13 +44,24 @@ const TransactionsHistoryBlock = () => {
     return period ? [period.startDate, period.endDate] : undefined
   }, [billingPeriods, periodId])
 
+  const tagFilterKey = JSON.stringify(tagFilter)
+  const dateBetweenKey = JSON.stringify(dateBetween)
+
+  useEffect(() => {
+    const tag = buildTagFilter(tagFilter)
+    dispatch(fetchTransactionsThunk({
+      filter: {
+        ...(activeType ? { type: activeType } : {}),
+        ...(tag ? { tag } : {}),
+        ...(dateBetween && dateBetween.length === 2 ? { date: { between: dateBetween } } : {}),
+      },
+    }))
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dispatch, activeType, tagFilterKey, dateBetweenKey])
+
   return (
-    <VStack width={'100%'} align={'start'} gap={4} height="calc(100vh - 200px)">
-      <HStack width={'100%'} justify={'space-between'} flexShrink={0}>
-        <Heading size={'md'}>Transactions</Heading>
-        <AddTransactionModal/>
-      </HStack>
-      <HStack gap={2} flexShrink={0} flexWrap="wrap">
+    <VStack width="100%" align="start" gap={4}>
+      <HStack gap={2} flexWrap="wrap">
         {typeFilters.map((f) => (
           <Button
             key={f.label}
@@ -80,19 +85,14 @@ const TransactionsHistoryBlock = () => {
         <PeriodFilter
           periods={billingPeriods}
           value={periodId}
-          onChange={(id) => setUserPeriodId(id ?? null)}
+          onChange={setPeriodId}
         />
       </HStack>
-      <Box width="100%" flex={1} overflowY="auto" minH={0}>
-        <TransactionList
-          accountId={activeSavingAccount!.id}
-          type={activeType}
-          tagFilter={tagFilter}
-          dateBetween={dateBetween}
-        />
+      <Box width="100%" flex={1} minH={0}>
+        <TransactionsTable transactions={transactions} loading={isLoading} />
       </Box>
     </VStack>
   )
 }
 
-export default TransactionsHistoryBlock
+export default AllTransactionsBlock

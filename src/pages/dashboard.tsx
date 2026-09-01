@@ -2,24 +2,22 @@ import AddBillingPeriodButton from '@/features/billing_period/AddBillingPerodBut
 import DashboardSummaryCards from '@/widgets/dashboard/DashboardSummaryCards';
 import DashboardActivityCalendar from '@/widgets/dashboard/DashboardActivityCalendar';
 import DashboardTransactions from '@/widgets/dashboard/DashboardTransactions';
-import { Heading, HStack, Link, Text, VStack } from '@chakra-ui/react';
+import { Heading, HStack, Link, VStack } from '@chakra-ui/react';
 import { COLOR } from '@/shared/config/colors';
 import { SavingAccountList } from '@/widgets/saving-account-list';
 import NextLink from 'next/link';
+import WelcomeHeader from '@/features/dashboard/WelcomeHeader';
+import moment from 'moment';
 
 export default function DashboardPage() {
   return (
     <VStack width={'100%'} align={'start'} gap={6}>
       <HStack width={'100%'} justify={'space-between'}>
-        <Heading>Dashboard</Heading>
+        <Heading>Главная {moment().format('LL')}</Heading>
         <AddBillingPeriodButton/>
       </HStack>
 
-      <VStack width={'100%'} align={'start'} gap={0}>
-        {/* TODO нужно вывести имя пользователя + пока нигде его не храним */}
-        <Text>Привет, {''}! 👋</Text>
-        <Text color={COLOR.LABEL} fontSize={'sm'}>Вот что происходит с вашими финансами</Text>
-      </VStack>
+      <WelcomeHeader/>
       <VStack width={'100%'} align={'start'} gap={6}>
         <DashboardSummaryCards/>
         <DashboardActivityCalendar/>

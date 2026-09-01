@@ -24,7 +24,7 @@ const SidebarItem = ({ title, icon, path }: SidebarItemProps) => {
       fontWeight={isActive ? 'semibold' : 'normal'}
       _hover={{ bg: isActive ? 'colorPalette.subtle' : 'bg.subtle' }}
       transition="background 0.15s, color 0.15s"
-      colorPalette="blue"
+      // colorPalette="blue"
     >
       <Icon fontSize="lg">{icon}</Icon>
       {!collapsed && <Text fontSize="sm" truncate>{title}</Text>}

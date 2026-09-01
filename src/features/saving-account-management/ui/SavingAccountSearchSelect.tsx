@@ -3,8 +3,8 @@ import { getAllSavingRequest, postSavingRequest } from '@/entities/saving-accoun
 import { useCallback } from 'react'
 
 type Props = {
-  value?: string
-  onChange?: (value: string) => void
+  value?: SearchSelectOption
+  onChange?: (value: string, option: SearchSelectOption) => void
   placeholder?: string
   creatable?: boolean
   label?: string
@@ -30,7 +30,7 @@ const SavingAccountSearchSelect = ({ value, onChange, placeholder = "Накоп�
     <SearchSelect
       fetchOptions={fetchOptions}
       value={value}
-      onChange={(val) => onChange?.(val)}
+      onChange={(val, option) => onChange?.(val, option)}
       onCreate={creatable ? handleCreate : undefined}
       placeholder={placeholder}
       {...props}

@@ -18,7 +18,7 @@ export type TransactionType = {
   id: string;
   fromAccount: SavingAccountType | null;
   toAccount?: SavingAccountType | null;
-  category?: CategoryType | null;
+  category: CategoryType | null;
   tags?: TagType[];
   createdById: string | null;
   createdBy: UserProfile | null;

@@ -1,13 +1,13 @@
-import { Flex, Heading, IconButton, Separator, Text, VStack } from '@chakra-ui/react'
+import { Box, Flex, Heading, IconButton, Separator, Text, VStack } from '@chakra-ui/react'
 import { createContext, ReactElement, useContext, useState } from 'react'
 import SidebarItem from './SidebarItem'
+import SidebarUser from './SidebarUser'
 import PiggyBankIcon from '@/shared/icon/PiggyBankIcon'
-import { LuLayoutDashboard, LuPanelLeftClose, LuPanelLeftOpen, LuLogOut, LuArrowLeftRight } from 'react-icons/lu'
+import { LuLayoutDashboard, LuPanelLeftClose, LuPanelLeftOpen, LuArrowLeftRight, LuReceipt } from 'react-icons/lu'
 import { ColorModeButton } from '@/shared/ui/color-mode'
 import { MdCalendarViewMonth, MdOutlineAnalytics, MdOutlineSettings } from 'react-icons/md'
 import { useRouter } from 'next/router'
 import { useAppDispatch } from '@/app/store'
-import { deleteToken, setIsAuth } from '@/entities/auth'
 import { clearActiveWorkspace } from '@/entities/workspace'
 
 export type SidebarItemProps = {
@@ -21,47 +21,44 @@ export const useSidebarContext = () => useContext(SidebarContext)
 
 const SIDEBAR_LIST: SidebarItemProps[] = [
   {
-    title: 'Dashboard',
+    title: 'Главная',
     icon: <LuLayoutDashboard />,
     path: '/dashboard',
   },
   {
-    title: 'Analytics',
+    title: 'Транзакции',
+    icon: <LuReceipt />,
+    path: '/transactions',
+  },
+  {
+    title: 'Аналитика',
     icon: <MdOutlineAnalytics/>,
     path: '/analytics'
   },
   {
-    title: 'Budgets',
+    title: 'Накопительные',
     icon: <PiggyBankIcon size="md" />,
     path: '/budgets',
   },
   {
-    title: 'View',
+    title: 'Инструменты',
     icon: <MdCalendarViewMonth/>,
     path: '/view'
   },
   {
-    title: 'Settings',
+    title: 'Настройки',
     icon: <MdOutlineSettings/>,
     path: '/settings'
   },
 ]
 
-const SIDEBAR_WIDTH_EXPANDED = '240px'
+const SIDEBAR_WIDTH_EXPANDED = '250px'
 const SIDEBAR_WIDTH_COLLAPSED = '68px'
 
 const Sidebar = () => {
   const [collapsed, setCollapsed] = useState(false)
   const router = useRouter()
   const dispatch = useAppDispatch()
-
-  const handleLogout = () => {
-    localStorage.removeItem('token')
-    localStorage.removeItem('refreshToken')
-    dispatch(deleteToken())
-    dispatch(setIsAuth(false))
-    router.push('/login')
-  }
 
   const handleSwitchWorkspace = () => {
     localStorage.removeItem('workspaceId')
@@ -71,83 +68,80 @@ const Sidebar = () => {
 
   return (
     <SidebarContext.Provider value={{ collapsed }}>
-      <Flex
-        as="aside"
-        direction="column"
-        width={collapsed ? SIDEBAR_WIDTH_COLLAPSED : SIDEBAR_WIDTH_EXPANDED}
-        minW={collapsed ? SIDEBAR_WIDTH_COLLAPSED : SIDEBAR_WIDTH_EXPANDED}
-        height="100%"
-        borderRight="1px solid"
-        borderColor="border"
-        py={4}
-        px={collapsed ? 2 : 4}
-        transition="width 0.2s, min-width 0.2s, padding 0.2s"
-        overflow="hidden"
-      >
-        <Flex align="center" justify={collapsed ? 'center' : 'start'} px={2} mb={4} minH="40px">
-          {!collapsed && (
-            <Heading size="lg" textTransform="uppercase" truncate>
-              Budget
-            </Heading>
-          )}
-        </Flex>
-
-        <VStack gap={1} align="stretch" flex={1}>
-          {SIDEBAR_LIST.map((item) => (
-            <SidebarItem key={item.path} {...item} />
-          ))}
-        </VStack>
-
-        <Separator my={2} />
-
-        <VStack gap={1} align="stretch">
-          <Flex justify={collapsed ? 'center' : 'start'} px={collapsed ? 0 : 1}>
-            <ColorModeButton />
-          </Flex>
-          <Flex
-            align="center"
-            gap={2}
-            px={collapsed ? 0 : 1}
-            justify={collapsed ? 'center' : 'start'}
-            cursor="pointer"
-            onClick={handleSwitchWorkspace}
-            _hover={{ opacity: 0.8 }}
-          >
-            <IconButton
-              aria-label="Switch workspace"
-              variant="ghost"
-              size="sm"
-              as="span"
-            >
-              <LuArrowLeftRight />
-            </IconButton>
+      <Box position="relative" height="100%">
+        <Flex
+          as="aside"
+          direction="column"
+          width={collapsed ? SIDEBAR_WIDTH_COLLAPSED : SIDEBAR_WIDTH_EXPANDED}
+          minW={collapsed ? SIDEBAR_WIDTH_COLLAPSED : SIDEBAR_WIDTH_EXPANDED}
+          height="100%"
+          borderRight="1px solid"
+          borderColor="border"
+          py={4}
+          px={collapsed ? 2 : 4}
+          transition="width 0.2s, min-width 0.2s, padding 0.2s"
+          overflow="hidden"
+        >
+          <Flex align="center" justify={collapsed ? 'center' : 'start'} px={2} mb={4} minH="40px">
             {!collapsed && (
-              <Text fontSize="sm" truncate>Switch workspace</Text>
+              <Heading size="lg" textTransform="uppercase" truncate>
+              Budget
+              </Heading>
             )}
           </Flex>
-          <Flex justify={collapsed ? 'center' : 'start'} px={collapsed ? 0 : 1}>
-            <IconButton
-              aria-label="Logout"
-              variant="ghost"
-              size="sm"
-              colorPalette="red"
-              onClick={handleLogout}
+
+          <VStack gap={2} align="stretch" flex={1}>
+            {SIDEBAR_LIST.map((item) => (
+              <SidebarItem key={item.path} {...item} />
+            ))}
+          </VStack>
+
+          <Separator my={2} />
+
+          <VStack gap={1} align="stretch">
+            <Flex justify={collapsed ? 'center' : 'start'} px={collapsed ? 0 : 1}>
+              <ColorModeButton />
+            </Flex>
+            <Flex
+              align="center"
+              gap={2}
+              px={collapsed ? 0 : 1}
+              justify={collapsed ? 'center' : 'start'}
+              cursor="pointer"
+              onClick={handleSwitchWorkspace}
+              _hover={{ opacity: 0.8 }}
             >
-              <LuLogOut />
-            </IconButton>
-          </Flex>
-          <Flex justify={collapsed ? 'center' : 'start'} px={collapsed ? 0 : 1}>
-            <IconButton
-              aria-label="Toggle sidebar"
-              variant="ghost"
-              size="sm"
-              onClick={() => setCollapsed((c) => !c)}
-            >
-              {collapsed ? <LuPanelLeftOpen /> : <LuPanelLeftClose />}
-            </IconButton>
-          </Flex>
-        </VStack>
-      </Flex>
+              <IconButton
+                aria-label="Switch workspace"
+                variant="ghost"
+                size="sm"
+                as="span"
+              >
+                <LuArrowLeftRight />
+              </IconButton>
+              {!collapsed && (
+                <Text fontSize="sm" truncate>Переключить пространство</Text>
+              )}
+            </Flex>
+            <SidebarUser />
+          </VStack>
+        </Flex>
+        <IconButton
+          aria-label="Toggle sidebar"
+          variant="outline"
+          size="sm"
+          onClick={() => setCollapsed((c) => !c)}
+          position="absolute"
+          top={5}
+          right={0}
+          transform="translateX(50%)"
+          zIndex={1}
+          bg="bg"
+          borderRadius="full"
+        >
+          {collapsed ? <LuPanelLeftOpen /> : <LuPanelLeftClose />}
+        </IconButton>
+      </Box>
     </SidebarContext.Provider>
   )
 }

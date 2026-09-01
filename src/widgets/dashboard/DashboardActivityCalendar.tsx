@@ -63,6 +63,7 @@ const DashboardActivityCalendar = () => {
               <Text color={COLOR.LABEL}>Нет данных об активности</Text>
             </VStack>
           ) : (
+
             <ActivityCalendar
               data={data}
               theme={calendarTheme}
@@ -71,10 +72,9 @@ const DashboardActivityCalendar = () => {
               showWeekdayLabels={['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun']}
               weekStart={1}
               blockSize={13}
-              blockMargin={4}
               blockRadius={3}
               fontSize={11}
-              style={{ width: '100%' }}
+              style={{ overflow: 'unset' }}
             />
           )}
         </VStack>
