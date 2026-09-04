@@ -106,7 +106,13 @@ const config = defineConfig({
         danger: { fg: { value: '{colors.danger}' } },
         period: { fg: { value: '{colors.period}' } },
         primary: { fg: { value: '{colors.primary}' } },
-        label: { fg: { value: '{colors.label}' } },
+        label: { value: { base: '#5f5e59', _dark: '#bcbab6' } },
+        bg: {
+          tabs: { value: { base: '#eeeceb', _dark: '#2c2c2c' } }
+        },
+        text: {
+          sidebar: { value: { base: '#676661', _dark: '#BCBAB6' } }
+        }
       },
     },
     recipes: {

@@ -15,16 +15,14 @@ const SidebarItem = ({ title, icon, path }: SidebarItemProps) => {
       width="100%"
       px={3}
       py={2}
-      borderRadius="md"
+      borderRadius={4}
       justify={collapsed ? 'center' : 'start'}
       gap={3}
       cursor="pointer"
-      bg={isActive ? 'colorPalette.subtle' : 'transparent'}
-      color={isActive ? 'colorPalette.fg' : 'fg.muted'}
-      fontWeight={isActive ? 'semibold' : 'normal'}
-      _hover={{ bg: isActive ? 'colorPalette.subtle' : 'bg.subtle' }}
+      bg={isActive ? 'bg.tabs' : 'transparent'}
+      _hover={{ bg: 'bg.tabs' }}
       transition="background 0.15s, color 0.15s"
-      // colorPalette="blue"
+      color={'text.sidebar'}
     >
       <Icon fontSize="lg">{icon}</Icon>
       {!collapsed && <Text fontSize="sm" truncate>{title}</Text>}
