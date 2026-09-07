@@ -2,24 +2,28 @@ import AddBillingPeriodButton from '@/features/billing_period/AddBillingPerodBut
 import DashboardSummaryCards from '@/widgets/dashboard/DashboardSummaryCards';
 import DashboardActivityCalendar from '@/widgets/dashboard/DashboardActivityCalendar';
 import DashboardTransactions from '@/widgets/dashboard/DashboardTransactions';
-import { Heading, HStack, Link, Text, VStack } from '@chakra-ui/react';
+import { Heading, HStack, Link, VStack } from '@chakra-ui/react';
 import { COLOR } from '@/shared/config/colors';
 import { SavingAccountList } from '@/widgets/saving-account-list';
 import NextLink from 'next/link';
+import WelcomeHeader from '@/features/dashboard/WelcomeHeader';
+import moment from 'moment';
+import AddTransactionDrawer from '@/features/transaction-management/ui/AddTransactionDrawer';
+
+const ACCOUNT_LIMIT = 3
 
 export default function DashboardPage() {
   return (
     <VStack width={'100%'} align={'start'} gap={6}>
       <HStack width={'100%'} justify={'space-between'}>
-        <Heading>Dashboard</Heading>
-        <AddBillingPeriodButton/>
+        <Heading>Сегодня {moment().format('LL')}</Heading>
+        <HStack>
+          <AddBillingPeriodButton/>
+          <AddTransactionDrawer/>
+        </HStack>
       </HStack>
 
-      <VStack width={'100%'} align={'start'} gap={0}>
-        {/* TODO нужно вывести имя пользователя + пока нигде его не храним */}
-        <Text>Привет, {''}! 👋</Text>
-        <Text color={COLOR.LABEL} fontSize={'sm'}>Вот что происходит с вашими финансами</Text>
-      </VStack>
+      <WelcomeHeader/>
       <VStack width={'100%'} align={'start'} gap={6}>
         <DashboardSummaryCards/>
         <DashboardActivityCalendar/>
@@ -30,7 +34,7 @@ export default function DashboardPage() {
               Все накопительные &rsaquo;
             </Link>
           </HStack>
-          <SavingAccountList isDisplayCreteModal limit={3} />
+          <SavingAccountList limit={ACCOUNT_LIMIT} />
         </VStack>
         <DashboardTransactions />
       </VStack>

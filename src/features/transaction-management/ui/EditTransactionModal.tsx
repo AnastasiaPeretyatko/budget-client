@@ -7,7 +7,8 @@ import BaseDatePicker from '@/shared/ui/date-picker'
 import FieldInput from '@/shared/ui/FieldInput'
 import BaseModal from '@/shared/ui/modal'
 import { useNotifications } from '@/shared/hooks/useNotifications'
-import { HStack, VStack } from '@chakra-ui/react'
+import { SearchSelectOption } from '@/shared/ui/search-select'
+import { HStack, IconButton, VStack } from '@chakra-ui/react'
 import { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { FaArrowRightLong } from 'react-icons/fa6'
@@ -28,13 +29,26 @@ const EditTransactionModal = ({ transaction, trigger }: Props) => {
   const [tagIds, setTagIds] = useState<string[]>(transaction.tags?.map(t => t.id) ?? [])
   // eslint-disable-next-line max-len
   const initialTagOptions: TagSelectOption[] = (transaction.tags ?? []).map(t => ({ label: t.name, value: t.id, color: t.color }))
-  const [fromAccountId, setFromAccountId] = useState(transaction.fromAccount?.id ?? '')
-  const [toAccountId, setToAccountId] = useState(transaction.toAccount?.id ?? '')
+  const [fromOption, setFromOption] = useState<SearchSelectOption | undefined>(
+    transaction.fromAccount
+      ? { label: transaction.fromAccount.name, value: transaction.fromAccount.id }
+      : undefined
+  )
+  const [toOption, setToOption] = useState<SearchSelectOption | undefined>(
+    transaction.toAccount
+      ? { label: transaction.toAccount.name, value: transaction.toAccount.id }
+      : undefined
+  )
   const [isLoading, setIsLoading] = useState(false)
   const [errors, setErrors] = useState<Record<string, string>>({})
 
   const isTransfer = transaction.type === TransactionTypeEnum.TRANSFER
   const isIncome = transaction.type === TransactionTypeEnum.INCOME
+
+  const handleSwap = () => {
+    setFromOption(toOption)
+    setToOption(fromOption)
+  }
 
   const validate = () => {
     const newErrors: Record<string, string> = {}
@@ -54,8 +68,8 @@ const EditTransactionModal = ({ transaction, trigger }: Props) => {
         date: new Date(date),
         categoryId: categoryId || undefined,
         tagIds,
-        fromAccountId: fromAccountId || undefined,
-        toAccountId: toAccountId || undefined,
+        fromAccountId: fromOption?.value || undefined,
+        toAccountId: toOption?.value || undefined,
       }
     }))
       .unwrap()
@@ -79,29 +93,31 @@ const EditTransactionModal = ({ transaction, trigger }: Props) => {
           <HStack width='100%' gap={4} align='end'>
             <SavingAccountSearchSelect
               label='Откуда'
-              value={fromAccountId}
-              onChange={(val) => setFromAccountId(val)}
+              value={fromOption}
+              onChange={(_, option) => setFromOption(option)}
             />
-            <FaArrowRightLong style={{ minWidth: 20, fontSize: 16, margin: '0 8px 8px' }} />
+            <IconButton aria-label='Поменять местами' variant='ghost' size='sm' onClick={handleSwap} mb='4px'>
+              <FaArrowRightLong style={{ minWidth: 20, fontSize: 16 }} />
+            </IconButton>
             <SavingAccountSearchSelect
               label='Куда'
-              value={toAccountId}
-              onChange={(val) => setToAccountId(val)}
+              value={toOption}
+              onChange={(_, option) => setToOption(option)}
             />
           </HStack>
         )}
         {!isTransfer && !isIncome && (
           <SavingAccountSearchSelect
             label='Счёт списания'
-            value={fromAccountId}
-            onChange={(val) => setFromAccountId(val)}
+            value={fromOption}
+            onChange={(_, option) => setFromOption(option)}
           />
         )}
         {!isTransfer && isIncome && (
           <SavingAccountSearchSelect
             label='Счёт зачисления'
-            value={toAccountId}
-            onChange={(val) => setToAccountId(val)}
+            value={toOption}
+            onChange={(_, option) => setToOption(option)}
           />
         )}
         <HStack width='100%' gap={4}>
@@ -121,7 +137,9 @@ const EditTransactionModal = ({ transaction, trigger }: Props) => {
         </HStack>
         <CategorySearchSelect
           label='Категория'
-          value={categoryId}
+          value={transaction.category
+            ? { label: transaction.category.name, value: transaction.category.id }
+            : undefined}
           onChange={(val) => setCategoryId(val)}
         />
         <TagSelectInput label='Теги' defaultSelected={initialTagOptions} onChange={setTagIds} />

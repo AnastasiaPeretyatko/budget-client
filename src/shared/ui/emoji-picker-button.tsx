@@ -37,9 +37,8 @@ const EmojiPickerButton = ({ value, onChange, placeholder = '😀' }: Props) => 
         display="flex"
         alignItems="center"
         justifyContent="center"
-        borderRadius={8}
+        borderRadius={4}
         borderWidth="1px"
-        borderColor="gray.600"
         cursor="pointer"
         _hover={{ borderColor: 'gray.400' }}
       >

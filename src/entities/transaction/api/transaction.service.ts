@@ -1,5 +1,5 @@
 import { http } from '@/shared/api';
-import { BaseTransactionType, TransactionType } from '../types/transaction.type';
+import { BaseTransactionType, BatchTransaction, TransactionType } from '../types/transaction.type';
 import { AxiosResponse } from 'axios';
 import { GetAllTransactionArgs, GetAllTransactionResponse, UpdateTransactionArgs } from './transaction.thunk';
 
@@ -10,3 +10,5 @@ export const getAllTransactionRequest = (params: GetAllTransactionArgs): Promise
 export const deleteTransactionRequest = (id: string): Promise<AxiosResponse<void>> => http.delete(`/transition/${id}`)
 
 export const updateTransactionRequest = (id: string, data: UpdateTransactionArgs['data']): Promise<AxiosResponse<TransactionType>> => http.patch(`/transition/${id}`, data)
+
+export const postBatchTransactionRequest = (data: BatchTransaction[]) => http.post<TransactionType[]>('/transition/batch', data)

@@ -2,7 +2,7 @@ import { useEffect } from 'react'
 import { useSelector } from 'react-redux'
 import { RootState, useAppDispatch } from '@/app/store'
 import { fetchBalanceHistoryThunk } from '@/entities/statistics'
-import { Card, Heading, HStack, Skeleton, Text } from '@chakra-ui/react'
+import { Card, chakra, Heading, HStack, Skeleton, Text, useSlotRecipe } from '@chakra-ui/react'
 import { COLOR } from '@/shared/config/colors'
 import { InfoTip } from '@/shared/ui/toggle-tip'
 import { formatAmount } from '@/shared/ui/SummaryCard'
@@ -41,6 +41,8 @@ const CustomTooltip = (
 
 const SavingAccountAmoundCard = ({ accountId, savingAccountAmound }: Props) => {
   const dispatch = useAppDispatch()
+  const recipe = useSlotRecipe({ key: 'summaryCard' })
+  const styles = recipe({ tone: 'primary' })
   const { balanceHistory, isBalanceHistoryLoading } = useSelector(
     (state: RootState) => state.statistics
   )
@@ -54,18 +56,10 @@ const SavingAccountAmoundCard = ({ accountId, savingAccountAmound }: Props) => {
     : 0
 
   return (
-    <Card.Root
-      width="100%"
-      overflow="hidden"
-      style={{
-        background: `linear-gradient(135deg, ${COLOR.PRIMARY_COLOR}18 0%, transparent 60%)`,
-      }}
-    >
+    <Card.Root css={{ ...styles.root, flex: 'initial' }} width="100%">
       <Card.Body display="flex" flexDir="column" gap={3} pb={!isBalanceHistoryLoading && balanceHistory.length > 1 ? 0 : 12} >
         <HStack gap={1}>
-          <Text color={COLOR.LABEL} fontWeight={500} fontSize="sm">
-            Ожидаемый баланс
-          </Text>
+          <chakra.span css={styles.label}>Ожидаемый баланс</chakra.span>
           <InfoTip />
         </HStack>
         {isBalanceHistoryLoading ? (

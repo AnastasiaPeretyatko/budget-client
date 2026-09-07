@@ -12,7 +12,7 @@ export type SearchSelectOption = {
 
 type Props = {
   fetchOptions: (search: string) => Promise<SearchSelectOption[]>
-  value?: string
+  value?: SearchSelectOption
   onChange?: (value: string, option: SearchSelectOption) => void
   onCreate?: (name: string) => Promise<SearchSelectOption>
   placeholder?: string
@@ -33,12 +33,13 @@ const SearchSelect = ({
   invalid,
   errorText,
 }: Props) => {
-  const [selectedOption, setSelectedOption] = useState<SearchSelectOption | null>(null)
+  const [selectedOption, setSelectedOption] = useState<SearchSelectOption | null>(value || null)
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   useEffect(() => {
-    if (!value) setSelectedOption(null)
-  }, [value])
+    setSelectedOption(value ?? null)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [value?.value])
 
   const loadOptions = (inputValue: string): Promise<SearchSelectOption[]> =>
     new Promise((resolve) => {

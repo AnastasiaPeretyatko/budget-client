@@ -1,7 +1,7 @@
-import { Heading, Text } from '@chakra-ui/react'
-import { COLOR } from '@/shared/config/colors'
+import { Heading } from '@chakra-ui/react'
 import ProgressCircleUI from '@/shared/ui/progress-circle'
 import SummaryCard from '@/shared/ui/SummaryCard'
+import { AmountText } from '@/shared/ui/amount-text'
 
 const pluralDays = (n: number) => {
   const abs = Math.abs(n)
@@ -19,7 +19,7 @@ type Props = {
 const PeriodProgressCard = ({ daysRemaining, totalDays, percent }: Props) => (
   <SummaryCard
     label="До конца периода"
-    accentColor={COLOR.PERIOD_TEXT}
+    tone="period"
     value={
       <Heading size="lg">
         {daysRemaining} {pluralDays(daysRemaining)}
@@ -27,9 +27,9 @@ const PeriodProgressCard = ({ daysRemaining, totalDays, percent }: Props) => (
     }
     change={
       totalDays !== null ? (
-        <Text fontSize="xs" color={COLOR.LABEL}>
+        <AmountText tone="label" size="xs">
           {totalDays - daysRemaining} из {totalDays} дней
-        </Text>
+        </AmountText>
       ) : undefined
     }
     badge={

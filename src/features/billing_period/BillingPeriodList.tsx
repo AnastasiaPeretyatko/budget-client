@@ -2,7 +2,6 @@ import { useAppDispatch, useAppSelector } from '@/app/store'
 import {
   fetchBillingPeriodsThunk,
   archiveBillingPeriodThunk,
-  BillingPeriodType,
 } from '@/entities/bulling-period'
 import { useEffect, useState } from 'react'
 import { VStack, HStack, Text, IconButton, Spinner, Badge } from '@chakra-ui/react'

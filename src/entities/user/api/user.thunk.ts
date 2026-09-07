@@ -6,7 +6,7 @@ export const fetchMeThunk = createAsyncThunk<
   UserProfile,
   void,
   { rejectValue: string }
->('user/fetchMe', async (_, { rejectWithValue }) => {
+>('user/me', async (_, { rejectWithValue }) => {
   try {
     const res = await getMeRequest();
     return res.data;

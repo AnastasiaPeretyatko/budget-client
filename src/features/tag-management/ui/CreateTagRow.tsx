@@ -33,13 +33,13 @@ const CreateTagRow = ({ onCreated }: Props) => {
   }
 
   return (
-    <HStack gap={2}>
+    <HStack width={'100%'} gap={2}>
       <Select.Root
         size="sm"
         collection={colorCollection}
         value={[color]}
         onValueChange={e => setColor(e.value[0])}
-        width="130px"
+        width="60px"
         flexShrink={0}
       >
         <Select.HiddenSelect />
@@ -85,10 +85,13 @@ const CreateTagRow = ({ onCreated }: Props) => {
         value={name}
         onChange={e => setName(e.target.value)}
         size="sm"
-        borderRadius={8}
+        borderRadius={4}
         autoFocus
         onKeyDown={e => e.key === 'Enter' && handleCreate()}
         flex={1}
+        _focusVisible={{
+          outline: 'none'
+        }}
       />
       <IconButton
         aria-label="Создать"

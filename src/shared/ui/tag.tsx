@@ -7,7 +7,7 @@ type Props = {
 
 const BaseTag = ({ children, ...props }: Props) => {
   return (
-    <Tag.Root {...props}>
+    <Tag.Root {...props} boxShadow={'none'}>
       <Tag.Label>{children}</Tag.Label>
     </Tag.Root>
   )

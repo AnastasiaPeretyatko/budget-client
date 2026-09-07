@@ -5,6 +5,7 @@ import { COLOR } from '@/shared/config/colors'
 const AddSavingButton = () => {
   return (
     <Box
+      minH={'205px'}
       width={'100%'}
       height={'100%'}
       borderRadius={'2xl'}

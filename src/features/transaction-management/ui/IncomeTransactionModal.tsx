@@ -64,7 +64,7 @@ const IncomeTransactionModal = ({ onClose }: Props) => {
         <FieldInput label="Amount" onChange={(e) => { setAmount(e.target.value); setErrors((prev) => ({ ...prev, amount: '' })) }} required invalid={!!errors.amount} errorText={errors.amount}/>
         <FieldInput label="Description" onChange={(e) => { setDescription(e.target.value); setErrors((prev) => ({ ...prev, description: '' })) }} required invalid={!!errors.description} errorText={errors.description}/>
       </HStack>
-      <CategorySearchSelect label='Category' value={categoryId} onChange={(val) => setCategoryId(val)}/>
+      <CategorySearchSelect label='Category' onChange={(val) => setCategoryId(val)}/>
       <TagSelectInput label='Теги' onChange={setTagIds} />
       <BaseDatePicker selectionMode='single' label='Event day' defaultDate={date} onChangeValue={(dates) => setDate(dates[0])} />
       <Button width={'100%'} size="sm" borderRadius={10} onClick={handleSave} loading={isLoading}>

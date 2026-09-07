@@ -24,6 +24,7 @@ const userSlice = createSlice({
         state.error = undefined;
       })
       .addCase(fetchMeThunk.fulfilled, (state, { payload }) => {
+        console.log({ payload, log: 'kek' })
         state.profile = payload;
         state.isLoading = false;
       })

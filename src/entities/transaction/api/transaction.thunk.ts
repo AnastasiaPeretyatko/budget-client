@@ -1,7 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit'
 import { AxiosError } from 'axios'
-import { BaseTransactionType, TransactionType, TransactionTypeEnum } from '../types/transaction.type'
-import { deleteTransactionRequest, getAllTransactionRequest, postTransactionRequest, updateTransactionRequest } from './transaction.service'
+import { BaseTransactionType, BatchTransaction, TransactionType, TransactionTypeEnum } from '../types/transaction.type'
+import { deleteTransactionRequest, getAllTransactionRequest, postBatchTransactionRequest, postTransactionRequest, updateTransactionRequest } from './transaction.service'
 
 export type UpdateTransactionArgs = {
   id: string
@@ -51,6 +51,22 @@ export const createTransactionThunk = createAsyncThunk<
   try {
     const res = await postTransactionRequest(data)
     return res.data
+  } catch (error) {
+    const axiosError = error as AxiosError<{ message: string }>
+    return rejectWithValue(
+      axiosError.response?.data?.message ?? axiosError.message ?? 'Unknown error'
+    )
+  }
+})
+
+export const postBatchTransactionThunk = createAsyncThunk<
+TransactionType[],
+BatchTransaction[],
+{rejectValue: string}
+>('transaction/batch', async (data, { rejectWithValue }) => {
+  try {
+    const res = await postBatchTransactionRequest(data)
+    return res.data;
   } catch (error) {
     const axiosError = error as AxiosError<{ message: string }>
     return rejectWithValue(

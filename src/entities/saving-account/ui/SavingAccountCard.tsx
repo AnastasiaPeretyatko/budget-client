@@ -21,7 +21,7 @@ const SavingAccountCard = ({ savingAccount, onClick }: Props) => {
       minH={'100%'}
       borderRadius={'2xl'}
       overflow={'hidden'}
-      _hover={{ cursor: 'pointer', backgroundColor: 'gray.900' }}
+      _hover={{ cursor: 'pointer', backgroundColor: 'bg.tabs' }}
       onClick={() => onClick && onClick(savingAccount.id)}
     >
       <Card.Body display={'flex'} flexDirection={'column'} padding={4} gap={4}>
@@ -29,7 +29,7 @@ const SavingAccountCard = ({ savingAccount, onClick }: Props) => {
           <Box
             width={10}
             height={10}
-            bgColor={COLOR.BACKGROUND}
+            bgColor={"bg.tabs"}
             borderRadius={'50%'}
             display={'flex'}
             alignItems={'center'}
@@ -40,7 +40,7 @@ const SavingAccountCard = ({ savingAccount, onClick }: Props) => {
             {savingAccount.emoji ?? '💰'}
           </Box>
           <HStack gap={2} flexWrap={'wrap'}>
-            <Heading size={'sm'}>{savingAccount.name}</Heading>
+            <Heading size={'sm'} color={'text.sidebar'}>{savingAccount.name}</Heading>
             {savingAccount.workspaceName && (
               <Badge size={'sm'} variant={'subtle'} colorPalette={'purple'}>{savingAccount.workspaceName}</Badge>
             )}
@@ -50,7 +50,7 @@ const SavingAccountCard = ({ savingAccount, onClick }: Props) => {
           <ProgressCircleUI size={'xl'} value={progress} />
           <VStack align={'start'} gap={0}>
             <Text fontWeight={600}>{formatAmount(currentBalance)} ₽</Text>
-            <Text color={COLOR.LABEL} fontSize={'xs'}>из {formatAmount(periodMax)} ₽</Text>
+            <Text color={"text.sidebar"} fontSize={'xs'}>из {formatAmount(periodMax)} ₽</Text>
           </VStack>
         </HStack>
       </Card.Body>

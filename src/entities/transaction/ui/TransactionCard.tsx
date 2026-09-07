@@ -4,13 +4,14 @@ import { Badge, Box, Button, CloseButton, Dialog, HStack, IconButton, Portal, Te
 import { COLOR } from '@/shared/config/colors'
 import { FaArrowRightLong } from 'react-icons/fa6'
 import { LuArrowDown, LuArrowUp, LuArrowLeftRight, LuPencil, LuTrash2 } from 'react-icons/lu'
-import { AppDispatch } from '@/app/store'
-import { useDispatch } from 'react-redux'
+import { AppDispatch, RootState } from '@/app/store'
+import { useDispatch, useSelector } from 'react-redux'
 import { deleteTransactionThunk } from '@/entities/transaction'
 import DropdownMenu from '@/shared/ui/menu'
 import { useNotifications } from '@/shared/hooks/useNotifications'
 import moment from 'moment'
 import EditTransactionModal from '@/features/transaction-management/ui/EditTransactionModal'
+import { setSelectedTransactions } from '../api/transaction.slice'
 
 type Props = {
   accountId?: string
@@ -29,6 +30,7 @@ function getTagColor(name: string): string {
 
 const TransactionCard = ({ accountId, transaction }: Props) => {
   const dispatch = useDispatch<AppDispatch>()
+  const { selectedTransactions } = useSelector((state: RootState) => state.transactions)
   const { showSuccessMessage, showErrorMessage } = useNotifications()
   const [deleteOpen, setDeleteOpen] = useState(false)
   const editTriggerRef = useRef<HTMLDivElement>(null)
@@ -53,6 +55,11 @@ const TransactionCard = ({ accountId, transaction }: Props) => {
     return num.toLocaleString('ru-RU', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
   }, [transaction.amount])
 
+  const isSelected = useMemo(
+    () => !!selectedTransactions?.some(t => t.id === transaction.id),
+    [selectedTransactions, transaction.id]
+  )
+
   const time = moment(transaction.date).format('HH:mm')
 
   const handleDelete = () => {
@@ -65,6 +72,9 @@ const TransactionCard = ({ accountId, transaction }: Props) => {
       .catch(() => showErrorMessage('Ошибка при удалении'))
   }
 
+  const selectedTransactionIds = (id: string) => {
+    dispatch(setSelectedTransactions(id))
+  }
   const menuItems = [
     {
       value: 'edit',
@@ -87,20 +97,23 @@ const TransactionCard = ({ accountId, transaction }: Props) => {
       px={4}
       py={3}
       borderRadius={12}
-      bg="gray.900"
+      _hover={{
+        bg: "bg.tabs"
+      }}
+      borderColor={isSelected ? 'primary' : 'none'}
+      borderWidth={isSelected ? '2px' : 'none'}
+      cursor="pointer"
       gap={3}
       align="center"
-      _hover={{ bg: 'gray.800' }}
-      transition="background 0.15s"
+      onClick={() => selectedTransactionIds(transaction.id)}
     >
-      {/* Icon */}
       <Box
         minW={10}
         minH={10}
         w={10}
         h={10}
         borderRadius="50%"
-        bg={iconConfig.bg}
+        backgroundColor="bg.tabs"
         display="flex"
         alignItems="center"
         justifyContent="center"
