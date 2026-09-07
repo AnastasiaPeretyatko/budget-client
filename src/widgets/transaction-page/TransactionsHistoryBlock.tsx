@@ -11,7 +11,7 @@ import { useSelector } from 'react-redux'
 import { RootState, useAppDispatch } from '@/app/store'
 import RadioMenu from '@/shared/ui/radio-menu'
 
-const typeFilters = [
+const typeFilters: { label: string; value: TransactionTypeEnum | 'All' }[] = [
   { label: 'Все', value: 'All' },
   { label: 'Расходы', value: TransactionTypeEnum.EXPENSE },
   { label: 'Доходы', value: TransactionTypeEnum.INCOME },
@@ -23,7 +23,7 @@ const TransactionsHistoryBlock = () => {
   const { activeSavingAccount } = useSelector((state: RootState) => state.savingAccounts)
   const { tags } = useSelector((state: RootState) => state.tags)
   const { billingPeriods } = useSelector((state: RootState) => state.billingPeriod)
-  const [activeType, setActiveType] = useState<string>('All')
+  const [activeType, setActiveType] = useState<TransactionTypeEnum | 'All'>('All')
   const [tagFilter, setTagFilter] = useState<CheckboxDropdownValue>({})
   // undefined = не трогали (по умолчанию активный период), null = явно выбраны все периоды
   const [userPeriodId, setUserPeriodId] = useState<string | null | undefined>(undefined)
@@ -40,7 +40,7 @@ const TransactionsHistoryBlock = () => {
 
   const periodId = userPeriodId === undefined ? activePeriodId : (userPeriodId ?? undefined)
 
-  const handleTypeChange = (value: string) => {
+  const handleTypeChange = (value: TransactionTypeEnum | 'All') => {
     setActiveType(prev => prev === value ? 'All' : value)
   }
 

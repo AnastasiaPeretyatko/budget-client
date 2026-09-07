@@ -11,19 +11,12 @@ const MyDetailsForm = () => {
   const { profile, isLoading } = useSelector((state: RootState) => state.user)
   const { showSuccessMessage, showErrorMessage } = useNotifications()
 
-  const [firstName, setFirstName] = useState('')
-  const [lastName, setLastName] = useState('')
+  const [firstName, setFirstName] = useState(profile?.firstName || '')
+  const [lastName, setLastName] = useState(profile?.lastName || '')
 
   useEffect(() => {
     dispatch(fetchMeThunk())
   }, [dispatch])
-
-  useEffect(() => {
-    if (profile) {
-      setFirstName(profile.firstName ?? '')
-      setLastName(profile.lastName ?? '')
-    }
-  }, [profile])
 
   const hasChanges = useMemo(() => {
     const serverFirst = profile?.firstName ?? ''

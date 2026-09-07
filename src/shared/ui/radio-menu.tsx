@@ -1,14 +1,14 @@
 import { Menu, Portal } from "@chakra-ui/react"
 import { ReactNode } from "react"
 
-type Props = {
-  items: {value: string, label: string}[];
+type Props<T> = {
+  items: {value: T, label: string}[];
   triggerButton: ReactNode;
-  value: string;
-  onChange: (val: string) => void
+  value: T;
+  onChange: (val: T) => void
 }
 
-const RadioMenu = ({ items, triggerButton, value, onChange }: Props) => {
+const RadioMenu = <T extends string>({ items, triggerButton, value, onChange }: Props<T>) => {
   return (
     <Menu.Root>
       <Menu.Trigger asChild>
@@ -19,7 +19,7 @@ const RadioMenu = ({ items, triggerButton, value, onChange }: Props) => {
           <Menu.Content minW="10rem">
             <Menu.RadioItemGroup
               value={value}
-              onValueChange={(e) => onChange(e.value)}
+              onValueChange={(e) => onChange(e.value as T)}
             >
               {items.map((item) => (
                 <Menu.RadioItem key={item.value} value={item.value}>
