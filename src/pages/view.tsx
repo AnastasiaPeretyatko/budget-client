@@ -1,36 +1,35 @@
 import { Button, Grid, Heading, HStack, Text, VStack } from '@chakra-ui/react'
 import { COLOR } from '@/shared/config/colors'
-import BaseTabs from '@/shared/ui/tabs'
 import GeneralToolView from '@/widgets/tools/GeneralToolView'
 import DropdownMenu from '@/shared/ui/menu'
 
 const ViewPage = () => {
-  const tabs = [
-    {
-      value: 'Обзор',
-      // icon: <LuUser />,
-      component: (
-        <VStack width={'100%'} align={'start'} gap={6} pt={4}>
-          <GeneralToolView />
-        </VStack>
-      ),
-    },
-    // {
-    //   value: 'Категории',
-    //   // icon: <LuSettings />,
-    //   // component: <WorkspaceSettingsTab />,
-    // },
-    // {
-    //   value: 'Теги',
-    //   // icon: <LuSettings />,
-    //   // component: <WorkspaceSettingsTab />,
-    // },
-    // {
-    //   value: 'Периоды',
-    //   // icon: <LuSettings />,
-    //   // component: <WorkspaceSettingsTab />,
-    // },
-  ]
+  // const tabs = [
+  //   {
+  //     value: 'Обзор',
+  //     // icon: <LuUser />,
+  //     component: (
+  //       <VStack width={'100%'} align={'start'} gap={6} pt={4}>
+  //         <GeneralToolView />
+  //       </VStack>
+  //     ),
+  //   },
+  //   // {
+  //   //   value: 'Категории',
+  //   //   // icon: <LuSettings />,
+  //   //   // component: <WorkspaceSettingsTab />,
+  //   // },
+  //   // {
+  //   //   value: 'Теги',
+  //   //   // icon: <LuSettings />,
+  //   //   // component: <WorkspaceSettingsTab />,
+  //   // },
+  //   // {
+  //   //   value: 'Периоды',
+  //   //   // icon: <LuSettings />,
+  //   //   // component: <WorkspaceSettingsTab />,
+  //   // },
+  // ]
 
   const menuItems = [
     {
@@ -64,7 +63,9 @@ const ViewPage = () => {
         <DropdownMenu buttonTrigger={<Button size={'sm'}>+ Добавить</Button>} menuItems={menuItems}/>
 
       </HStack>
-      <BaseTabs list={tabs} isBorder fitted={false} />
+      {/* <BaseTabs list={tabs} isBorder fitted={false} /> */}
+
+      <GeneralToolView />
 
       <Grid width="100%" templateColumns={{ base: '1fr', md: '1fr 1fr' }} gap={4}>
         {/* <Card.Root borderRadius={16} border="none">

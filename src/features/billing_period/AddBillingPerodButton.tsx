@@ -1,10 +1,11 @@
 import { COLOR } from '@/shared/config/colors'
 import BaseDatePicker from '@/shared/ui/date-picker'
 import BasePopover from '@/shared/ui/popover'
-import { Box, Button, Float, Text, VStack } from '@chakra-ui/react'
+import { Box, Button, Float, VStack } from '@chakra-ui/react'
 import { useState } from 'react'
 import { useAppDispatch, useAppSelector } from '@/app/store'
 import { createBillingPeriodThunk } from '@/entities/bulling-period'
+import Label from '@/shared/ui/label'
 
 const AddBillingPeriodButton = () => {
   const dispatch = useAppDispatch()
@@ -21,7 +22,7 @@ const AddBillingPeriodButton = () => {
 
   const triggerButton = (
     <Box position={'relative'} display={'inline-flex'}>
-      <Button size={'xs'} bgColor={COLOR.PRIMARY_COLOR}>+ Новый период</Button>
+      <Button size={'xs'}>+ Новый период</Button>
       {hasNoActivePeriod && (
         <Float placement={'top-end'} offsetX={'0'} offsetY={'0'}>
           <Box w={2.5} h={2.5} bg={COLOR.EXPENSE_TEXT} borderRadius={'full'} />
@@ -33,7 +34,7 @@ const AddBillingPeriodButton = () => {
   return (
     <BasePopover TriggerButton={triggerButton}>
       <VStack align={'start'} gap={4}>
-        <Text color={COLOR.LABEL} fontSize={'sm'} fontWeight={600}>Select a new period</Text>
+        <Label >Добавьте новый период</Label>
         <BaseDatePicker selectionMode='range' onChangeValue={(dates) => setDates(dates)} />
         <Button
           width={'100%'}
@@ -42,7 +43,7 @@ const AddBillingPeriodButton = () => {
           loading={isLoading}
           disabled={dates.length < 2}
         >
-          Apply
+          Сохранить
         </Button>
       </VStack>
     </BasePopover>

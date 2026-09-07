@@ -8,13 +8,19 @@ import { SavingAccountList } from '@/widgets/saving-account-list';
 import NextLink from 'next/link';
 import WelcomeHeader from '@/features/dashboard/WelcomeHeader';
 import moment from 'moment';
+import AddTransactionDrawer from '@/features/transaction-management/ui/AddTransactionDrawer';
+
+const ACCOUNT_LIMIT = 3
 
 export default function DashboardPage() {
   return (
     <VStack width={'100%'} align={'start'} gap={6}>
       <HStack width={'100%'} justify={'space-between'}>
-        <Heading>Главная {moment().format('LL')}</Heading>
-        <AddBillingPeriodButton/>
+        <Heading>Сегодня {moment().format('LL')}</Heading>
+        <HStack>
+          <AddBillingPeriodButton/>
+          <AddTransactionDrawer/>
+        </HStack>
       </HStack>
 
       <WelcomeHeader/>
@@ -28,7 +34,7 @@ export default function DashboardPage() {
               Все накопительные &rsaquo;
             </Link>
           </HStack>
-          <SavingAccountList isDisplayCreteModal limit={3} />
+          <SavingAccountList limit={ACCOUNT_LIMIT} />
         </VStack>
         <DashboardTransactions />
       </VStack>

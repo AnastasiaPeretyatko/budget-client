@@ -1,7 +1,8 @@
 import { AppDispatch, RootState } from '@/app/store'
 import { fetchSavingAccountByIdThunk } from '@/entities/saving-account'
+import SavingAccountToggle from '@/features/saving-account-management/ui/SavingAccountToggle'
 import TransactionTabs from '@/widgets/transaction-page/TransactionTabs'
-import { Heading, VStack } from '@chakra-ui/react'
+import { Heading, HStack, VStack } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
@@ -20,7 +21,11 @@ const BudgetPage = () => {
   return (
     <VStack width={'100%'} padding={4} gap={4} align={'start'}>
       <TransactionTabs>
-        <Heading size={'2xl'} mt={1} whiteSpace={'nowrap'}>{activeSavingAccount?.name}</Heading>
+        <HStack>
+          <Heading size={'2xl'} mt={1} whiteSpace={'nowrap'}>{activeSavingAccount?.name}</Heading>
+          <SavingAccountToggle/>
+
+        </HStack>
       </TransactionTabs>
     </VStack>
   )

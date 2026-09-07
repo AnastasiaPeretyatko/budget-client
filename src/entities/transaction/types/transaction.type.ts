@@ -22,8 +22,15 @@ export type TransactionType = {
   tags?: TagType[];
   createdById: string | null;
   createdBy: UserProfile | null;
-  type: TransactionTypeEnum;
 } & BaseTransactionType
+
+export type BatchTransaction = {
+  amount: string,
+  date: Date,
+  type: TransactionTypeEnum,
+  description: string,
+  accountName: string,
+}
 
 export enum TransactionTypeEnum {
   EXPENSE = 'expense',

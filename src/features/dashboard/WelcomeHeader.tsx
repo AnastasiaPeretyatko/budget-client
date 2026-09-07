@@ -8,7 +8,7 @@ const WelcomeHeader = () => {
 
   return (
     <VStack width={'100%'} align={'start'} gap={0}>
-      <Text>Привет, {user?.firstName} {user?.lastName}! 👋</Text>
+      <Text>Привет, {user?.firstName}! 👋</Text>
       <Text color={COLOR.LABEL} fontSize={'sm'}>Вот что происходит с вашими финансами</Text>
     </VStack>
   )

@@ -21,11 +21,11 @@ const BaseDatePicker = ({ selectionMode, label, defaultDate, onChangeValue }: Pr
   }
 
   return (
-    <DatePicker.Root selectionMode={selectionMode} width="100%" value={value} onValueChange={handleChengeDate} locale="en-GB">
+    <DatePicker.Root selectionMode={selectionMode} size={'sm'} value={value} onValueChange={handleChengeDate} locale="ru-RU">
       {label && <DatePicker.Label color={COLOR.LABEL}>{label}</DatePicker.Label>}
       <DatePicker.Control>
-        <DatePicker.Input index={0} borderRadius={12} borderColor={COLOR.BORDER} />
-        {selectionMode === 'range' && <DatePicker.Input index={1} borderRadius={12} borderColor={COLOR.BORDER} />}
+        <DatePicker.Input index={0} borderRadius={4} borderColor={'bg.tabs'} />
+        {selectionMode === 'range' && <DatePicker.Input index={1} borderRadius={4} borderColor={'bg.tabs'} />}
         <DatePicker.IndicatorGroup>
           <DatePicker.Trigger>
             <LuCalendar />

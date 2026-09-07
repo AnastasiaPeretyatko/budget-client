@@ -12,6 +12,7 @@ import { TbHistory } from 'react-icons/tb'
 import TransactionsHistoryBlock from './TransactionsHistoryBlock'
 import AnalyticsBlock from './AnalyticsBlock'
 import { fetchLatestPeriodThunk } from '@/entities/bulling-period'
+import CalculationCard from '@/features/calculation_card/CalculationCard'
 
 const TransactionTabs = ({ children }: PropsWithChildren) => {
   const dispatch = useAppDispatch()
@@ -71,6 +72,14 @@ const TransactionTabs = ({ children }: PropsWithChildren) => {
     ) },
   ]
 
+  if (!activeSavingAccount) {
+    return (
+      <VStack width={'100%'} align={'center'} justify={'center'} gap={4} py={8}>
+        <Text fontSize={'sm'} color={COLOR.LABEL}>Выберите накопительный счёт</Text>
+      </VStack>
+    )
+  }
+
   return (
     <Tabs.Root
       size={'sm'}
@@ -78,8 +87,7 @@ const TransactionTabs = ({ children }: PropsWithChildren) => {
       variant="plain"
       width={'100%'}
       css={{
-        "--tabs-indicator-bg": `${COLOR.BORDER}`,
-        "--tabs-indicator-shadow": "shadows.xs",
+        "--tabs-indicator-bg": `colors.bg.tabs`,
         "--tabs-trigger-radius": "radii.full",
       }}
     >
@@ -142,6 +150,7 @@ const TransactionTabs = ({ children }: PropsWithChildren) => {
                 </VStack>
               </Card.Body>
             </Card.Root>
+            <CalculationCard/>
           </VStack>
         </GridItem>
       </Grid>

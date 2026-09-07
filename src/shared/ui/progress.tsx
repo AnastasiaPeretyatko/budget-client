@@ -10,13 +10,13 @@ const Progress = ({ remaining, spend }: ProgressProps) => {
   const defaultValue = useMemo(() => spend / (remaining + spend) * 100, [remaining, spend])
 
   return (
-    <ProgressRoot defaultValue={defaultValue || 0} maxW="sm">
+    <ProgressRoot width={'100%'} defaultValue={defaultValue || 0}>
       <HStack gap="5">
-        <ProgressLabel>{spend || 0} ₽</ProgressLabel>
+        <ProgressLabel fontSize="xs">{spend || 0} ₽</ProgressLabel>
         <ProgressTrack flex="1">
           <ProgressRange />
         </ProgressTrack>
-        <ProgressValueText>{remaining ||0} ₽</ProgressValueText>
+        <ProgressValueText fontSize="xs">{remaining ||0} ₽</ProgressValueText>
       </HStack>
     </ProgressRoot>
   )

@@ -19,9 +19,13 @@ const TransactionTypeIcon = ({ transaction }: { transaction: TransactionType }) 
   if (transaction.type === TransactionTypeEnum.INCOME) {
     return (
       <Box
-        minW={10} minH={10} borderRadius="50%"
+        minW={10}
+        minH={10}
+        borderRadius="50%"
         backgroundColor="green.900"
-        display="flex" alignItems="center" justifyContent="center"
+        display="flex"
+        alignItems="center"
+        justifyContent="center"
       >
         <LuArrowDown color={COLOR.INCOME_TEXT} />
       </Box>
@@ -30,9 +34,13 @@ const TransactionTypeIcon = ({ transaction }: { transaction: TransactionType }) 
   if (transaction.type === TransactionTypeEnum.TRANSFER) {
     return (
       <Box
-        minW={10} minH={10} borderRadius="50%"
+        minW={10}
+        minH={10}
+        borderRadius="50%"
         backgroundColor="purple.900"
-        display="flex" alignItems="center" justifyContent="center"
+        display="flex"
+        alignItems="center"
+        justifyContent="center"
       >
         <LuArrowLeftRight color={COLOR.PRIMARY_COLOR} />
       </Box>
@@ -40,9 +48,13 @@ const TransactionTypeIcon = ({ transaction }: { transaction: TransactionType }) 
   }
   return (
     <Box
-      minW={10} minH={10} borderRadius="50%"
+      minW={10}
+      minH={10}
+      borderRadius="50%"
       backgroundColor="orange.900"
-      display="flex" alignItems="center" justifyContent="center"
+      display="flex"
+      alignItems="center"
+      justifyContent="center"
     >
       <LuArrowUp color={COLOR.EXPENSE_TEXT} />
     </Box>
@@ -100,17 +112,27 @@ const DashboardTransactions = () => {
               {topFive.map((item, index) => (
                 <HStack key={item.id} width="100%" gap={3}>
                   <Box
-                    minW={8} minH={8} borderRadius="50%"
-                    backgroundColor="gray.800"
-                    display="flex" alignItems="center" justifyContent="center"
-                    fontWeight={700} fontSize="sm" color="gray.400"
+                    minW={8}
+                    minH={8}
+                    borderRadius="50%"
+                    backgroundColor="bg.tabs"
+                    display="flex"
+                    alignItems="center"
+                    justifyContent="center"
+                    fontWeight={700}
+                    fontSize="sm"
+                    color="gray.400"
                   >
                     {index + 1}
                   </Box>
                   <Box
-                    minW={10} minH={10} borderRadius="50%"
-                    backgroundColor="gray.800"
-                    display="flex" alignItems="center" justifyContent="center"
+                    minW={10}
+                    minH={10}
+                    borderRadius="50%"
+                    backgroundColor="bg.tabs"
+                    display="flex"
+                    alignItems="center"
+                    justifyContent="center"
                     fontSize="xl"
                   >
                     {item.category?.icon}

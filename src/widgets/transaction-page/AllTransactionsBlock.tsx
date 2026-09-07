@@ -3,20 +3,21 @@ import { fetchTransactionsThunk } from '@/entities/transaction'
 import { fetchTagsThunk } from '@/entities/tag'
 import { fetchBillingPeriodsThunk } from '@/entities/bulling-period'
 import CheckboxDropdown, { CheckboxDropdownValue } from '@/shared/ui/checkbox-dropdown'
-import { Box, Button, HStack, VStack } from '@chakra-ui/react'
+import { Box, Button, HStack, Text, VStack } from '@chakra-ui/react'
 import { useEffect, useMemo, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { RootState, useAppDispatch } from '@/app/store'
 import PeriodFilter from './PeriodFilter'
 import TransactionsTable from './TransactionsTable'
 import { buildTagFilter } from '../transaction-list/TransactionList'
+import RadioMenu from '@/shared/ui/radio-menu'
 
 const typeFilters = [
-  { label: 'Все', value: undefined },
+  { label: 'Все', value: 'All' },
   { label: 'Расходы', value: TransactionTypeEnum.EXPENSE },
   { label: 'Доходы', value: TransactionTypeEnum.INCOME },
   { label: 'Переводы', value: TransactionTypeEnum.TRANSFER },
-] as const
+]
 
 const AllTransactionsBlock = () => {
   const dispatch = useAppDispatch()
@@ -24,7 +25,7 @@ const AllTransactionsBlock = () => {
   const { billingPeriods } = useSelector((state: RootState) => state.billingPeriod)
   const { transactions, isLoading } = useSelector((state: RootState) => state.transactions)
 
-  const [activeType, setActiveType] = useState<TransactionTypeEnum | undefined>(undefined)
+  const [activeType, setActiveType] = useState<string>('All')
   const [tagFilter, setTagFilter] = useState<CheckboxDropdownValue>({})
   const [periodId, setPeriodId] = useState<string | undefined>(undefined)
 
@@ -33,8 +34,8 @@ const AllTransactionsBlock = () => {
     dispatch(fetchBillingPeriodsThunk())
   }, [dispatch])
 
-  const handleTypeChange = (value: TransactionTypeEnum | undefined) => {
-    setActiveType(prev => prev === value ? undefined : value)
+  const handleTypeChange = (value: string) => {
+    setActiveType(prev => prev === value ? 'All' : value)
   }
 
   const tagItems = tags.map(t => ({ label: t.name, value: t.id, color: t.color }))
@@ -51,7 +52,7 @@ const AllTransactionsBlock = () => {
     const tag = buildTagFilter(tagFilter)
     dispatch(fetchTransactionsThunk({
       filter: {
-        ...(activeType ? { type: activeType } : {}),
+        ...(activeType !== 'All' ? { type: activeType } : {}),
         ...(tag ? { tag } : {}),
         ...(dateBetween && dateBetween.length === 2 ? { date: { between: dateBetween } } : {}),
       },
@@ -61,20 +62,14 @@ const AllTransactionsBlock = () => {
 
   return (
     <VStack width="100%" align="start" gap={4}>
+
       <HStack gap={2} flexWrap="wrap">
-        {typeFilters.map((f) => (
-          <Button
-            key={f.label}
-            size="xs"
-            variant={activeType === f.value ? 'solid' : 'ghost'}
-            colorPalette={activeType === f.value ? 'blue' : 'gray'}
-            borderRadius="full"
-            fontSize="xs"
-            onClick={() => handleTypeChange(f.value)}
-          >
-            {f.label}
-          </Button>
-        ))}
+        <RadioMenu
+          items={typeFilters}
+          onChange={handleTypeChange}
+          triggerButton={<Button size={'xs'}>Фильтр{activeType && <Text>| {typeFilters.find(el => el.value === activeType)?.label}</Text>}</Button>}
+          value={activeType}
+        />
         <CheckboxDropdown
           label="Теги"
           items={tagItems}

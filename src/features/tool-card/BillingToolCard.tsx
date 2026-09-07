@@ -1,16 +1,17 @@
 import { useAppDispatch, useAppSelector } from '@/app/store'
 import { COLOR } from '@/shared/config/colors'
 import { Button, Card, Flex, HStack, Input, Link, Spinner, Text, VStack } from '@chakra-ui/react'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { fetchBillingPeriodsThunk } from '@/entities/bulling-period'
 import BillingCard from '../billing_period/BillingCard'
 import { BsCalendarEvent } from 'react-icons/bs'
+import AddBillingPeriod from '../billing_period/AddBillingPeriod'
 
 const BillingToolCard = () => {
   const dispatch = useAppDispatch()
 
   const { billingPeriods, isLoading } = useAppSelector(state => state.billingPeriod)
-
+  const [isAdding, setIsAdding] = useState(false)
   useEffect(() => {
     dispatch(fetchBillingPeriodsThunk())
   }, [dispatch])
@@ -28,10 +29,14 @@ const BillingToolCard = () => {
             <Text>Платежные периоды</Text>
             <Text fontSize={'sm'} color={COLOR.LABEL}>8 периодов</Text>
           </VStack>
-          <Button size={'sm'} variant={'subtle'}>Управление {'>'}</Button>
+          <Button size={'sm'} variant={'subtle'} onClick={() => setIsAdding(true)}>
+            + Добавить
+          </Button>
         </HStack>
         <Input placeholder='Поиск категории...'/>
-        <VStack width={'100%'} borderRadius={4} borderColor={'gray.800'} borderWidth={'1px'}>
+        <VStack width={'100%'} borderRadius={4} gap={1} px={1}>
+          {isAdding && <AddBillingPeriod onClose={() => setIsAdding(false)} />}
+
           {
             billingPeriods.map(billing => <BillingCard  key={billing.id}  billing={billing}/>)
           }

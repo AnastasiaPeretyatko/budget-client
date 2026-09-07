@@ -26,10 +26,8 @@ const EditBillingPeriodRow = ({ billingPeriod, onClose }: Props) => {
 
   return (
     <HStack
-      padding={3}
+      width={'100%'}
       borderRadius={8}
-      borderWidth="1px"
-      borderColor="blue.500"
       gap={2}
     >
       <Input

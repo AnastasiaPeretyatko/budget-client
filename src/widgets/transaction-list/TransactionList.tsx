@@ -58,10 +58,9 @@ const TransactionList = ({ accountId, limit, type, tagFilter = {}, dateBetween }
       {transactions.map((tr, index) => {
         const currentDate = moment(tr.date).format('LL')
 
-        const prevDate =
-    index > 0
-      ? moment(transactions[index - 1].date).format('LL')
-      : null
+        const prevDate = index > 0
+          ? moment(transactions[index - 1].date).format('LL')
+          : null
 
         const shouldShowDate = currentDate !== prevDate
 

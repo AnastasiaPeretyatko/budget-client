@@ -4,7 +4,7 @@ import { Heading, VStack } from '@chakra-ui/react'
 const BudgetsPage = () => {
   return (
     <VStack width={'100%'} align={'start'}>
-      <Heading>Budgets</Heading>
+      <Heading>Счета</Heading>
       <SavingAccountList isDisplayCreteModal wrap />
     </VStack>
   )

@@ -5,10 +5,11 @@ import SidebarUser from './SidebarUser'
 import PiggyBankIcon from '@/shared/icon/PiggyBankIcon'
 import { LuLayoutDashboard, LuPanelLeftClose, LuPanelLeftOpen, LuArrowLeftRight, LuReceipt } from 'react-icons/lu'
 import { ColorModeButton } from '@/shared/ui/color-mode'
-import { MdCalendarViewMonth, MdOutlineAnalytics, MdOutlineSettings } from 'react-icons/md'
+import { MdCalendarViewMonth, MdOutlineSettings } from 'react-icons/md'
 import { useRouter } from 'next/router'
 import { useAppDispatch } from '@/app/store'
 import { clearActiveWorkspace } from '@/entities/workspace'
+import { TbBusinessplan } from 'react-icons/tb'
 
 export type SidebarItemProps = {
   title: string
@@ -21,24 +22,24 @@ export const useSidebarContext = () => useContext(SidebarContext)
 
 const SIDEBAR_LIST: SidebarItemProps[] = [
   {
-    title: 'Главная',
+    title: 'Сегодня',
     icon: <LuLayoutDashboard />,
     path: '/dashboard',
+  },
+  {
+    title: 'Счета',
+    icon: <PiggyBankIcon size="md" />,
+    path: '/budgets',
+  },
+  {
+    title: 'План',
+    icon: <TbBusinessplan/>,
+    path: '/plan',
   },
   {
     title: 'Транзакции',
     icon: <LuReceipt />,
     path: '/transactions',
-  },
-  {
-    title: 'Аналитика',
-    icon: <MdOutlineAnalytics/>,
-    path: '/analytics'
-  },
-  {
-    title: 'Накопительные',
-    icon: <PiggyBankIcon size="md" />,
-    path: '/budgets',
   },
   {
     title: 'Инструменты',
@@ -90,7 +91,7 @@ const Sidebar = () => {
             )}
           </Flex>
 
-          <VStack gap={2} align="stretch" flex={1}>
+          <VStack gap={1} align="stretch" flex={1}>
             {SIDEBAR_LIST.map((item) => (
               <SidebarItem key={item.path} {...item} />
             ))}
@@ -98,7 +99,7 @@ const Sidebar = () => {
 
           <Separator my={2} />
 
-          <VStack gap={1} align="stretch">
+          <VStack gap={1} align="stretch" fontSize={'sm'}>
             <Flex justify={collapsed ? 'center' : 'start'} px={collapsed ? 0 : 1}>
               <ColorModeButton />
             </Flex>
