@@ -1,4 +1,4 @@
-import { Box, Flex, Heading, IconButton, Separator, Text, VStack } from '@chakra-ui/react'
+import { Box, Flex, Heading, IconButton, Image, Separator, Text, VStack } from '@chakra-ui/react'
 import { createContext, ReactElement, useContext, useState } from 'react'
 import SidebarItem from './SidebarItem'
 import SidebarUser from './SidebarUser'
@@ -10,6 +10,8 @@ import { useRouter } from 'next/router'
 import { useAppDispatch } from '@/app/store'
 import { clearActiveWorkspace } from '@/entities/workspace'
 import { TbBusinessplan } from 'react-icons/tb'
+import { GoProjectTemplate } from 'react-icons/go'
+import Label from '@/shared/ui/label'
 
 export type SidebarItemProps = {
   title: string
@@ -35,6 +37,11 @@ const SIDEBAR_LIST: SidebarItemProps[] = [
     title: 'План',
     icon: <TbBusinessplan/>,
     path: '/plan',
+  },
+  {
+    title: 'Шаблоны',
+    icon: <GoProjectTemplate/>,
+    path: '/templates'
   },
   {
     title: 'Транзакции',
@@ -83,11 +90,13 @@ const Sidebar = () => {
           transition="width 0.2s, min-width 0.2s, padding 0.2s"
           overflow="hidden"
         >
-          <Flex align="center" justify={collapsed ? 'center' : 'start'} px={2} mb={4} minH="40px">
+          <Flex align="center" justify={collapsed ? 'center' : 'start'} px={2} mb={4} minH="40px" gap={2}>
+            <Image src={'logo.png'} alt='logo' width={38} height={38}/>
             {!collapsed && (
-              <Heading size="lg" textTransform="uppercase" truncate>
-              Budget
-              </Heading>
+              <VStack align={'start'} gap={0}>
+                <Heading>FinFlow</Heading>
+                <Label textWrap={'nowrap'} fontSize={'xs'}>Бюджет • Конверты</Label>
+              </VStack>
             )}
           </Flex>
 
