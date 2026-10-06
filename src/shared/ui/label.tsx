@@ -5,7 +5,7 @@ type Props = PropsWithChildren & TextProps
 
 const Label = ({ children, ...props }: Props) => {
   return (
-    <Text fontSize={'xs'} textTransform={'uppercase'} color={"label"} fontWeight={700} {...props}>{children}</Text>
+    <Text fontSize={'sm'} color={"label"} fontWeight={700} {...props}>{children}</Text>
   )
 }
 

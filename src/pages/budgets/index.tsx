@@ -1,11 +1,13 @@
-import { SavingAccountList } from '@/widgets/saving-account-list'
-import { Heading, VStack } from '@chakra-ui/react'
+import GeneralEnvelopePoolCard from '@/features/GeneralEnvelopePoolCard'
+import CurrentEnvelopesList from '@/widgets/CurrentEnvelopesList'
+import { VStack } from '@chakra-ui/react'
 
 const BudgetsPage = () => {
   return (
-    <VStack width={'100%'} align={'start'}>
-      <Heading>Счета</Heading>
-      <SavingAccountList isDisplayCreteModal wrap />
+    <VStack width={'100%'} align={'start'} gap={4}>
+      <GeneralEnvelopePoolCard />
+      <CurrentEnvelopesList/>
+      {/* <SavingAccountList isDisplayCreteModal wrap /> */}
     </VStack>
   )
 }

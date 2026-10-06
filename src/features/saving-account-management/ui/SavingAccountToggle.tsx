@@ -2,9 +2,9 @@ import { RootState, useAppDispatch } from '@/app/store'
 import { fetchSavingAccountsThunk } from '@/entities/saving-account'
 import BasePopover from '@/shared/ui/popover'
 import { IconButton, Text, Input, HStack, VStack, } from '@chakra-ui/react'
+import { ChevronDown } from 'lucide-react'
 import { useRouter } from 'next/router'
 import React, { useEffect } from 'react'
-import { FaAngleDown } from 'react-icons/fa6'
 import { IoIosCheckmark } from 'react-icons/io'
 import { useSelector } from 'react-redux'
 
@@ -41,7 +41,7 @@ const SavingAccountToggle = () => {
   }, [dispatch, savingAccounts.length]);
 
   return (
-    <BasePopover TriggerButton={<IconButton size={'xs'} variant={'ghost'} aria-label="Toggle Saving Account"><FaAngleDown/></IconButton>}>
+    <BasePopover TriggerButton={<IconButton size={'xs'} variant={'ghost'} aria-label="Toggle Saving Account"><ChevronDown/></IconButton>}>
       <VStack width={'100%'} align={'start'}>
         <Text>Выберите счет</Text>
         <Input size={'xs'} value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Поиск счета..." />

@@ -1,31 +1,30 @@
 "use client"
 
-import { DatePicker, parseDate, Portal } from "@chakra-ui/react"
+import { DatePicker, InputProps, parseDate, Portal } from "@chakra-ui/react"
 import { useState } from 'react'
 import { LuCalendar } from "react-icons/lu"
-import { COLOR } from '../config/colors'
 
 type Props = {
   selectionMode: "single" | "multiple" | "range"
   label?: string;
   defaultDate?: string
-  onChangeValue: (dates: string[]) => void
-}
+  onChangeValue?: (dates: string[]) => void
+} & InputProps
 
-const BaseDatePicker = ({ selectionMode, label, defaultDate, onChangeValue }: Props) => {
+const BaseDatePicker = ({ selectionMode, label, defaultDate, onChangeValue, ...props }: Props) => {
   const [value, setValue] = useState([parseDate(defaultDate || new Date())])
 
   const handleChengeDate = (e: DatePicker.ValueChangeDetails) => {
     setValue(e.value)
-    onChangeValue(e.value.map(d => d.toString()))
+    onChangeValue?.(e.value.map(d => d.toString()))
   }
 
   return (
-    <DatePicker.Root selectionMode={selectionMode} size={'sm'} value={value} onValueChange={handleChengeDate} locale="ru-RU">
-      {label && <DatePicker.Label color={COLOR.LABEL}>{label}</DatePicker.Label>}
+    <DatePicker.Root selectionMode={selectionMode} value={value} onValueChange={handleChengeDate} locale="ru-RU">
+      {label && <DatePicker.Label>{label}</DatePicker.Label>}
       <DatePicker.Control>
-        <DatePicker.Input index={0} borderRadius={4} borderColor={'bg.tabs'} />
-        {selectionMode === 'range' && <DatePicker.Input index={1} borderRadius={4} borderColor={'bg.tabs'} />}
+        <DatePicker.Input index={0} {...props}/>
+        {selectionMode === 'range' && <DatePicker.Input index={1}/>}
         <DatePicker.IndicatorGroup>
           <DatePicker.Trigger>
             <LuCalendar />

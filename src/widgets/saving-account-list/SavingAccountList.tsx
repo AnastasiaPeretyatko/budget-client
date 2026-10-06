@@ -19,10 +19,6 @@ const SavingAccountList = ({ isDisplayCreteModal = false, limit, wrap = false }:
 
   const { savingAccounts } = useSelector((state: RootState) => state.savingAccounts)
 
-  const handleOpenBudgetClick = (id: string) => {
-    router.push(`/budgets/${id}`)
-  }
-
   useEffect(() => {
     dispatch(fetchSavingAccountsThunk())
   }, [dispatch])
@@ -41,7 +37,6 @@ const SavingAccountList = ({ isDisplayCreteModal = false, limit, wrap = false }:
         <SavingAccountCard
           key={account.id}
           savingAccount={account}
-          onClick={handleOpenBudgetClick}
         />
       ))}
       {isDisplayCreteModal && <CreateSavingModal />}

@@ -4,11 +4,16 @@ import { authReducer } from '@/entities/auth'
 import { savingReducer } from '@/entities/saving-account'
 import { transactionsReducer } from '@/entities/transaction'
 import { workspacesReducer } from '@/entities/workspace'
-import { billingPeriodReducer } from '@/entities/bulling-period'
+import { billingPeriodReducer, selectedPeriodReducer } from '@/entities/bulling-period'
 import { categoryReducer } from '@/entities/category'
 import { statisticsReducer } from '@/entities/statistics'
 import { userReducer } from '@/entities/user'
 import { tagReducer } from '@/entities/tag'
+import { templatesApi } from '@/entities/template/api/templatesApi'
+import { transactionApi } from '@/entities/transaction/api/transactionApi'
+import { envelopesApi } from '@/entities/envelope/api/envelopesApi'
+import { billingPeriodApi } from '@/entities/bulling-period/api/billing-periodApi'
+import { envelopeApi } from '@/entities/envelope/api/envelopApi'
 
 export const store = configureStore({
   reducer: {
@@ -17,11 +22,24 @@ export const store = configureStore({
     savingAccounts: savingReducer,
     workspaces: workspacesReducer,
     billingPeriod: billingPeriodReducer,
+    selectedPeriod: selectedPeriodReducer,
     categories: categoryReducer,
     statistics: statisticsReducer,
     user: userReducer,
     tags: tagReducer,
-  }
+    [templatesApi.reducerPath]: templatesApi.reducer,
+    [transactionApi.reducerPath]: transactionApi.reducer,
+    [envelopesApi.reducerPath]: envelopesApi.reducer,
+    [envelopeApi.reducerPath]: envelopeApi.reducer,
+    [billingPeriodApi.reducerPath]: billingPeriodApi.reducer,
+  },
+  middleware: (getDefaultMiddlewars) => getDefaultMiddlewars().concat(
+    templatesApi.middleware,
+    envelopesApi.middleware,
+    transactionApi.middleware,
+    billingPeriodApi.middleware,
+    envelopeApi.middleware,
+  )
 })
 
 export type RootState = ReturnType<typeof store.getState>

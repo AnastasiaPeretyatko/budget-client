@@ -5,7 +5,7 @@ import { Card, Heading, Text } from '@chakra-ui/react'
 import { useEffect } from 'react'
 import { fetchLatestPeriodThunk } from '@/entities/bulling-period'
 import { fetchDashboardSummaryThunk } from '@/entities/statistics'
-import { formattingmonay } from '@/shared/utils/formattingMonay'
+import { formattingMonay } from '@/shared/utils/formattingMonay'
 
 const RemainingFundsCard = () => {
   const dispatch = useAppDispatch()
@@ -41,9 +41,9 @@ const RemainingFundsCard = () => {
       <Text fontSize={'xs'} color={'gray.500'}>
         Осталось
       </Text>
-      <Heading size={'3xl'}>{formattingmonay(dashboardSummary?.balance)} ₽</Heading>
+      <Heading size={'3xl'}>{formattingMonay(dashboardSummary?.balance)} ₽</Heading>
       <Text color={'gray.500'} fontSize={'xs'}>
-        {formattingmonay(countDailyBudget())} ₽ в день - ещё {countDaysRemaining()} дней
+        {formattingMonay(countDailyBudget())} ₽ в день - ещё {countDaysRemaining()} дней
       </Text>
       <CategoryPieCard />
     </Card.Root>

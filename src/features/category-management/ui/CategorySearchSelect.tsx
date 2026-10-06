@@ -10,7 +10,7 @@ type Props = {
   label?: string
 }
 
-const CategorySearchSelect = ({ value, onChange, placeholder = "Select category", creatable = true, ...props }: Props) => {
+const CategorySearchSelect = ({ value, onChange, placeholder = "Выберите категорию...", creatable = true, ...props }: Props) => {
   const fetchOptions = useCallback(async (search: string): Promise<SearchSelectOption[]> => {
     const res = await getAllCategoryRequest(search)
     return res.data.map((item) => ({

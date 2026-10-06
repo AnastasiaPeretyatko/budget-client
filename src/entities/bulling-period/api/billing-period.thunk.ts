@@ -68,7 +68,7 @@ export const archiveBillingPeriodThunk = createAsyncThunk<
 })
 
 export const fetchLatestPeriodThunk = createAsyncThunk<
-  { startDate: string; endDate: string },
+  { id: string; startDate: string; endDate: string },
   void,
   { rejectValue: string }
 >('billingPeriod/fetchLatest', async (_, { rejectWithValue }) => {

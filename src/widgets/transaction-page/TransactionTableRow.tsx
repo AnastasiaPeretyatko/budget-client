@@ -1,9 +1,10 @@
-import { useMemo, useRef, useState } from 'react'
-import { TransactionType, TransactionTypeEnum, deleteTransactionThunk } from '@/entities/transaction'
+import { Dispatch, SetStateAction, useMemo, useRef, useState } from 'react'
+import { TransactionType, TransactionTypeEnum } from '@/entities/transaction'
 import {
   Badge,
   Box,
   Button,
+  Checkbox,
   CloseButton,
   Dialog,
   HStack,
@@ -15,15 +16,16 @@ import {
 import { COLOR } from '@/shared/config/colors'
 import { FaArrowRightLong } from 'react-icons/fa6'
 import { LuPencil, LuTrash2 } from 'react-icons/lu'
-import { AppDispatch } from '@/app/store'
-import { useDispatch } from 'react-redux'
 import DropdownMenu from '@/shared/ui/menu'
 import { useNotifications } from '@/shared/hooks/useNotifications'
 import moment from 'moment'
 import EditTransactionModal from '@/features/transaction-management/ui/EditTransactionModal'
+import { useDeleteTransactionMutation } from '@/entities/transaction/api/transactionApi'
 
 type Props = {
   transaction: TransactionType
+  selection: TransactionType[];
+  setSelection: Dispatch<SetStateAction<TransactionType[]>>;
 }
 
 const TYPE_CONFIG = {
@@ -32,10 +34,12 @@ const TYPE_CONFIG = {
   [TransactionTypeEnum.TRANSFER]: { label: 'Перевод', palette: 'blue', color: COLOR.PERIOD_TEXT, sign: '' },
 } as const
 
-const TransactionTableRow = ({ transaction }: Props) => {
-  const dispatch = useDispatch<AppDispatch>()
+const TransactionTableRow = ({ transaction, selection, setSelection }: Props) => {
+  const [deleteTransaction, { isLoading }] = useDeleteTransactionMutation()
+
   const { showSuccessMessage, showErrorMessage } = useNotifications()
   const [deleteOpen, setDeleteOpen] = useState(false)
+  const [checked, setChecked] = useState(false)
   const editTriggerRef = useRef<HTMLDivElement>(null)
 
   const config = TYPE_CONFIG[transaction.type]
@@ -46,13 +50,13 @@ const TransactionTableRow = ({ transaction }: Props) => {
   }, [transaction.amount])
 
   const handleDelete = () => {
-    dispatch(deleteTransactionThunk(transaction.id))
-      .unwrap()
-      .then(() => {
-        showSuccessMessage('Транзакция удалена')
-        setDeleteOpen(false)
-      })
-      .catch(() => showErrorMessage('Ошибка при удалении'))
+    try {
+      deleteTransaction(transaction.id)
+      showSuccessMessage('Транзакция удалена')
+      setDeleteOpen(false)
+    } catch (error) {
+      showErrorMessage('Ошибка при удалении')
+    }
   }
 
   const menuItems = [
@@ -78,15 +82,34 @@ const TransactionTableRow = ({ transaction }: Props) => {
 
   return (
     <Table.Row>
-      <Table.Cell whiteSpace="nowrap" color={COLOR.LABEL} fontSize="xs">
-        {moment(transaction.date).format('DD.MM.YY HH:mm')}
+      <Table.Cell>
+        <Checkbox.Root
+          size="sm"
+          top="0.5"
+          aria-label="Select row"
+          checked={selection.includes(transaction)}
+          onCheckedChange={(changes) => {
+            setSelection((prev) =>
+              changes.checked
+                ? [...prev, transaction]
+                : selection.filter((item) => item.id !== transaction.id),
+            )
+          }}
+        >
+          <Checkbox.HiddenInput />
+          <Checkbox.Control />
+        </Checkbox.Root>
       </Table.Cell>
+      <Table.Cell fontSize={'12px'}>
+        <Text color={'#1E293B'}>{moment(transaction.date).format('ll')}</Text>
+        <Text color={'#94A3B8'}>{moment(transaction.date).format('HH:mm:ss')}</Text>
+      </Table.Cell>
+      <Table.Cell>{transaction.category?.name ?? '—'}</Table.Cell>
       <Table.Cell>
         <Badge colorPalette={config.palette} borderRadius="full" px={2} fontSize="2xs">
           {config.label}
         </Badge>
       </Table.Cell>
-      <Table.Cell>{transaction.category?.name ?? '—'}</Table.Cell>
       <Table.Cell maxW="240px">
         <Text lineClamp={1}>{transaction.description || '—'}</Text>
       </Table.Cell>
@@ -158,7 +181,7 @@ const TransactionTableRow = ({ transaction }: Props) => {
                   <Dialog.ActionTrigger asChild>
                     <Button variant="outline">Отмена</Button>
                   </Dialog.ActionTrigger>
-                  <Button colorPalette="red" onClick={handleDelete}>Удалить</Button>
+                  <Button colorPalette="red" onClick={handleDelete} loading={isLoading}>Удалить</Button>
                 </Dialog.Footer>
                 <Dialog.CloseTrigger asChild>
                   <CloseButton size="sm" />

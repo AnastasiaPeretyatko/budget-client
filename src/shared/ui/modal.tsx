@@ -1,21 +1,37 @@
 import { Button, CloseButton, Dialog, Portal } from '@chakra-ui/react'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 type Props = {
   title: string;
   description?: string;
   children: React.ReactNode | ((close: () => void) => React.ReactNode);
-  buttonTrigger: React.ReactNode;
+  buttonTrigger?: React.ReactNode;
   onClickSave?: (close: () => void) => void;
   showFooter?: boolean;
   confirmLabel?: string;
   confirmColorPalette?: string;
+  isOpen?: boolean
+  onClose?: () => void
 }
 
-const BaseModal = ({ title, description, children, buttonTrigger, onClickSave, showFooter = true, confirmLabel = 'Сохранить', confirmColorPalette }: Props) => {
-  const [open, setOpen] = useState(false)
+const BaseModal = ({
+  title,
+  description,
+  children,
+  buttonTrigger,
+  onClickSave,
+  showFooter = true,
+  confirmLabel = 'Сохранить',
+  confirmColorPalette,
+  isOpen = false,
+  onClose
+}: Props) => {
+  const [open, setOpen] = useState(isOpen)
 
-  const close = () => setOpen(false)
+  const close = () => {
+    setOpen(false)
+    onClose?.()
+  }
 
   const renderedChildren = typeof children === 'function' ? children(close) : children
 
@@ -27,11 +43,23 @@ const BaseModal = ({ title, description, children, buttonTrigger, onClickSave, s
     }
   }
 
+  useEffect(() => {
+    setOpen(isOpen)
+  }, [isOpen])
+
   return (
-    <Dialog.Root size={'md'} placement={'center'} open={open} onOpenChange={e => setOpen(e.open)}>
-      <Dialog.Trigger>
-        {buttonTrigger}
-      </Dialog.Trigger>
+    <Dialog.Root
+      size={'md'}
+      placement={'center'}
+      open={open}
+      onOpenChange={e => {
+        setOpen(e.open)}}
+    >
+      {buttonTrigger &&
+        <Dialog.Trigger>
+          {buttonTrigger}
+        </Dialog.Trigger>
+      }
       <Portal>
         <Dialog.Backdrop />
         <Dialog.Positioner>
@@ -45,9 +73,9 @@ const BaseModal = ({ title, description, children, buttonTrigger, onClickSave, s
             {showFooter && (
               <Dialog.Footer>
                 <Dialog.ActionTrigger asChild>
-                  <Button variant="outline">Отмена</Button>
+                  <Button variant="secondary">Отмена</Button>
                 </Dialog.ActionTrigger>
-                <Button size="sm" colorPalette={confirmColorPalette} onClick={handleSave}>{confirmLabel}</Button>
+                <Button variant={'primary'} size="sm" colorPalette={confirmColorPalette} onClick={handleSave}>{confirmLabel}</Button>
               </Dialog.Footer>
             )}
             <Dialog.CloseTrigger asChild>

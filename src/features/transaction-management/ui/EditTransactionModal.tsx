@@ -1,5 +1,4 @@
-import { AppDispatch } from '@/app/store'
-import { TransactionType, TransactionTypeEnum, updateTransactionThunk } from '@/entities/transaction'
+import { TransactionType, TransactionTypeEnum } from '@/entities/transaction'
 import { CategorySearchSelect } from '@/features/category-management'
 import { SavingAccountSearchSelect } from '@/features/saving-account-management'
 import TagSelectInput, { TagSelectOption } from '@/features/tag-management/ui/TagSelectInput'
@@ -10,8 +9,8 @@ import { useNotifications } from '@/shared/hooks/useNotifications'
 import { SearchSelectOption } from '@/shared/ui/search-select'
 import { HStack, IconButton, VStack } from '@chakra-ui/react'
 import { useState } from 'react'
-import { useDispatch } from 'react-redux'
 import { FaArrowRightLong } from 'react-icons/fa6'
+import { useEditTransactionMutation } from '@/entities/transaction/api/transactionApi'
 
 type Props = {
   transaction: TransactionType
@@ -19,7 +18,7 @@ type Props = {
 }
 
 const EditTransactionModal = ({ transaction, trigger }: Props) => {
-  const dispatch = useDispatch<AppDispatch>()
+  const [editTransaction] = useEditTransactionMutation()
   const { showSuccessMessage, showErrorMessage } = useNotifications()
 
   const [amount, setAmount] = useState(transaction.amount)
@@ -60,25 +59,26 @@ const EditTransactionModal = ({ transaction, trigger }: Props) => {
   const handleSave = (close: () => void) => {
     if (!validate()) return
     setIsLoading(true)
-    dispatch(updateTransactionThunk({
-      id: transaction.id,
-      data: {
-        amount,
-        description: description || null,
-        date: new Date(date),
-        categoryId: categoryId || undefined,
-        tagIds,
-        fromAccountId: fromOption?.value || undefined,
-        toAccountId: toOption?.value || undefined,
-      }
-    }))
-      .unwrap()
-      .then(() => {
-        showSuccessMessage('Транзакция обновлена')
-        close()
+    try {
+      editTransaction({
+        id: transaction.id,
+        data: {
+          amount,
+          description: description || null,
+          date: new Date(date),
+          categoryId: categoryId || undefined,
+          tagIds,
+          fromAccountId: fromOption?.value || undefined,
+          toAccountId: toOption?.value || undefined,
+        }
       })
-      .catch((err: string) => showErrorMessage(err))
-      .finally(() => setIsLoading(false))
+      showSuccessMessage('Транзакция обновлена')
+      close()
+    } catch (error) {
+      showErrorMessage(error)
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   return (

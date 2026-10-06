@@ -8,7 +8,7 @@ import {
 } from './billing-period.thunk'
 import { BillingPeriodType } from '../types/billing-period.type'
 
-type LatestPeriod = { startDate: string; endDate: string }
+type LatestPeriod = { id: string; startDate: string; endDate: string }
 
 type BillingPeriodState = {
   billingPeriods: BillingPeriodType[]
