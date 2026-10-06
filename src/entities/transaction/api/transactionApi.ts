@@ -34,11 +34,12 @@ export type GetAllTransactionArgs = {
   filter?: {
     fromAccountId?: string;
     toAccountId?: string;
-    categoryId?: string;
+    categoryIds?: string[];
     accountId?: string;
     date?: { between: string[] };
     type?: string | null;
     tag?: TagFilterOperator;
+    periodId?: string;
   };
   search?: string
 };

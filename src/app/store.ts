@@ -14,6 +14,8 @@ import { transactionApi } from '@/entities/transaction/api/transactionApi'
 import { envelopesApi } from '@/entities/envelope/api/envelopesApi'
 import { billingPeriodApi } from '@/entities/bulling-period/api/billing-periodApi'
 import { envelopeApi } from '@/entities/envelope/api/envelopApi'
+import { categoriesApi } from '@/entities/category/api/categoriesApi'
+import { tagsApi } from '@/entities/tag/api/tagsApi'
 
 export const store = configureStore({
   reducer: {
@@ -32,6 +34,8 @@ export const store = configureStore({
     [envelopesApi.reducerPath]: envelopesApi.reducer,
     [envelopeApi.reducerPath]: envelopeApi.reducer,
     [billingPeriodApi.reducerPath]: billingPeriodApi.reducer,
+    [categoriesApi.reducerPath]: categoriesApi.reducer,
+    [tagsApi.reducerPath]: tagsApi.reducer
   },
   middleware: (getDefaultMiddlewars) => getDefaultMiddlewars().concat(
     templatesApi.middleware,
@@ -39,6 +43,8 @@ export const store = configureStore({
     transactionApi.middleware,
     billingPeriodApi.middleware,
     envelopeApi.middleware,
+    categoriesApi.middleware,
+    tagsApi.middleware
   )
 })
 

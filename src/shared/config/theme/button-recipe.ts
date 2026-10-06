@@ -69,6 +69,22 @@ export const buttonRecipe = defineRecipe({
           bg: 'white',
           transform: 'scale(1.1)'
         }
+      },
+      categories: {
+        bg: '#F8FAFC',
+        border: '1px solid #E2E8F0',
+        borderRadius: '12px',
+        fontSize: '12px',
+        fontWeight: 'medium',
+        color: '#334155',
+        transition: 'transform 0.2s ease',
+        _hover: {
+          transform: 'scale(1.1)'
+        },
+        _current: {
+          bg: 'primary',
+          color: 'white'
+        }
       }
     },
     size: {

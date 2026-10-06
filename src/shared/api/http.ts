@@ -1,4 +1,5 @@
 import axios, { AxiosResponse } from 'axios';
+import { PUBLIC_ROUTES } from '../config/routes';
 
 const BASE_URL = process.env.NEXT_PUBLIC_BASEURL;
 
@@ -68,7 +69,10 @@ http.interceptors.response.use(
         } catch (err) {
           isRefreshing = false;
           localStorage.clear();
-          window.location.assign('/login');
+          const isPublic = PUBLIC_ROUTES.includes( window.location.pathname)
+          if ( !isPublic) {
+            window.location.assign('/login');
+          }
           return Promise.reject(err);
         }
       } else {

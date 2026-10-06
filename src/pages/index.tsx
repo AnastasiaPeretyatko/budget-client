@@ -1,12 +1,10 @@
 /* eslint-disable max-len */
-import { Header } from '@/widgets/header'
 import MoneyAnimation from '@/shared/assets/animated/MoneyComponent'
 import { Box, Container, HStack, Text } from '@chakra-ui/react'
 
 const Home = () => {
   return (
     <Container width={"100%"} height={'100vh'} padding={4} display={'flex'} flexDir={'column'} alignItems={'center'}>
-      <Header />
       <HStack justify={'center'} height={'100%'} >
         <MoneyAnimation/>
         <Box width={'30%'}>

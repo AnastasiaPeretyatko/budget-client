@@ -1,4 +1,5 @@
 import BillingPeriodSelect from '@/features/billing-period-select/BillingPeriodSelect'
+import { AddTransactionModal } from '@/features/transaction-management'
 import UserAvatar from '@/features/user-avatar/UserAvatar'
 import { WorkspaceSelect } from '@/features/workspace-select/WorkspaceSelect'
 import { Box, Button, HStack, Input } from '@chakra-ui/react'
@@ -13,8 +14,8 @@ const Header = () => {
         <WorkspaceSelect/>
         <BillingPeriodSelect/>
         <Input variant={'primary'} placeholder='Поиск...'/>
-        <Button size={'xs'} variant={'secondary'}><Plus/> Из шаблона</Button>
-        <Button size={'xs'} variant={'primary'}><Plus/> Транзакция</Button>
+        <Button variant={'secondary'} disabled><Plus/> Из шаблона</Button>
+        <AddTransactionModal nameButton='Транзакция'/>
       </HStack>
       <Box paddingLeft={2}>
         <UserAvatar/>

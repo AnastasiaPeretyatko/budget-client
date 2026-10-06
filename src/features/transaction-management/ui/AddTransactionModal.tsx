@@ -17,7 +17,7 @@ import { useNotifications } from '@/shared/hooks/useNotifications'
 import { generateTransactionType } from '@/shared/utils/generatetransactionType'
 
 type Props = {
-  envelope: EnvelopesType;
+  envelope?: EnvelopesType;
   nameButton: string;
 }
 
@@ -26,9 +26,9 @@ const AMOUNT_CONST = ['500', '1000', '3000', '5000']
 const AddTransactionModal = ({ envelope, nameButton }: Props) => {
   const [addTransaction, { isLoading }] = useAddTransactionMutation()
   const { showErrorMessage, showSuccessMessage } = useNotifications();
-  const { register, setValue, handleSubmit, control, reset } = useForm<BaseTransactionType>({
+  const { register, setValue, handleSubmit, control, reset, watch } = useForm<BaseTransactionType>({
     defaultValues: {
-      fromAccountId: envelope.id,
+      fromAccountId: envelope?.id,
       toAccountId: '',
       // categoryId: '',
       tagIds: [],
@@ -69,13 +69,15 @@ const AddTransactionModal = ({ envelope, nameButton }: Props) => {
           <VStack align={'start'} width={'100%'} gap={4}>
             <EnvelopeSelectWrapper control={control} />
             <FieldInput label='Сумма распределения:' {...register('amount')}>
-              <Button
+              {envelope && <Button
                 size={'xs'}
                 variant={'unstyle'}
                 color={'primary'}
                 fontWeight={'600'}
-                onClick={() => setValue('amount', envelope.amount)}
-              >Вся сумма остатка</Button>
+                onClick={() => setValue('amount', envelope?.amount)}
+              >
+                Вся сумма остатка
+              </Button>}
             </FieldInput>
             <HStack width={'100%'}>
               {
