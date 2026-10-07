@@ -38,7 +38,6 @@ const UserAvatar = () => {
       <Menu.Trigger rounded="full" focusRing="outside">
         <Avatar.Root size="sm">
           <Avatar.Fallback name={`${user.firstName! + user.lastName!}`} />
-          <Avatar.Image src={`${user.firstName! + user.lastName!}`} />
         </Avatar.Root>
       </Menu.Trigger>
       <Portal>
