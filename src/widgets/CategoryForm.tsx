@@ -123,7 +123,7 @@ const CategoryForm = ({
       </VStack>
 
       <VStack width={'100%'} align={'start'} gap={3}>
-        <SectionTitle>Принадлежность к макро-фонду (50 / 30 / 20)</SectionTitle>
+        <SectionTitle>Принадлежность к макро-фонду (50 / 20 / 30)</SectionTitle>
         <Controller
           control={control}
           name='macroFund'

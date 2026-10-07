@@ -108,7 +108,7 @@ const PlanFundsMatrix = ({ funds, unassignedSpent }: Props) => {
   return (
     <Card.Root width={'100%'} variant={'primary'} gap={4}>
       <VStack align={'start'} gap={0}>
-        <Heading size={'md'}>Матрица сбалансированности фондов (50 / 30 / 20)</Heading>
+        <Heading size={'md'}>Матрица сбалансированности фондов (50 / 20 / 30)</Heading>
         <Text fontSize={'12px'} color={'label'}>
           Примерно сколько расходов ушло на каждый фонд по сравнению с нормой
         </Text>

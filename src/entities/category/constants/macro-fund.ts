@@ -12,7 +12,7 @@ export const MACRO_FUND_CONFIG = {
   },
   [MacroFundEnum.LIFESTYLE]: {
     label: 'Качество жизни',
-    share: 30,
+    share: 20,
     description: 'Свободные траты, удовольствия и развлечения',
     icon: Sprout,
     bg: '#FFFBEB',
@@ -20,7 +20,7 @@ export const MACRO_FUND_CONFIG = {
   },
   [MacroFundEnum.SAVINGS]: {
     label: 'Капитал и резерв',
-    share: 20,
+    share: 30,
     description: 'Инвестиции, подушка безопасности и цели',
     icon: TrendingUp,
     bg: '#ECFDF5',
