@@ -192,7 +192,7 @@ const CategoryForm = ({
               <Text fontSize={'11px'} color={'label'}>Сколько можно потратить по категории за один цикл</Text>
             </VStack>
             <HStack width={'160px'}>
-              <FieldInput type='number' min={0} placeholder='0' textAlign={'end'} {...register('defaultLimit')} />
+              <FieldInput bg={'white'} type='number' min={0} placeholder='0' textAlign={'end'} {...register('defaultLimit')} />
               <Text color={'label'}>₽</Text>
             </HStack>
           </HStack>
