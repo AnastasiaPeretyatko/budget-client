@@ -8,10 +8,16 @@ const SearchInput = ({ ...props }: Props) => {
   const inputRef = useRef<HTMLInputElement | null>(null)
 
   const handleClear = () => {
-    if (inputRef.current) {
-      inputRef.current.value = ''; // Очистка поля
-      inputRef.current.focus();    // (Опционально) Возвращаем фокус на инпут
-    }
+    const input = inputRef.current
+    if (!input) return
+
+    // Просто input.value = '' React не заметит, и onChange у родителя не сработает (поиск останется старым).
+    // Поэтому ставим значение "родным" способом браузера и сами отправляем событие input —
+    // тогда родитель получает обычный onChange с пустой строкой.
+    const setNativeValue = Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, 'value')?.set
+    setNativeValue?.call(input, '')
+    input.dispatchEvent(new Event('input', { bubbles: true }))
+    input.focus()
   };
 
   return (
