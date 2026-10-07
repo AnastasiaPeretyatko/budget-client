@@ -10,6 +10,7 @@ export const tableRecipe = defineSlotRecipe({
           color: '#94A3B8',
           fontSize: '12px',
           textTransform: 'uppercase',
+          bg:'#F8FAFC'
         },
         row: {
           _notLast: {

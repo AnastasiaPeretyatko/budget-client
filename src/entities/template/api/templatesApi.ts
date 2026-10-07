@@ -2,13 +2,20 @@ import { createApi } from '@reduxjs/toolkit/query/react';
 import { BaseTemplateType, TemplateType } from '../types/template.type';
 import { axiosBaseQuery } from '@/shared/api/axiosBaseQuery';
 import { ParamsType } from '@/shared/types/params.type';
+import { TransactionTypeEnum } from '@/entities/transaction';
+
+export type GetTemplatesParams = Partial<ParamsType> & {
+  type?: TransactionTypeEnum
+  categoryIds?: string[]
+  tagIds?: string[]
+}
 
 export const templatesApi = createApi({
   reducerPath: 'templatesApi',
   tagTypes: ['Templates'],
   baseQuery: axiosBaseQuery(),
   endpoints: (build) => ({
-    getTemplates: build.query<{data: TemplateType[], count: number}, Partial<ParamsType>>({
+    getTemplates: build.query<{data: TemplateType[], count: number}, GetTemplatesParams>({
       query: (params) => ({ url: 'templates', method: 'GET', params }),
       providesTags: (result) => result?.data
         ? [

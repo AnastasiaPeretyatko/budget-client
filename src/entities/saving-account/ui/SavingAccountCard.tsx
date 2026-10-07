@@ -1,4 +1,4 @@
-import { Box, Button, Card, Heading, HStack, Text } from '@chakra-ui/react'
+import { Badge, Box, Button, Card, Heading, HStack, Text } from '@chakra-ui/react'
 import { SavingAccountType } from '../types/saving-account.type'
 import { Utensils } from 'lucide-react'
 import { formattingMonay } from '@/shared/utils/formattingMonay'
@@ -20,6 +20,7 @@ const SavingAccountCard = ({ savingAccount }: Props) => {
       <HStack width={'100%'}>
         <Box p={'8px'} bg={'#FFF1F2'} borderRadius={'12px'}><Utensils size={'16px'}/></Box>
         <Heading cursor={'pointer'} flex={1} fontSize={'12px'} fontWeight={'bold'} onClick={() => router.push(`/budgets/${savingAccount.id}`)}>{savingAccount.name}</Heading>
+        {savingAccount.isSafe && <Badge>Сейф</Badge>}
       </HStack>
       <Box>
         <Text fontSize={'12px'} color={'#94A3B8'}>Осталось в конверте:</Text>

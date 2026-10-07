@@ -1,10 +1,10 @@
 import { useGetEnvelopeQuery } from '@/entities/envelope/api/envelopApi'
 import SavingAccountToggle from '@/features/saving-account-management/ui/SavingAccountToggle'
+import SavingSettingsModal from '@/features/saving-account-management/ui/SavingSettingsModal'
 import { AddTransactionModal } from '@/features/transaction-management'
 import Label from '@/shared/ui/label'
 import { formattingMonay } from '@/shared/utils/formattingMonay'
-import { Badge, Card, Heading, HStack, IconButton, Spinner, VStack } from '@chakra-ui/react'
-import { SettingsIcon } from 'lucide-react'
+import { Badge, Card, Heading, HStack, Spinner, VStack } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
 
 const EnvelopeInfoCard = () => {
@@ -23,11 +23,12 @@ const EnvelopeInfoCard = () => {
           <Heading fontSize={'18px'}>{data?.name} </Heading>
           <SavingAccountToggle/>
           <Badge variant={!!data?.deletedAt ? 'yellow' : 'green'}>{!!data?.deletedAt ? 'Archived' : 'Active'}</Badge>
+          {data?.isSafe && <Badge>Сейф</Badge>}
         </HStack>
 
         <HStack>
           {data && <AddTransactionModal envelope={data} nameButton='Добавить расход'/>}
-          <IconButton variant={'secondary'}><SettingsIcon/></IconButton>
+          {data && <SavingSettingsModal envelope={data}/>}
         </HStack>
       </HStack>
       <VStack width={'100%'} align={'start'} gap={0}>

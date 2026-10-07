@@ -1,6 +1,6 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
 import { axiosBaseQuery } from '@/shared/api/axiosBaseQuery';
-import { CategoryType, CreateCategoryDto } from '../types/category.type';
+import { CategoryType, CreateCategoryDto, UpdateCategoryDto } from '../types/category.type';
 
 export const categoriesApi = createApi({
   reducerPath: 'categoriesApi',
@@ -19,8 +19,21 @@ export const categoriesApi = createApi({
     addCategories: build.mutation<CategoryType, CreateCategoryDto>({
       query: (data) => ({ url: '/categories', method:'POST', data }),
       invalidatesTags: [{ type: 'Categories', id: 'LIST' }]
-    })
+    }),
+    updateCategories: build.mutation<CategoryType, { id: string, data: UpdateCategoryDto }>({
+      query: ({ id, data }) => ({ url: `/categories/${id}`, method:'PATCH', data }),
+      invalidatesTags: [{ type: 'Categories', id: 'LIST' }]
+    }),
+    archiveCategories: build.mutation<void, string>({
+      query: (id) => ({ url: `/categories/${id}`, method:'DELETE' }),
+      invalidatesTags: [{ type: 'Categories', id: 'LIST' }]
+    }),
   })
 })
 
-export const { useAddCategoriesMutation, useGetCategoriesQuery } = categoriesApi
+export const {
+  useAddCategoriesMutation,
+  useGetCategoriesQuery,
+  useUpdateCategoriesMutation,
+  useArchiveCategoriesMutation
+} = categoriesApi

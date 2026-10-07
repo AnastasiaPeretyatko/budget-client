@@ -1,6 +1,8 @@
 import { useAppSelector } from '@/app/store'
 import Label from '@/shared/ui/label'
 import formatPeriod from '@/shared/utils/formatPeriod'
+import { formattingMonay } from '@/shared/utils/formattingMonay'
+import { useGetEnvelopesQuery } from '@/entities/envelope/api/envelopesApi'
 import { Card, Flex, Heading, HStack, Text, VStack } from '@chakra-ui/react'
 import { BanknoteIcon, CalendarIcon } from 'lucide-react'
 import { CreateSavingModal } from './saving-account-management'
@@ -10,6 +12,8 @@ import { BillingPeriodType } from '@/entities/bulling-period'
 
 const GeneralEnvelopePoolCard = () => {
   const { data: billingPeriods, isLoading } = useGetPeriodsQuery()
+  // тот же запрос, что в списке конвертов ниже, поэтому лишнего обращения к серверу нет
+  const { data: envelopes } = useGetEnvelopesQuery()
   const [period, setPeriod] = useState<BillingPeriodType | null>()
   const currentId = useAppSelector(state => state.selectedPeriod.selectedPeriodId)
 
@@ -17,6 +21,12 @@ const GeneralEnvelopePoolCard = () => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setPeriod(billingPeriods?.find(b => b.id === currentId))
   }, [billingPeriods, currentId])
+
+  // Суммируем в копейках, чтобы не копились ошибки дробных чисел
+  const pool = envelopes?.reduce(
+    (sum, envelope) => sum + Math.round(Number(envelope.amount) * 100),
+    0
+  )
 
   return (
     <Card.Root width={'100%'} variant={'primary'} gap={4}>
@@ -27,7 +37,7 @@ const GeneralEnvelopePoolCard = () => {
           </Flex>
           <VStack align={'start'}>
             <Label>Общий пул конвертов</Label>
-            <Heading fontSize={'30px'}>482 500 ₽</Heading>
+            <Heading fontSize={'30px'}>{pool === undefined ? '—' : formattingMonay(pool / 100)}</Heading>
           </VStack>
         </HStack>
 

@@ -37,7 +37,7 @@ const UsedTemplateDrawer = ({ template }: Props) => {
     },
     {
       label: 'Теги',
-      value: ''
+      value: template.tags?.map(tag => `#${tag.name}`).join(', ') || '—'
     }
   ]
 

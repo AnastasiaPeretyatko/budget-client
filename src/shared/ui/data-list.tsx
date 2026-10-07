@@ -13,7 +13,7 @@ const BaseDataList = ({ data, style }: Props) => {
         data.map((item) => (
           <DataList.Item key={item.label} justifyContent={'space-between'}>
             <DataList.ItemLabel textTransform={'uppercase'} fontSize={'10px'} fontWeight={'600'} color={'text.sidebar'}>{item.label}</DataList.ItemLabel>
-            <DataList.ItemValue flex={'unset'}>{item.value}</DataList.ItemValue>
+            <DataList.ItemValue justifyContent={'end'} whiteSpace={'nowrap'}>{item.value}</DataList.ItemValue>
           </DataList.Item>
         ))
       }

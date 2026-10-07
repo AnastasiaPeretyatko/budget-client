@@ -1,4 +1,11 @@
-export type { BillingPeriodType, CreateBillingPeriodDto, UpdateBillingPeriodDto, BillingPeriodStatus } from './types/billing-period.type'
+export type {
+  BillingPeriodType,
+  BillingPeriodHistoryItem,
+  BillingPeriodSummaryType,
+  CreateBillingPeriodDto,
+  UpdateBillingPeriodDto,
+  BillingPeriodStatus
+} from './types/billing-period.type'
 export {
   createBillingPeriodThunk,
   fetchLatestPeriodThunk,

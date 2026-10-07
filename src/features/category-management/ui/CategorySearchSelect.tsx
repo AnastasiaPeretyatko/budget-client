@@ -4,7 +4,7 @@ import { useCallback } from 'react'
 
 type Props = {
   value?: SearchSelectOption
-  onChange?: (value: string) => void
+  onChange?: (value: string, option: SearchSelectOption) => void
   placeholder?: string
   creatable?: boolean
   label?: string
@@ -28,7 +28,7 @@ const CategorySearchSelect = ({ value, onChange, placeholder = "Выберите
     <SearchSelect
       fetchOptions={fetchOptions}
       value={value}
-      onChange={(val) => onChange?.(val)}
+      onChange={(val, option) => onChange?.(val, option)}
       onCreate={creatable ? handleCreate : undefined}
       placeholder={placeholder}
       {...props}

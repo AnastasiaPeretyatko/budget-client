@@ -2,6 +2,7 @@ export type BaseEnvelopesType = {
   amount: string;
   description: string | null;
   name: string;
+  isSafe?: boolean;
 }
 
 export type EnvelopesType = BaseEnvelopesType & {
@@ -14,6 +15,7 @@ export type EnvelopesType = BaseEnvelopesType & {
   periodExpense: string;
   periodStartBalance: string;
   transactionCount: number;
+  isSafe: boolean;
   emoji?: string | null;
   workspaceName?: string | null;
 

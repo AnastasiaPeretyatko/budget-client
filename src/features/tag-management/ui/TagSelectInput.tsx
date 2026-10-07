@@ -13,7 +13,7 @@ export type TagSelectOption = {
 
 type Props = {
   defaultSelected?: TagSelectOption[]
-  onChange?: (ids: string[]) => void
+  onChange?: (ids: string[], tags: TagSelectOption[]) => void
   label?: string
   placeholder?: string
 }
@@ -38,7 +38,7 @@ const TagSelectInput = ({ defaultSelected = [], onChange, label, placeholder = '
 
   const updateSelected = (next: TagSelectOption[]) => {
     setSelected(next)
-    onChange?.(next.map(t => t.value))
+    onChange?.(next.map(t => t.value), next)
   }
 
   const removeTag = (id: string) => updateSelected(selected.filter(t => t.value !== id))

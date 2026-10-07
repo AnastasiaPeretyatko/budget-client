@@ -15,6 +15,7 @@ import { tableRecipe } from './table-recipe'
 import { badgeRecipe } from './badge-recipe'
 import { textareaRecipe } from './textarea-recipe'
 import { datePickerRecipe } from './datepicker-recipe'
+import { tabsRecipe } from './tabs-recipe'
 
 // Recipe = аналог theme.components.*.variants из Chakra v2.
 // base — общие стили, variants — наборы вариаций, defaultVariants — значения по умолчанию.
@@ -118,6 +119,7 @@ const config = defineConfig({
       summaryCard: summaryCardRecipe,
       table: tableRecipe,
       datePicker: datePickerRecipe,
+      tabs: tabsRecipe,
     },
   },
 })
