@@ -19,7 +19,7 @@ const CreateSavingModal = () => {
       showSuccessMessage('Накопительный счет успешно создан')
       close()
     } catch (error) {
-      showErrorMessage('Ошибка создания накопительного счета')
+      showErrorMessage('Ошибка создания накопительного счета', error)
     }
   }
 

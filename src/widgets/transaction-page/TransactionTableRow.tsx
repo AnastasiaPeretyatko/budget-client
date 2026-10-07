@@ -55,7 +55,7 @@ const TransactionTableRow = ({ transaction, selection, setSelection }: Props) =>
       showSuccessMessage('Транзакция удалена')
       setDeleteOpen(false)
     } catch (error) {
-      showErrorMessage('Ошибка при удалении')
+      showErrorMessage('Ошибка при удалении', error)
     }
   }
 

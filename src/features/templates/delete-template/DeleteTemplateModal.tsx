@@ -14,12 +14,12 @@ const DeleteTemplateModal = ({ templateId }: Props) => {
 
   const { showErrorMessage, showSuccessMessage } = useNotifications()
 
-  const handleDeleteTemplate = () => {
+  const handleDeleteTemplate = async() => {
     try {
-      deleteTemplate(templateId)
+      await deleteTemplate(templateId).unwrap()
       showSuccessMessage('Шаблон успешно удален')
     } catch (error) {
-      showErrorMessage("Произошла ошибка")
+      showErrorMessage("Произошла ошибка", error)
     }
   }
 

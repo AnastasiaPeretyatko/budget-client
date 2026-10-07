@@ -33,8 +33,8 @@ const TagEditModal = ({ tag }: Props) => {
       await updateTag({ id: tag.id, data }).unwrap()
       setIsOpen.off()
       showSuccessMessage('Тег успешно обновлён')
-    } catch {
-      showErrorMessage('Ошибка при обновлении тега')
+    } catch (error) {
+      showErrorMessage('Ошибка при обновлении тега', error)
     }
   }
 

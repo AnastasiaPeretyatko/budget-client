@@ -39,8 +39,8 @@ const NextPeriodModal = ({ period }: Props) => {
       await addPeriod(data).unwrap()
       setIsOpen.off()
       showSuccessMessage('Новый цикл создан')
-    } catch {
-      showErrorMessage('Ошибка при создании цикла')
+    } catch (error) {
+      showErrorMessage('Ошибка при создании цикла', error)
     }
   }
 

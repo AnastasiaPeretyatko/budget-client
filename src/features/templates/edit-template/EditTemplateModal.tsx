@@ -30,9 +30,9 @@ const EditTemplateModal = ({ template }: Props) => {
     try {
       await updateTemplate({ id: template.id, body: data }).unwrap()
       handleClose()
-      showSuccessMessage('success')
-    } catch {
-      showErrorMessage('error')
+      showSuccessMessage('Готово')
+    } catch (error) {
+      showErrorMessage('Ошибка', error)
     }
   }
 

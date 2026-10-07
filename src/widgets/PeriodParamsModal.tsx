@@ -23,8 +23,8 @@ const PeriodParamsModal = ({ period }: Props) => {
       await updatePeriod({ id: period.id, data }).unwrap()
       setIsOpen.off()
       showSuccessMessage('Параметры цикла обновлены')
-    } catch {
-      showErrorMessage('Ошибка при обновлении цикла')
+    } catch (error) {
+      showErrorMessage('Ошибка при обновлении цикла', error)
     }
   }
 

@@ -21,9 +21,9 @@ const AddTemplateModal = () => {
       await addTemplate(data).unwrap()
       setIsOpen.off()
       setFormKey(key => key + 1)
-      showSuccessMessage('success')
-    } catch {
-      showErrorMessage('error')
+      showSuccessMessage('Готово')
+    } catch (error) {
+      showErrorMessage('Ошибка', error)
     }
   }
 

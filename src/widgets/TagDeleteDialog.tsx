@@ -22,8 +22,8 @@ const TagDeleteDialog = ({ tag }: Props) => {
       await deleteTag(tag.id).unwrap()
       setIsOpen.off()
       showSuccessMessage('Тег успешно удалён')
-    } catch {
-      showErrorMessage('Ошибка при удалении тега')
+    } catch (error) {
+      showErrorMessage('Ошибка при удалении тега', error)
     }
   }
 

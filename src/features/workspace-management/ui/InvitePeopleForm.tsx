@@ -17,8 +17,8 @@ const InvitePeopleForm = () => {
       await inviteUser({ emails: [email] }).unwrap()
       showSuccessMessage('Invitation sent successfully')
       setEmail('')
-    } catch {
-      showErrorMessage('Error sending invitation')
+    } catch (error) {
+      showErrorMessage('Error sending invitation', error)
     }
   }
 

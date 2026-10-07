@@ -20,8 +20,8 @@ const WorkspaceEditModal = ({ workspaceId, workspaceTitle, trigger }: Props) => 
       await updateWorkspace({ id: workspaceId, data: { title } }).unwrap()
       showSuccessMessage('Workspace updated successfully')
       close()
-    } catch {
-      showErrorMessage('Error updating workspace')
+    } catch (error) {
+      showErrorMessage('Error updating workspace', error)
     }
   }
 

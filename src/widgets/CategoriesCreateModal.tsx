@@ -18,8 +18,8 @@ const CategoriesCreateModal = () => {
       await addCategory(data).unwrap()
       setIsOpen.off()
       showSuccessMessage('Категория успешно создана')
-    } catch {
-      showErrorMessage('Ошибка при создании категории')
+    } catch (error) {
+      showErrorMessage('Ошибка при создании категории', error)
     }
   }
 

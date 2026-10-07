@@ -26,8 +26,8 @@ const WorkspacePersonCard = ({ user }: Props) => {
       await removeWorkspaceUser(user.id).unwrap()
       showSuccessMessage('Пользователь удалён')
       close()
-    } catch {
-      showErrorMessage('Ошибка удаления')
+    } catch (error) {
+      showErrorMessage('Ошибка удаления', error)
     }
   }
 

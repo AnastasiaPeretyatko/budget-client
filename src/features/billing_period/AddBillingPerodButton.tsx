@@ -5,6 +5,7 @@ import { Box, Button, Float, VStack } from '@chakra-ui/react'
 import { useState } from 'react'
 import { useAddPeriodMutation, useGetLatestPeriodQuery } from '@/entities/billing-period/api/billing-periodApi'
 import Label from '@/shared/ui/label'
+import { useNotifications } from '@/shared/hooks/useNotifications'
 
 const AddBillingPeriodButton = () => {
   const [addPeriod, { isLoading }] = useAddPeriodMutation()
@@ -12,13 +13,19 @@ const AddBillingPeriodButton = () => {
   // null — сервер ответил, что активного периода нет (пока грузится, это undefined)
   const hasNoActivePeriod = latestPeriod === null
   const [dates, setDates] = useState<string[]>([])
+  const { showErrorMessage, showSuccessMessage } = useNotifications()
 
-  const handleApply = () => {
+  const handleApply = async() => {
     if (dates.length < 2) return
-    addPeriod({
-      startDate: dates[0],
-      endDate: dates[1],
-    })
+    try {
+      await addPeriod({
+        startDate: dates[0],
+        endDate: dates[1],
+      }).unwrap()
+      showSuccessMessage('Успешно')
+    } catch (error) {
+      showErrorMessage('Ошибка при создании периода', error)
+    }
   }
 
   const triggerButton = (

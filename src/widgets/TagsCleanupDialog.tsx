@@ -23,8 +23,8 @@ const TagsCleanupDialog = ({ tags }: Props) => {
       const { deletedCount } = await cleanupTags().unwrap()
       setIsOpen.off()
       showSuccessMessage(`Удалено неиспользуемых тегов: ${deletedCount}`)
-    } catch {
-      showErrorMessage('Ошибка при очистке тегов')
+    } catch (error) {
+      showErrorMessage('Ошибка при очистке тегов', error)
     }
   }
 

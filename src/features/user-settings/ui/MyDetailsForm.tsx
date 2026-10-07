@@ -28,8 +28,8 @@ const MyDetailsForm = () => {
       // Обновляем auth.user — из него имя берут хедер и приветствие
       dispatch(setUser(updated))
       showSuccessMessage('Данные сохранены')
-    } catch {
-      showErrorMessage('Ошибка сохранения')
+    } catch (error) {
+      showErrorMessage('Ошибка сохранения', error)
     }
   }
 

@@ -30,8 +30,8 @@ const SavingSettingsModal = ({ envelope }: Props) => {
       await updateEnvelope({ id: envelope.id, data: { isSafe } }).unwrap()
       setIsOpen.off()
       showSuccessMessage('Настройки конверта сохранены')
-    } catch {
-      showErrorMessage('Не удалось сохранить настройки конверта')
+    } catch(error) {
+      showErrorMessage('Не удалось сохранить настройки конверта', error)
     }
   }
 

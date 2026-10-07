@@ -1,10 +1,12 @@
 import { toaster } from '@/shared/ui/toaster';
+import { getErrorMessage } from '../utils/getErrorMessage';
 
 export const useNotifications = () => {
 
-  const showErrorMessage = (title: string) => {
+  const showErrorMessage = (fallback: string, error?: unknown) => {
+    const errorMessage = error ? getErrorMessage(error) : fallback
     toaster.error({
-      title,
+      title: errorMessage,
       type: "error",
     });
   };

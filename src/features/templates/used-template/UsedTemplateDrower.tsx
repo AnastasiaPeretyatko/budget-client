@@ -41,17 +41,17 @@ const UsedTemplateDrawer = ({ template }: Props) => {
     }
   ]
 
-  const handleCreateTransaction = () => {
+  const handleCreateTransaction = async() => {
     try {
-      addTransaction({
+      await addTransaction({
         templateId: template.id,
         overrides: {
           amount
         }
-      })
+      }).unwrap()
       showSuccessMessage('Транзакция успешно создалась')
     } catch (error) {
-      showErrorMessage('Что-то пошло не так. Проверте данные.')
+      showErrorMessage('Что-то пошло не так. Проверте данные.', error)
     }
   }
 

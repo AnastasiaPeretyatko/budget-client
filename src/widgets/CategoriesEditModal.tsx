@@ -26,8 +26,8 @@ const CategoriesEditModal = ({ category }: Props) => {
       await updateCategory({ id: category.id, data }).unwrap()
       setIsOpen.off()
       showSuccessMessage('Категория успешно обновлена')
-    } catch {
-      showErrorMessage('Ошибка при обновлении категории')
+    } catch (error) {
+      showErrorMessage('Ошибка при обновлении категории', error)
     }
   }
 

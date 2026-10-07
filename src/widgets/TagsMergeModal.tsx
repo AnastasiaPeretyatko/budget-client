@@ -63,8 +63,8 @@ const TagsMergeForm = ({ tags, onClose }: FormProps) => {
       const { mergedTags, movedTransactions } = await mergeTags({ sourceIds, targetId }).unwrap()
       showSuccessMessage(`Объединено тегов: ${mergedTags}, перенесено транзакций: ${movedTransactions}`)
       onClose()
-    } catch {
-      showErrorMessage('Ошибка при объединении тегов')
+    } catch (error) {
+      showErrorMessage('Ошибка при объединении тегов', error)
     }
   }
 

@@ -15,8 +15,8 @@ const WorkspaceCreateModal = () => {
       await createWorkspace({ title }).unwrap()
       showSuccessMessage('Workspace created successfully')
       close()
-    } catch {
-      showErrorMessage('Error creating workspace')
+    } catch (error) {
+      showErrorMessage('Error creating workspace', error)
     }
   }
   return (

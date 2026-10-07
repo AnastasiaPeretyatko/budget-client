@@ -25,7 +25,7 @@ const LoginForm = () => {
     dispatch(loginThunk(credentials))
       .unwrap()
       .then(() => router.push('/workspaces'))
-      .catch(() => showErrorMessage('Неправильный логин или пароль'))
+      .catch((error) => showErrorMessage('Неправильный логин или пароль', error))
   }
   return (
     <chakra.form onSubmit={handleSubmit} autoComplete="on" display="flex" flexDirection="column" gap={4}>

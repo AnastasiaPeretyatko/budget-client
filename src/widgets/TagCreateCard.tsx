@@ -29,8 +29,8 @@ const TagCreateCard = ({ tags }: Props) => {
       await addTag(data).unwrap()
       showSuccessMessage('Тег успешно создан')
       reset()
-    } catch {
-      showErrorMessage('Ошибка при создании тега')
+    } catch (error) {
+      showErrorMessage('Ошибка при создании тега', error)
     }
   }
 

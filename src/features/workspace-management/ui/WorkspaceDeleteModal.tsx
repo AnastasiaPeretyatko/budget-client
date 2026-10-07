@@ -18,8 +18,8 @@ const WorkspaceDeleteModal = ({ workspaceId, workspaceTitle, trigger }: Props) =
       await deleteWorkspace(workspaceId).unwrap()
       showSuccessMessage('Workspace deleted successfully')
       close()
-    } catch {
-      showErrorMessage('Error deleting workspace')
+    } catch (error) {
+      showErrorMessage('Error deleting workspace', error)
     }
   }
 
@@ -32,7 +32,8 @@ const WorkspaceDeleteModal = ({ workspaceId, workspaceTitle, trigger }: Props) =
       confirmColorPalette='red'
     >
       <Text>
-        Вы уверены, что хотите удалить workspace <strong>{workspaceTitle}</strong>? Это действие необратимо.
+        Вы уверены, что хотите удалить workspace
+        <strong>{workspaceTitle}</strong>? Это действие необратимо.
       </Text>
     </BaseModal>
   )
