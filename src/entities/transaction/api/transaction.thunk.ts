@@ -1,7 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit'
 import { AxiosError } from 'axios'
-import { BaseTransactionType, BatchTransaction, TransactionType, TransactionTypeEnum } from '../types/transaction.type'
-import { deleteTransactionRequest, getAllTransactionRequest, postBatchTransactionRequest, postTransactionRequest, updateTransactionRequest } from './transaction.service'
+import { BatchTransaction, TransactionType, TransactionTypeEnum } from '../types/transaction.type'
+import { getAllTransactionRequest, postBatchTransactionRequest } from './transaction.service'
 
 export type UpdateTransactionArgs = {
   id: string
@@ -43,22 +43,6 @@ export type GetAllTransactionArgs = {
   };
 };
 
-export const createTransactionThunk = createAsyncThunk<
-  TransactionType,
-  BaseTransactionType,
-  { rejectValue: string }
->('transaction/create', async (data, { rejectWithValue }) => {
-  try {
-    const res = await postTransactionRequest(data)
-    return res.data
-  } catch (error) {
-    const axiosError = error as AxiosError<{ message: string }>
-    return rejectWithValue(
-      axiosError.response?.data?.message ?? axiosError.message ?? 'Unknown error'
-    )
-  }
-})
-
 export const postBatchTransactionThunk = createAsyncThunk<
 TransactionType[],
 BatchTransaction[],
@@ -67,22 +51,6 @@ BatchTransaction[],
   try {
     const res = await postBatchTransactionRequest(data)
     return res.data;
-  } catch (error) {
-    const axiosError = error as AxiosError<{ message: string }>
-    return rejectWithValue(
-      axiosError.response?.data?.message ?? axiosError.message ?? 'Unknown error'
-    )
-  }
-})
-
-export const deleteTransactionThunk = createAsyncThunk<
-  string,
-  string,
-  { rejectValue: string }
->('transaction/delete', async (id, { rejectWithValue }) => {
-  try {
-    await deleteTransactionRequest(id)
-    return id
   } catch (error) {
     const axiosError = error as AxiosError<{ message: string }>
     return rejectWithValue(
@@ -112,19 +80,3 @@ export const fetchTransactionsThunk = createAsyncThunk<
     }
   }
 )
-
-export const updateTransactionThunk = createAsyncThunk<
-  TransactionType,
-  UpdateTransactionArgs,
-  { rejectValue: string }
->('transaction/update', async ({ id, data }, { rejectWithValue }) => {
-  try {
-    const res = await updateTransactionRequest(id, data)
-    return res.data
-  } catch (error) {
-    const axiosError = error as AxiosError<{ message: string }>
-    return rejectWithValue(
-      axiosError.response?.data?.message ?? axiosError.message ?? 'Unknown error'
-    )
-  }
-})

@@ -18,7 +18,7 @@ export type {
   PlanTagSlice,
   PlanFundItem,
 } from './types/plan-statistics.type'
-export { fetchStatisticsByCategoryThunk, fetchPeriodComparisonThunk, fetchActivityThunk, fetchTotalSummaryThunk, fetchTopExpensesThunk, fetchDashboardSummaryThunk, fetchBalanceHistoryThunk } from './api/statistics.thunk'
+export { fetchActivityThunk, fetchTopExpensesThunk, fetchDashboardSummaryThunk } from './api/statistics.thunk'
 export { default as BalanceCard } from './ui/BalanceCard'
 export { default as TotalIncomeCard } from './ui/TotalIncomeCard'
 export { default as TotalSpentCard } from './ui/TotalSpentCard'

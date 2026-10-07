@@ -5,10 +5,8 @@ import { savingReducer } from '@/entities/saving-account'
 import { transactionsReducer } from '@/entities/transaction'
 import { workspacesReducer } from '@/entities/workspace'
 import { billingPeriodReducer, selectedPeriodReducer } from '@/entities/bulling-period'
-import { categoryReducer } from '@/entities/category'
 import { statisticsReducer } from '@/entities/statistics'
 import { userReducer } from '@/entities/user'
-import { tagReducer } from '@/entities/tag'
 import { templatesApi } from '@/entities/template/api/templatesApi'
 import { transactionApi } from '@/entities/transaction/api/transactionApi'
 import { envelopesApi } from '@/entities/envelope/api/envelopesApi'
@@ -26,10 +24,8 @@ export const store = configureStore({
     workspaces: workspacesReducer,
     billingPeriod: billingPeriodReducer,
     selectedPeriod: selectedPeriodReducer,
-    categories: categoryReducer,
     statistics: statisticsReducer,
     user: userReducer,
-    tags: tagReducer,
     [templatesApi.reducerPath]: templatesApi.reducer,
     [transactionApi.reducerPath]: transactionApi.reducer,
     [envelopesApi.reducerPath]: envelopesApi.reducer,

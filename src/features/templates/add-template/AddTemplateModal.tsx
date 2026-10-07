@@ -5,14 +5,11 @@ import BaseModalV2 from '@/shared/ui/modal_v2'
 import { Button } from '@chakra-ui/react'
 import { useBoolean } from '@/shared/hooks/useBoolean'
 import { useState } from 'react'
-import { useSelector } from 'react-redux'
-import { RootState } from '@/app/store'
 import TemplateForm, { getEmptyTemplateForm } from '../template-form/TemplateForm'
 
 const AddTemplateModal = () => {
   const [addTemplate, { isLoading }] = useAddTemplateMutation()
   const { showErrorMessage, showSuccessMessage } = useNotifications()
-  const { activeSavingAccount } = useSelector((state: RootState) => state.savingAccounts)
 
   const [isOpen, setIsOpen] = useBoolean()
   // Селекты категории и тегов хранят выбор у себя внутри, форму одним reset() не очистить.
@@ -42,7 +39,7 @@ const AddTemplateModal = () => {
         title='Создать шаблон транзакции'
         description='Сохраните параметры, чтобы быстро создавать повторяющиеся транзакции в будущем.'
         submitLabel='Сохранить шаблон'
-        defaultValues={getEmptyTemplateForm(activeSavingAccount)}
+        defaultValues={getEmptyTemplateForm()}
         isLoading={isLoading}
         onSubmit={handleSubmit}
         onCancel={setIsOpen.off}
