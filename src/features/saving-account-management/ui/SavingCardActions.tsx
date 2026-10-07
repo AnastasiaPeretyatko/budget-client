@@ -1,34 +1,36 @@
-import { AppDispatch } from '@/app/store'
-import DropdownMenu from '@/shared/ui/menu'
-import { deleteSavingAccountThunk } from '@/entities/saving-account'
-import { Button } from '@chakra-ui/react'
-import { useMemo } from 'react'
-import { useDispatch } from 'react-redux'
-
-const SavingCardActions = ({ id }: {id: string}) => {
-  const dispatch = useDispatch<AppDispatch>()
-
-  const menuItems = useMemo(() => {
-    return [
-      {
-        value: 'edit',
-        label: 'Edit',
-        onClick: () => console.log('edit')
-      },
-      {
-        value: 'delete',
-        label: 'Delete',
-        onClick: () => dispatch(deleteSavingAccountThunk(id))
-      }
-    ]
-  }, [dispatch, id])
-
-  return (
-    <DropdownMenu
-      buttonTrigger={<Button variant={'surface'} size={'sm'}>...</Button>}
-      menuItems={menuItems}
-    />
-  )
-}
-
-export default SavingCardActions
+// [DEAD CODE] Не используется нигде в проекте. Закомментировано 2026-10-07, можно удалять.
+// import { AppDispatch } from '@/app/store'
+// import DropdownMenu from '@/shared/ui/menu'
+// import { deleteSavingAccountThunk } from '@/entities/saving-account'
+// import { Button } from '@chakra-ui/react'
+// import { useMemo } from 'react'
+// import { useDispatch } from 'react-redux'
+//
+// const SavingCardActions = ({ id }: {id: string}) => {
+//   const dispatch = useDispatch<AppDispatch>()
+//
+//   const menuItems = useMemo(() => {
+//     return [
+//       {
+//         value: 'edit',
+//         label: 'Edit',
+//         onClick: () => console.log('edit')
+//       },
+//       {
+//         value: 'delete',
+//         label: 'Delete',
+//         onClick: () => dispatch(deleteSavingAccountThunk(id))
+//       }
+//     ]
+//   }, [dispatch, id])
+//
+//   return (
+//     <DropdownMenu
+//       buttonTrigger={<Button variant={'surface'} size={'sm'}>...</Button>}
+//       menuItems={menuItems}
+//     />
+//   )
+// }
+//
+// export default SavingCardActions
+//
