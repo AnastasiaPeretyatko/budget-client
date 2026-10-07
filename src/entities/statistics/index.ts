@@ -1,14 +1,8 @@
 export type {
-  CategoryStatisticsItem,
-  StatisticsByCategoryResponse,
-  StatisticsByCategoryDto,
-  PeriodComparisonResponse,
   ActivityItem,
-  TotalSummaryResponse,
   TopExpenseItem,
   DashboardSummaryResponse,
   DashboardChangeItem,
-  BalanceHistoryItem,
 } from './types/statistics.type'
 export type {
   PlanRange,
