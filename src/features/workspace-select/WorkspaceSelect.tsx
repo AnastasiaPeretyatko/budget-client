@@ -1,12 +1,15 @@
 
+import { useAppSelector } from '@/app/store'
 import { useGetWorkspacesQuery } from '@/entities/workspace/api/workspaceApi'
+import { useSwitchWorkspace } from './useSwitchWorkspace'
 import { Portal, Select, createListCollection } from "@chakra-ui/react"
 import { useMemo } from 'react'
 
 export const WorkspaceSelect = () => {
   const { data: workspaces } = useGetWorkspacesQuery()
 
-  const currentWorkspaceId = localStorage.getItem('workspaceId') as string
+  const activeWorkspaceId = useAppSelector(state => state.workspaces.activeWorkspaceId)
+  const switchWorkspace = useSwitchWorkspace()
 
   const collection = useMemo(
     () => createListCollection({
@@ -15,12 +18,22 @@ export const WorkspaceSelect = () => {
     [workspaces],
   )
 
+  const handleChange = (e: { value: string[] }) => {
+    const id = e.value[0]
+    if (id && id !== activeWorkspaceId) switchWorkspace(id)
+  }
+
   return (
-    <Select.Root variant={'primary'} collection={collection} defaultValue={[currentWorkspaceId]}>
+    <Select.Root
+      variant={'primary'}
+      collection={collection}
+      value={activeWorkspaceId ? [activeWorkspaceId] : []}
+      onValueChange={handleChange}
+    >
       <Select.HiddenSelect />
       <Select.Control>
         <Select.Trigger>
-          <Select.ValueText placeholder="Select framework"/>
+          <Select.ValueText placeholder="Рабочее пространство"/>
         </Select.Trigger>
         <Select.IndicatorGroup>
           <Select.Indicator />

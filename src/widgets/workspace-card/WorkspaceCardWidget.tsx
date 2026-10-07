@@ -1,27 +1,15 @@
-import { AppDispatch } from '@/app/store'
-import { resetApiCache } from '@/app/resetApiCache'
-import { WorkspaceListType, setActiveWorkspace, WorkspaceCard } from '@/entities/workspace'
-import { useRouter } from 'next/router'
-import { useDispatch } from 'react-redux'
+import { WorkspaceListType, WorkspaceCard } from '@/entities/workspace'
+import { useSwitchWorkspace } from '@/features/workspace-select/useSwitchWorkspace'
 
 type Props = {
   workspace: WorkspaceListType
 }
 
 const WorkspaceCardWidget = ({ workspace }: Props) => {
-  const router = useRouter()
-  const dispatch = useDispatch<AppDispatch>()
-
-  const handleSelect = (id: string) => {
-    localStorage.setItem('workspaceId', id)
-    dispatch(setActiveWorkspace(id))
-    // кэш предыдущего пространства не должен попасть на экран нового
-    dispatch(resetApiCache())
-    router.push('/dashboard')
-  }
+  const switchWorkspace = useSwitchWorkspace({ redirectTo: '/dashboard' })
 
   return (
-    <WorkspaceCard workspace={workspace} onSelect={handleSelect}/>
+    <WorkspaceCard workspace={workspace} onSelect={switchWorkspace}/>
   )
 }
 
