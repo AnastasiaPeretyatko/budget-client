@@ -3,21 +3,22 @@ import BaseDatePicker from '@/shared/ui/date-picker'
 import BasePopover from '@/shared/ui/popover'
 import { Box, Button, Float, VStack } from '@chakra-ui/react'
 import { useState } from 'react'
-import { useAppDispatch, useAppSelector } from '@/app/store'
-import { createBillingPeriodThunk } from '@/entities/bulling-period'
+import { useAddPeriodMutation, useGetLatestPeriodQuery } from '@/entities/bulling-period/api/billing-periodApi'
 import Label from '@/shared/ui/label'
 
 const AddBillingPeriodButton = () => {
-  const dispatch = useAppDispatch()
-  const { isLoading, hasNoActivePeriod } = useAppSelector(state => state.billingPeriod)
+  const [addPeriod, { isLoading }] = useAddPeriodMutation()
+  const { data: latestPeriod } = useGetLatestPeriodQuery()
+  // null — сервер ответил, что активного периода нет (пока грузится, это undefined)
+  const hasNoActivePeriod = latestPeriod === null
   const [dates, setDates] = useState<string[]>([])
 
   const handleApply = () => {
     if (dates.length < 2) return
-    dispatch(createBillingPeriodThunk({
+    addPeriod({
       startDate: dates[0],
       endDate: dates[1],
-    }))
+    })
   }
 
   const triggerButton = (

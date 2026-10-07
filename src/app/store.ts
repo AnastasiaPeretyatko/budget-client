@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { authReducer } from '@/entities/auth'
 import { savingReducer } from '@/entities/saving-account'
 import { workspacesReducer } from '@/entities/workspace'
-import { billingPeriodReducer, selectedPeriodReducer } from '@/entities/bulling-period'
+import { selectedPeriodReducer } from '@/entities/bulling-period'
 import { userReducer } from '@/entities/user'
 import { templatesApi } from '@/entities/template/api/templatesApi'
 import { transactionApi } from '@/entities/transaction/api/transactionApi'
@@ -19,7 +19,6 @@ export const store = configureStore({
     auth: authReducer,
     savingAccounts: savingReducer,
     workspaces: workspacesReducer,
-    billingPeriod: billingPeriodReducer,
     selectedPeriod: selectedPeriodReducer,
     user: userReducer,
     [templatesApi.reducerPath]: templatesApi.reducer,

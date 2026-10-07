@@ -5,6 +5,7 @@ import {
   BillingPeriodSummaryType,
   BillingPeriodType,
   CreateBillingPeriodDto,
+  LatestPeriodType,
   UpdateBillingPeriodDto
 } from '../types/billing-period.type';
 
@@ -13,6 +14,7 @@ const INVALIDATES = [
   { type: 'BillingPeriod' as const, id: 'LIST' },
   { type: 'BillingPeriod' as const, id: 'SUMMARY' },
   { type: 'BillingPeriod' as const, id: 'HISTORY' },
+  { type: 'BillingPeriod' as const, id: 'LATEST' },
 ]
 
 export const billingPeriodApi = createApi({
@@ -28,6 +30,12 @@ export const billingPeriodApi = createApi({
           { type: 'BillingPeriod', id: 'LIST' },
         ]
         : [{ type: 'BillingPeriod', id: 'LIST' }],
+    }),
+    // Сервер отвечает { data: период | null }: null значит «активного периода нет»
+    getLatestPeriod: build.query<LatestPeriodType | null, void>({
+      query: () => ({ url: '/billing-period/latest', method: 'GET' }),
+      transformResponse: (response: { data: LatestPeriodType | null }) => response.data,
+      providesTags: [{ type: 'BillingPeriod', id: 'LATEST' }],
     }),
     getPeriodSummary: build.query<BillingPeriodSummaryType, string>({
       query: (id) => ({ url: `/billing-period/${id}/summary`, method: 'GET' }),
@@ -50,6 +58,7 @@ export const billingPeriodApi = createApi({
 
 export const {
   useAddPeriodMutation,
+  useGetLatestPeriodQuery,
   useGetPeriodsQuery,
   useGetPeriodSummaryQuery,
   useGetPeriodsHistoryQuery,

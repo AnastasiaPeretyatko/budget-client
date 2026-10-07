@@ -22,6 +22,12 @@ export type BillingPeriodType = {
   createdAt: string
 }
 
+export type LatestPeriodType = {
+  id: string
+  startDate: string
+  endDate: string
+}
+
 export type BillingPeriodResult = 'success' | 'overspent' | 'no_plan'
 
 export type BillingPeriodHistoryItem = {
