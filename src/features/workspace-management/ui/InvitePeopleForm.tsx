@@ -1,27 +1,25 @@
-import { AppDispatch } from '@/app/store'
-import { inviteUserThunk } from '@/entities/workspace'
+import { useInviteUserMutation } from '@/entities/workspace/api/workspaceApi'
 import { COLOR } from '@/shared/config/colors'
 import { useNotifications } from '@/shared/hooks/useNotifications'
 import { Button, HStack, Input } from '@chakra-ui/react'
 import { useState } from 'react'
-import { useDispatch } from 'react-redux'
 
 const InvitePeopleForm = () => {
-  const dispatch = useDispatch<AppDispatch>()
+  const [inviteUser] = useInviteUserMutation()
   const { showSuccessMessage, showErrorMessage } = useNotifications()
 
   const [email, setEmail] = useState<string>('')
 
-  const handleInvitePeople = () => {
+  const handleInvitePeople = async () => {
     if (!email) return;
 
-    dispatch(inviteUserThunk({ emails: [email] }))
-      .unwrap()
-      .then(() => {
-        showSuccessMessage('Invitation sent successfully')
-        setEmail('')
-      })
-      .catch(() => showErrorMessage('Error sending invitation'))
+    try {
+      await inviteUser({ emails: [email] }).unwrap()
+      showSuccessMessage('Invitation sent successfully')
+      setEmail('')
+    } catch {
+      showErrorMessage('Error sending invitation')
+    }
   }
 
   return (

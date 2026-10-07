@@ -1,6 +1,6 @@
 "use client"
 
-import { createListCollection, Portal, Select } from "@chakra-ui/react"
+import { createListCollection, Select } from "@chakra-ui/react"
 
 type Props = {
   options: {
@@ -21,6 +21,7 @@ const BaseSelect = ({ options, onChange, placeholder, value, ...props }: Props) 
   return (
     <Select.Root
       {...props}
+      zIndex={2}
       size={'sm'}
       minW={46}
       value={value ? [value] : []}
@@ -36,19 +37,19 @@ const BaseSelect = ({ options, onChange, placeholder, value, ...props }: Props) 
           <Select.Indicator />
         </Select.IndicatorGroup>
       </Select.Control>
-      <Portal>
-        <Select.Positioner>
-          <Select.ClearTrigger />
-          <Select.Content>
-            {collection.items.map((option) => (
-              <Select.Item item={option} key={option.value}>
-                {option.label}
-                <Select.ItemIndicator />
-              </Select.Item>
-            ))}
-          </Select.Content>
-        </Select.Positioner>
-      </Portal>
+      {/* <Portal> */}
+      <Select.Positioner>
+        {/* <Select.ClearTrigger /> */}
+        <Select.Content zIndex={2}>
+          {collection.items.map((option) => (
+            <Select.Item item={option} key={option.value}>
+              {option.label}
+              <Select.ItemIndicator />
+            </Select.Item>
+          ))}
+        </Select.Content>
+      </Select.Positioner>
+      {/* </Portal> */}
     </Select.Root>
   )
 }

@@ -87,7 +87,8 @@ export function AppGuard({ Component, pageProps }: AppGuardProps) {
   }
 
   return (
-    <PrivateLayout>
+    // key: при смене пространства страница и хедер создаются заново и запрашивают данные нового
+    <PrivateLayout key={activeWorkspaceId}>
       <Component {...pageProps} />
     </PrivateLayout>
   )

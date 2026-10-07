@@ -1,15 +1,12 @@
-import { Box, Flex, Heading, IconButton, Separator, Text, VStack } from '@chakra-ui/react'
+import { Box, Flex, Heading, IconButton, Image, VStack } from '@chakra-ui/react'
 import { createContext, ReactElement, useContext, useState } from 'react'
 import SidebarItem from './SidebarItem'
-import SidebarUser from './SidebarUser'
 import PiggyBankIcon from '@/shared/icon/PiggyBankIcon'
-import { LuLayoutDashboard, LuPanelLeftClose, LuPanelLeftOpen, LuArrowLeftRight, LuReceipt } from 'react-icons/lu'
-import { ColorModeButton } from '@/shared/ui/color-mode'
+import { LuLayoutDashboard, LuPanelLeftClose, LuPanelLeftOpen, LuReceipt } from 'react-icons/lu'
 import { MdCalendarViewMonth, MdOutlineSettings } from 'react-icons/md'
-import { useRouter } from 'next/router'
-import { useAppDispatch } from '@/app/store'
-import { clearActiveWorkspace } from '@/entities/workspace'
 import { TbBusinessplan } from 'react-icons/tb'
+import { GoProjectTemplate } from 'react-icons/go'
+import Label from '@/shared/ui/label'
 
 export type SidebarItemProps = {
   title: string
@@ -37,6 +34,11 @@ const SIDEBAR_LIST: SidebarItemProps[] = [
     path: '/plan',
   },
   {
+    title: 'Шаблоны',
+    icon: <GoProjectTemplate/>,
+    path: '/templates'
+  },
+  {
     title: 'Транзакции',
     icon: <LuReceipt />,
     path: '/transactions',
@@ -58,14 +60,6 @@ const SIDEBAR_WIDTH_COLLAPSED = '68px'
 
 const Sidebar = () => {
   const [collapsed, setCollapsed] = useState(false)
-  const router = useRouter()
-  const dispatch = useAppDispatch()
-
-  const handleSwitchWorkspace = () => {
-    localStorage.removeItem('workspaceId')
-    dispatch(clearActiveWorkspace())
-    router.push('/workspaces')
-  }
 
   return (
     <SidebarContext.Provider value={{ collapsed }}>
@@ -82,12 +76,15 @@ const Sidebar = () => {
           px={collapsed ? 2 : 4}
           transition="width 0.2s, min-width 0.2s, padding 0.2s"
           overflow="hidden"
+          bg={'bg.body'}
         >
-          <Flex align="center" justify={collapsed ? 'center' : 'start'} px={2} mb={4} minH="40px">
+          <Flex align="center" justify={collapsed ? 'center' : 'start'} px={2} mb={4} minH="40px" gap={2}>
+            <Image src={'/logo.png'} alt='logo' width={38} height={38}/>
             {!collapsed && (
-              <Heading size="lg" textTransform="uppercase" truncate>
-              Budget
-              </Heading>
+              <VStack align={'start'} gap={0}>
+                <Heading>FinFlow</Heading>
+                <Label textWrap={'nowrap'} fontSize={'xs'}>Бюджет • Конверты</Label>
+              </VStack>
             )}
           </Flex>
 
@@ -95,36 +92,6 @@ const Sidebar = () => {
             {SIDEBAR_LIST.map((item) => (
               <SidebarItem key={item.path} {...item} />
             ))}
-          </VStack>
-
-          <Separator my={2} />
-
-          <VStack gap={1} align="stretch" fontSize={'sm'}>
-            <Flex justify={collapsed ? 'center' : 'start'} px={collapsed ? 0 : 1}>
-              <ColorModeButton />
-            </Flex>
-            <Flex
-              align="center"
-              gap={2}
-              px={collapsed ? 0 : 1}
-              justify={collapsed ? 'center' : 'start'}
-              cursor="pointer"
-              onClick={handleSwitchWorkspace}
-              _hover={{ opacity: 0.8 }}
-            >
-              <IconButton
-                aria-label="Switch workspace"
-                variant="ghost"
-                size="sm"
-                as="span"
-              >
-                <LuArrowLeftRight />
-              </IconButton>
-              {!collapsed && (
-                <Text fontSize="sm" truncate>Переключить пространство</Text>
-              )}
-            </Flex>
-            <SidebarUser />
           </VStack>
         </Flex>
         <IconButton

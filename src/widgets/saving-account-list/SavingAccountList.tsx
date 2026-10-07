@@ -1,11 +1,7 @@
-import { AppDispatch, RootState } from '@/app/store'
-import { fetchSavingAccountsThunk } from '@/entities/saving-account'
+import { useGetEnvelopesQuery } from '@/entities/envelope/api/envelopesApi'
 import { SavingAccountCard } from '@/entities/saving-account'
 import { CreateSavingModal } from '@/features/saving-account-management'
 import { Box } from '@chakra-ui/react'
-import { useRouter } from 'next/router'
-import { useEffect } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
 
 type Props = {
   isDisplayCreteModal?: boolean
@@ -14,18 +10,7 @@ type Props = {
 }
 
 const SavingAccountList = ({ isDisplayCreteModal = false, limit, wrap = false }: Props) => {
-  const dispatch = useDispatch<AppDispatch>()
-  const router = useRouter()
-
-  const { savingAccounts } = useSelector((state: RootState) => state.savingAccounts)
-
-  const handleOpenBudgetClick = (id: string) => {
-    router.push(`/budgets/${id}`)
-  }
-
-  useEffect(() => {
-    dispatch(fetchSavingAccountsThunk())
-  }, [dispatch])
+  const { data: savingAccounts = [] } = useGetEnvelopesQuery()
 
   const visibleAccounts = limit ? savingAccounts.slice(0, limit) : savingAccounts
 
@@ -41,7 +26,6 @@ const SavingAccountList = ({ isDisplayCreteModal = false, limit, wrap = false }:
         <SavingAccountCard
           key={account.id}
           savingAccount={account}
-          onClick={handleOpenBudgetClick}
         />
       ))}
       {isDisplayCreteModal && <CreateSavingModal />}

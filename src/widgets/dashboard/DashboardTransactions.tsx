@@ -1,15 +1,13 @@
 'use client'
 
-import { AppDispatch, RootState } from '@/app/store'
-import { fetchTopExpensesThunk } from '@/entities/statistics'
-import { fetchTransactionsThunk, TransactionType } from '@/entities/transaction'
+import { useGetTopExpensesQuery } from '@/entities/statistics/api/statisticsApi'
+import { TransactionType } from '@/entities/transaction'
+import { useGetTransactionQuery } from '@/entities/transaction/api/transactionApi'
 import { TransactionTypeEnum } from '@/entities/transaction/types/transaction.type'
 import { COLOR } from '@/shared/config/colors'
 import { Box, Card, Grid, Heading, HStack, Link, Spinner, Text, VStack } from '@chakra-ui/react'
 import moment from 'moment'
 import NextLink from 'next/link'
-import { useEffect } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
 import { LuArrowDown, LuArrowUp, LuArrowLeftRight } from 'react-icons/lu'
 
 const TOP_LIMIT = 5
@@ -79,17 +77,13 @@ const getTransactionAmount = (transaction: TransactionType) => {
 }
 
 const DashboardTransactions = () => {
-  const dispatch = useDispatch<AppDispatch>()
-  const { topExpenses, isTopExpensesLoading } = useSelector((state: RootState) => state.statistics)
-  const { transactions, isLoading: isTransactionsLoading } = useSelector((state: RootState) => state.transactions)
-
-  useEffect(() => {
-    dispatch(fetchTopExpensesThunk())
-    dispatch(fetchTransactionsThunk({ paging: { limit: RECENT_LIMIT, offset: 0 } }))
-  }, [dispatch])
+  const { data: topExpenses = [], isLoading: isTopExpensesLoading } = useGetTopExpensesQuery()
+  const { data: transactionsData, isLoading: isTransactionsLoading } = useGetTransactionQuery({
+    paging: { limit: RECENT_LIMIT, offset: 0 }
+  })
 
   const topFive = topExpenses.slice(0, TOP_LIMIT)
-  const recentFive = transactions.slice(0, RECENT_LIMIT)
+  const recentFive = (transactionsData?.rows ?? []).slice(0, RECENT_LIMIT)
 
   return (
     <Grid width="100%" templateColumns="1fr 1fr" gap={4}>

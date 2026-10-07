@@ -1,3 +1,3 @@
-export const formattingmonay = (value?: string | number): string => {
-  return Number(value)?.toLocaleString('ru-RU') || '0'
+export const formattingMonay = (value?: string | number): string => {
+  return `${Number(value)?.toLocaleString('ru-RU') || '0'} ₽`
 }

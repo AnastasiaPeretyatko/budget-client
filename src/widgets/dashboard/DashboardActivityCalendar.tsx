@@ -1,14 +1,12 @@
 'use client'
 
-import { useEffect, useMemo } from 'react'
-import { useSelector } from 'react-redux'
+import { useMemo } from 'react'
 import { Card, HStack, Spinner, Text, VStack } from '@chakra-ui/react'
 import { ActivityCalendar, ThemeInput } from 'react-activity-calendar'
 import { useColorMode } from '@/shared/ui/color-mode'
 import { COLOR } from '@/shared/config/colors'
 import { InfoTip } from '@/shared/ui/toggle-tip'
-import { RootState, useAppDispatch } from '@/app/store'
-import { fetchActivityThunk } from '@/entities/statistics'
+import { useGetActivityQuery } from '@/entities/statistics/api/statisticsApi'
 
 const calendarTheme: ThemeInput = {
   light: ['#e8e0ff', '#c4a8fc', '#a07ef8', '#7c54f4', '#AE90FE'],
@@ -35,13 +33,8 @@ function assignLevels(items: { date: string; count: number }[]) {
 }
 
 const DashboardActivityCalendar = () => {
-  const dispatch = useAppDispatch()
-  const { activity, isActivityLoading } = useSelector((state: RootState) => state.statistics)
+  const { data: activity = [], isLoading: isActivityLoading } = useGetActivityQuery()
   const { colorMode } = useColorMode()
-
-  useEffect(() => {
-    dispatch(fetchActivityThunk())
-  }, [dispatch])
 
   const data = useMemo(() => assignLevels(activity), [activity])
 

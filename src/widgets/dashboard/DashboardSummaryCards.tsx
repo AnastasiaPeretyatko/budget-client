@@ -1,25 +1,19 @@
 'use client'
 
-import { useEffect, useMemo } from 'react'
-import { useSelector } from 'react-redux'
-import { RootState, useAppDispatch } from '@/app/store'
-import { fetchDashboardSummaryThunk } from '@/entities/statistics'
-import { fetchLatestPeriodThunk } from '@/entities/bulling-period'
+import { useMemo } from 'react'
+import { useGetDashboardSummaryQuery } from '@/entities/statistics/api/statisticsApi'
+import { useGetLatestPeriodQuery } from '@/entities/billing-period/api/billing-periodApi'
 import { HStack } from '@chakra-ui/react'
 import moment from 'moment'
 import { BalanceCard, TotalIncomeCard, TotalSpentCard } from '@/entities/statistics'
-import { PeriodProgressCard } from '@/entities/bulling-period'
+import { PeriodProgressCard } from '@/entities/billing-period'
 
 const DashboardSummaryCards = () => {
-  const dispatch = useAppDispatch()
-  const { dashboardSummary, isDashboardSummaryLoading } =
-    useSelector((state: RootState) => state.statistics)
-  const { latestPeriod } = useSelector((state: RootState) => state.billingPeriod)
-
-  useEffect(() => {
-    dispatch(fetchDashboardSummaryThunk())
-    dispatch(fetchLatestPeriodThunk())
-  }, [dispatch])
+  const {
+    data: dashboardSummary,
+    isLoading: isDashboardSummaryLoading
+  } = useGetDashboardSummaryQuery()
+  const { data: latestPeriod } = useGetLatestPeriodQuery()
 
   const totalDays = useMemo(() => {
     if (!latestPeriod) return null

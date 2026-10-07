@@ -36,6 +36,9 @@ const auth = createSlice({
     },
     setIsLoading: (state, { payload }: PayloadAction<boolean>) => {
       state.isLoading = payload
+    },
+    setUser: (state, { payload }: PayloadAction<AuthUser>) => {
+      state.user = payload
     }
   },
   extraReducers: builder => {
@@ -86,6 +89,6 @@ const auth = createSlice({
   }
 })
 
-export const { setIsAuth, setToken, deleteToken, setIsLoading } = auth.actions
+export const { setIsAuth, setToken, deleteToken, setIsLoading, setUser } = auth.actions
 
 export default auth.reducer

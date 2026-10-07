@@ -1,7 +1,7 @@
 import { Menu, Portal } from '@chakra-ui/react'
 import React from 'react'
 
-type MenuItem = {
+export type MenuItem = {
   value: string;
   label: string;
   icon?: React.ReactNode;

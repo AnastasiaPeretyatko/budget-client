@@ -1,6 +1,6 @@
-import { Field, Input, InputProps } from '@chakra-ui/react'
-import React from 'react'
-import { COLOR } from '../config/colors';
+import { Field, HStack, Input, InputGroup, InputProps } from '@chakra-ui/react'
+import React, { PropsWithChildren, ReactNode } from 'react'
+import Label from './label';
 
 type Props = {
   required?: boolean;
@@ -8,8 +8,9 @@ type Props = {
   label?: string;
   invalid?: boolean;
   errorText?: string;
+  startElement?: ReactNode;
   type?: React.HTMLInputTypeAttribute;
-} & InputProps
+} & InputProps & PropsWithChildren
 
 const FieldInput = ({
   required,
@@ -17,18 +18,33 @@ const FieldInput = ({
   label,
   invalid,
   errorText,
+  startElement,
+  children,
   ...props
 }:Props) => {
+  const input = (
+    <Input
+      variant={'primary'}
+      borderRadius={8}
+      borderWidth={2}
+      borderColor={invalid ? 'red.500' : 'outline'}
+      {...props}
+    />
+  )
+
   return (
     <Field.Root required={required} invalid={invalid}>
-      {label && <Field.Label color={COLOR.LABEL}>
-        {label} {required && <Field.RequiredIndicator />}
-      </Field.Label>}
-      <Input
-        borderRadius={12}
-        borderColor={invalid ? 'red.500' : COLOR.BORDER}
-        {...props}
-      />
+      <HStack width={'100%'} justify={'space-between'}>
+        {label && <Label color={'#64748B'}>
+          {label} {required && <Field.RequiredIndicator />}
+        </Label>}
+        {children}
+      </HStack>
+
+      {startElement
+        ? <InputGroup width={'100%'} startElement={startElement}>{input}</InputGroup>
+        : input
+      }
       {errorText && <Field.ErrorText>{errorText}</Field.ErrorText>}
       {helperText && !errorText && <Field.HelperText>{helperText}</Field.HelperText>}
     </Field.Root>

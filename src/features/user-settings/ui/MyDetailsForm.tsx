@@ -1,34 +1,36 @@
 import { RootState, useAppDispatch } from '@/app/store'
-import { fetchMeThunk, updateMeThunk } from '@/entities/user'
+import { setUser } from '@/entities/auth'
+import { useUpdateMeMutation } from '@/entities/user/api/userApi'
 import FieldInput from '@/shared/ui/FieldInput'
 import { useNotifications } from '@/shared/hooks/useNotifications'
 import { Button, HStack, VStack } from '@chakra-ui/react'
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 import { useSelector } from 'react-redux'
 
 const MyDetailsForm = () => {
   const dispatch = useAppDispatch()
-  const { profile, isLoading } = useSelector((state: RootState) => state.user)
+  const { user } = useSelector((state: RootState) => state.auth)
+  const [updateMe, { isLoading }] = useUpdateMeMutation()
   const { showSuccessMessage, showErrorMessage } = useNotifications()
 
-  const [firstName, setFirstName] = useState(profile?.firstName || '')
-  const [lastName, setLastName] = useState(profile?.lastName || '')
-
-  useEffect(() => {
-    dispatch(fetchMeThunk())
-  }, [dispatch])
+  const [firstName, setFirstName] = useState(user?.firstName || '')
+  const [lastName, setLastName] = useState(user?.lastName || '')
 
   const hasChanges = useMemo(() => {
-    const serverFirst = profile?.firstName ?? ''
-    const serverLast = profile?.lastName ?? ''
+    const serverFirst = user?.firstName ?? ''
+    const serverLast = user?.lastName ?? ''
     return firstName !== serverFirst || lastName !== serverLast
-  }, [firstName, lastName, profile])
+  }, [firstName, lastName, user])
 
-  const handleSave = () => {
-    dispatch(updateMeThunk({ firstName, lastName }))
-      .unwrap()
-      .then(() => showSuccessMessage('Данные сохранены'))
-      .catch(() => showErrorMessage('Ошибка сохранения'))
+  const handleSave = async () => {
+    try {
+      const updated = await updateMe({ firstName, lastName }).unwrap()
+      // Обновляем auth.user — из него имя берут хедер и приветствие
+      dispatch(setUser(updated))
+      showSuccessMessage('Данные сохранены')
+    } catch {
+      showErrorMessage('Ошибка сохранения')
+    }
   }
 
   return (

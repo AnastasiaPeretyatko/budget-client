@@ -1,18 +1,19 @@
 import { Button, CloseButton, Drawer, Portal } from '@chakra-ui/react'
-import { PropsWithChildren } from 'react'
+import { PropsWithChildren, ReactNode } from 'react'
 import { BsCardChecklist } from 'react-icons/bs'
 
 type Props = {
-  // trigger: ReactNode
+  trigger?: ReactNode
   isFooter?: boolean
 } & PropsWithChildren
 
-const BaseDrawer = ({  children, isFooter = false }: Props) => {
-
+const BaseDrawer = ({ trigger, children, isFooter = false }: Props) => {
   return (
     <Drawer.Root size={'sm'} preventScroll={false}>
       <Drawer.Trigger asChild>
-        <Button size={'xs'}><BsCardChecklist/></Button>
+        {
+          trigger ?? <Button size={'xs'}><BsCardChecklist/></Button>
+        }
       </Drawer.Trigger>
       <Portal>
         <Drawer.Backdrop />

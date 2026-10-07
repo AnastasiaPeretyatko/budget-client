@@ -3,9 +3,19 @@ import {
   defaultConfig,
   defineConfig,
   defineRecipe,
-  defineSlotRecipe,
 } from '@chakra-ui/react'
 import { COLOR } from '@/shared/config/colors'
+import { buttonRecipe } from './button-recipe'
+import { inputRecipe } from './input-recipe'
+import { selectRecipe } from './select-recipe'
+import { comboboxRecipe } from './combobox-recipe'
+import { cardRecipe, summaryCardRecipe } from './card-recipe'
+import { progressRecipe } from './progress-recipe'
+import { tableRecipe } from './table-recipe'
+import { badgeRecipe } from './badge-recipe'
+import { textareaRecipe } from './textarea-recipe'
+import { datePickerRecipe } from './datepicker-recipe'
+import { tabsRecipe } from './tabs-recipe'
 
 // Recipe = аналог theme.components.*.variants из Chakra v2.
 // base — общие стили, variants — наборы вариаций, defaultVariants — значения по умолчанию.
@@ -36,54 +46,12 @@ export const amountTextRecipe = defineRecipe({
   },
 })
 
-// Slot recipe = аналог составного компонента v2 (multi-part / parts).
-// Описываем стили для каждого «слота» составного компонента, а variant `tone`
-// разом перекрашивает нужные слоты (акцентный градиент фона + бейдж с иконкой).
-const toneVariant = (token: string) => ({
-  root: {
-    // токен-ссылки в произвольном градиенте не резолвятся, поэтому берём CSS-переменную
-    background: `linear-gradient(135deg, color-mix(in srgb, var(--chakra-colors-${token}) 9%, transparent) 0%, transparent 60%)`,
-  },
-  badge: {
-    bg: `color-mix(in srgb, var(--chakra-colors-${token}) 16%, transparent)`,
-    color: `${token}.fg`,
-  },
-})
-
-export const summaryCardRecipe = defineSlotRecipe({
-  className: 'summary-card',
-  slots: ['root', 'body', 'header', 'label', 'value', 'badge'],
-  base: {
-    root: { flex: 1, borderRadius: 'lg', overflow: 'hidden' },
-    body: { p: 4 },
-    header: { display: 'flex', alignItems: 'center', gap: 1 },
-    label: { color: 'label.fg', fontWeight: 500, fontSize: 'sm' },
-    value: { minW: 0 },
-    badge: {
-      flexShrink: 0,
-      w: '44px',
-      h: '44px',
-      borderRadius: 'full',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      fontSize: '20px',
-    },
-  },
-  variants: {
-    tone: {
-      primary: toneVariant('primary'),
-      income: toneVariant('income'),
-      expense: toneVariant('expense'),
-      period: toneVariant('period'),
-    },
-  },
-  defaultVariants: {
-    tone: 'primary',
-  },
-})
-
 const config = defineConfig({
+  globalCss: {
+    "html, body": {
+      background: '#FAF8FF'
+    }
+  },
   theme: {
     tokens: {
       colors: {
@@ -106,20 +74,38 @@ const config = defineConfig({
         danger: { fg: { value: '{colors.danger}' } },
         period: { fg: { value: '{colors.period}' } },
         primary: { fg: { value: '{colors.primary}' } },
-        label: { value: { base: '#5f5e59', _dark: '#bcbab6' } },
+        second_primary: { value: '#E2E7FF' },
+        label: { value: { base: '#94A3B8', _dark: '#bcbab6' } },
         bg: {
-          tabs: { value: { base: '#eeeceb', _dark: '#2c2c2c' } }
+          body: { value: { base: '#ffffff', _dark: '#0C1018' } },
+          default: { value: { base: '#eeeceb', _dark: '#0E121A' } },
+          default_light: { value: { base: '#eeeceb', _dark: '#121724' } },
         },
+        outline: { value: { base: '#ffffff', _dark: '#1A1F2B' } },
         text: {
           sidebar: { value: { base: '#676661', _dark: '#BCBAB6' } }
+        },
+        input:{
+          bg: { value: { base: '#F2F3FF', _dark: '#030304' } }
         }
       },
     },
     recipes: {
       amountText: amountTextRecipe,
+      button: buttonRecipe,
+      input: inputRecipe,
+      badge: badgeRecipe,
+      textarea: textareaRecipe
     },
     slotRecipes: {
+      card: cardRecipe,
+      select: selectRecipe,
+      combobox: comboboxRecipe,
+      progress: progressRecipe,
       summaryCard: summaryCardRecipe,
+      table: tableRecipe,
+      datePicker: datePickerRecipe,
+      tabs: tabsRecipe,
     },
   },
 })

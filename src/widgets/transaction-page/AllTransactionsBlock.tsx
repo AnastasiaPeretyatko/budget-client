@@ -1,69 +1,108 @@
 import { TransactionTypeEnum } from '@/entities/transaction/types/transaction.type'
-import { fetchTransactionsThunk } from '@/entities/transaction'
-import { fetchTagsThunk } from '@/entities/tag'
-import { fetchBillingPeriodsThunk } from '@/entities/bulling-period'
-import CheckboxDropdown, { CheckboxDropdownValue } from '@/shared/ui/checkbox-dropdown'
-import { Box, Button, HStack, Text, VStack } from '@chakra-ui/react'
-import { useEffect, useMemo, useState } from 'react'
-import { useSelector } from 'react-redux'
-import { RootState, useAppDispatch } from '@/app/store'
-import PeriodFilter from './PeriodFilter'
+import { Card, Circle, Float, HStack, IconButton, VStack } from '@chakra-ui/react'
+import { Dispatch, SetStateAction, useState } from 'react'
+import SearchInput from '@/shared/ui/search-input'
+import FilterType from './FilterType'
 import TransactionsTable from './TransactionsTable'
-import { buildTagFilter } from '../transaction-list/TransactionList'
-import RadioMenu from '@/shared/ui/radio-menu'
+import { useGetTransactionQuery } from '@/entities/transaction/api/transactionApi'
+import { useSelectedPeriod } from '@/entities/billing-period/api/useSelectedPeriod'
+import { BasePagination } from '@/shared/ui/pagination'
+import TransactionCategoriesBox from '@/features/transaction-management/ui/TransactionCategoriesBox'
+import TransactionTagsBox from '@/features/transaction-management/ui/TransactionTagsBox'
+import { Funnel } from 'lucide-react'
+import { useBoolean } from '@/shared/hooks/useBoolean'
+import useDebounce from '@/shared/hooks/useDebounce'
 
-const typeFilters = [
-  { label: 'Все', value: 'All' },
-  { label: 'Расходы', value: TransactionTypeEnum.EXPENSE },
-  { label: 'Доходы', value: TransactionTypeEnum.INCOME },
-  { label: 'Переводы', value: TransactionTypeEnum.TRANSFER },
-]
+const LIMIT = 10
+const SEARCH_DEBOUNCE_MS = 400
 
 const AllTransactionsBlock = () => {
-  const dispatch = useAppDispatch()
-  const { tags } = useSelector((state: RootState) => state.tags)
-  const { billingPeriods } = useSelector((state: RootState) => state.billingPeriod)
-  const { transactions, isLoading } = useSelector((state: RootState) => state.transactions)
+  const [filter, setFilter] = useState<TransactionTypeEnum | 'all'>('all')
+  const [search, setSearch] = useState<string>('')
+  const [page, setPage] = useState(1)
+  const [categoryIds, setCategoryIds] = useState<string[]>([])
+  const [tagIds, setTagIds] = useState<string[]>([])
 
-  const [activeType, setActiveType] = useState<string>('All')
-  const [tagFilter, setTagFilter] = useState<CheckboxDropdownValue>({})
-  const [periodId, setPeriodId] = useState<string | undefined>(undefined)
+  const [isOpenFilter, setOpenFilter] = useBoolean()
 
-  useEffect(() => {
-    dispatch(fetchTagsThunk(undefined))
-    dispatch(fetchBillingPeriodsThunk())
-  }, [dispatch])
+  const { selectedPeriodId } = useSelectedPeriod()
 
-  const handleTypeChange = (value: string) => {
-    setActiveType(prev => prev === value ? 'All' : value)
+  // в поле показываем search сразу, а на сервер отправляем debouncedSearch — после паузы в наборе
+  const debouncedSearch = useDebounce(search, SEARCH_DEBOUNCE_MS)
+
+  // Страницу сбрасываем не при наборе, а когда новый поиск реально применился: тогда запрос сразу идёт
+  // за первой страницей. setState прямо во время рендера — штатный приём React: он перерисует компонент
+  // до отправки запроса, поэтому запроса со старой страницей не будет.
+  const [appliedSearch, setAppliedSearch] = useState(debouncedSearch)
+  if (appliedSearch !== debouncedSearch) {
+    setAppliedSearch(debouncedSearch)
+    setPage(1)
   }
 
-  const tagItems = tags.map(t => ({ label: t.name, value: t.id, color: t.color }))
+  const { data, isLoading } = useGetTransactionQuery({
+    filter: { periodId: selectedPeriodId!, type: filter === 'all' ? null : filter as TransactionTypeEnum, categoryIds, tag: { in: tagIds } },
+    paging: { offset: (page * LIMIT) - LIMIT },
+    search: debouncedSearch,
+  },)
 
-  const dateBetween = useMemo(() => {
-    const period = billingPeriods.find(p => p.id === periodId)
-    return period ? [period.startDate, period.endDate] : undefined
-  }, [billingPeriods, periodId])
+  // при смене фильтра результаты другие — возвращаемся на первую страницу
+  const handleFilterChange = (type: TransactionTypeEnum | 'all') => {
+    setFilter(type)
+    setPage(1)
+  }
 
-  const tagFilterKey = JSON.stringify(tagFilter)
-  const dateBetweenKey = JSON.stringify(dateBetween)
+  // Боксы категорий и тегов ждут обычный setState, поэтому оборачиваем его:
+  // после каждого изменения выбора возвращаемся на первую страницу
+  const handleCategoryIds: Dispatch<SetStateAction<string[]>> = (value) => {
+    setCategoryIds(value)
+    setPage(1)
+  }
 
-  useEffect(() => {
-    const tag = buildTagFilter(tagFilter)
-    dispatch(fetchTransactionsThunk({
-      filter: {
-        ...(activeType !== 'All' ? { type: activeType } : {}),
-        ...(tag ? { tag } : {}),
-        ...(dateBetween && dateBetween.length === 2 ? { date: { between: dateBetween } } : {}),
-      },
-    }))
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dispatch, activeType, tagFilterKey, dateBetweenKey])
+  const handleTagIds: Dispatch<SetStateAction<string[]>> = (value) => {
+    setTagIds(value)
+    setPage(1)
+  }
 
   return (
     <VStack width="100%" align="start" gap={4}>
+      <Card.Root variant={'primary'} width={'100%'} gap={4} divideY={'1px'}>
+        <HStack width={'100%'}>
+          <SearchInput width={'50%'} placeholder='Поиск...' value={search} onChange={(e) => setSearch(e.target.value)}/>
+          <FilterType filter={filter} onChangeFilter={handleFilterChange}/>
+          <IconButton variant={'secondary'} onClick={setOpenFilter.toggle} position={'relative'}>
+            <Funnel/>
+            {(!!categoryIds.length || !!tagIds.length) && <Float><Circle w={2} h={2} bg={'red'}/></Float>}
+          </IconButton>
+        </HStack>
+        {
+          isOpenFilter && (
+            <>
+              <TransactionCategoriesBox
+                categoryIds={categoryIds}
+                setCategoryIds={handleCategoryIds}
+              />
+              <TransactionTagsBox tagIds={tagIds} setTagIds={handleTagIds}/>
+            </>
+          )
+        }
+      </Card.Root>
+      {
+        !!data && (
+          <Card.Root variant={'primary'} width={'100%'}>
+            <TransactionsTable transactions={data?.rows} loading={isLoading} />
+            {!!data?.count && (
+              <BasePagination
+                // BasePagination помнит страницу у себя — пересоздаём его, когда страница сбрасывается
+                key={`${debouncedSearch}|${filter}|${categoryIds}|${tagIds}`}
+                count={data?.count}
+                onChangePage={setPage}
+              />
+            )}
+          </Card.Root>
+        )
+      }
 
-      <HStack gap={2} flexWrap="wrap">
+      {/* <HStack gap={2} flexWrap="wrap">
         <RadioMenu
           items={typeFilters}
           onChange={handleTypeChange}
@@ -85,7 +124,7 @@ const AllTransactionsBlock = () => {
       </HStack>
       <Box width="100%" flex={1} minH={0}>
         <TransactionsTable transactions={transactions} loading={isLoading} />
-      </Box>
+      </Box> */}
     </VStack>
   )
 }

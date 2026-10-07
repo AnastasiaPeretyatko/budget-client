@@ -1,10 +1,9 @@
-import { RootState } from '@/app/store'
+import { useGetCurrentWorkspaceQuery } from '@/entities/workspace/api/workspaceApi'
 import WorkspacePersonCard from '@/entities/workspace/ui/WorkspacePersonCard'
 import { Heading, VStack } from '@chakra-ui/react'
-import { useSelector } from 'react-redux'
 
 const WorkspacePeopleList = () => {
-  const { currentWorkspace } = useSelector((state: RootState) => state.workspaces)
+  const { data: currentWorkspace } = useGetCurrentWorkspaceQuery()
 
   return (
     <VStack width={'100%'} gap={4} align={'start'}>

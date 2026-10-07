@@ -1,19 +1,12 @@
-import { AppDispatch, RootState } from '@/app/store'
 import { SimpleGrid, Text } from '@chakra-ui/react'
-import React, { useEffect } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import React from 'react'
 import { WorkspaceCardWidget } from '@/widgets/workspace-card'
-import { fetchWorkspacesThunk } from '@/entities/workspace'
+import { useGetWorkspacesQuery } from '@/entities/workspace/api/workspaceApi'
 import EmptyUI from '@/shared/ui/empty'
 import { MdOutlineWorkspaces } from 'react-icons/md'
 
 const WorkspaceListWidget = () => {
-  const dispatch = useDispatch<AppDispatch>()
-  const { workspaces, isLoading } = useSelector((state: RootState) => state.workspaces)
-
-  useEffect(() => {
-    dispatch(fetchWorkspacesThunk())
-  }, [dispatch])
+  const { data: workspaces = [], isLoading } = useGetWorkspacesQuery()
 
   if (isLoading) return <Text>Loading...</Text>
 

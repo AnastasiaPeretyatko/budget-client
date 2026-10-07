@@ -1,10 +1,8 @@
-import { AppDispatch } from '@/app/store'
-import { updateWorkspaceThunk } from '@/entities/workspace'
+import { useUpdateWorkspaceMutation } from '@/entities/workspace/api/workspaceApi'
 import { useNotifications } from '@/shared/hooks/useNotifications'
 import BaseModal from '@/shared/ui/modal'
 import { Input } from '@chakra-ui/react'
 import { useState } from 'react'
-import { useDispatch } from 'react-redux'
 
 type Props = {
   workspaceId: string
@@ -13,18 +11,18 @@ type Props = {
 }
 
 const WorkspaceEditModal = ({ workspaceId, workspaceTitle, trigger }: Props) => {
-  const dispatch = useDispatch<AppDispatch>()
+  const [updateWorkspace] = useUpdateWorkspaceMutation()
   const { showErrorMessage, showSuccessMessage } = useNotifications()
   const [title, setTitle] = useState(workspaceTitle)
 
-  const handleSave = (close: () => void) => {
-    dispatch(updateWorkspaceThunk({ id: workspaceId, data: { title } }))
-      .unwrap()
-      .then(() => {
-        showSuccessMessage('Workspace updated successfully')
-        close()
-      })
-      .catch(() => showErrorMessage('Error updating workspace'))
+  const handleSave = async (close: () => void) => {
+    try {
+      await updateWorkspace({ id: workspaceId, data: { title } }).unwrap()
+      showSuccessMessage('Workspace updated successfully')
+      close()
+    } catch {
+      showErrorMessage('Error updating workspace')
+    }
   }
 
   return (

@@ -1,11 +1,9 @@
 import { AuthUser } from '@/entities/auth'
-import { RootState, useAppDispatch } from '@/app/store'
-import { removeWorkspaceUserThunk } from '@/entities/workspace'
+import { useGetCurrentWorkspaceQuery, useRemoveWorkspaceUserMutation } from '../api/workspaceApi'
 import { useNotifications } from '@/shared/hooks/useNotifications'
 import BaseAvatar from '@/shared/ui/avatar'
 import BaseModal from '@/shared/ui/modal'
 import { HStack, IconButton, Text } from '@chakra-ui/react'
-import { useSelector } from 'react-redux'
 import { LuX } from 'react-icons/lu'
 
 type Props = {
@@ -13,8 +11,8 @@ type Props = {
 }
 
 const WorkspacePersonCard = ({ user }: Props) => {
-  const dispatch = useAppDispatch()
-  const { currentWorkspace } = useSelector((state: RootState) => state.workspaces)
+  const { data: currentWorkspace } = useGetCurrentWorkspaceQuery()
+  const [removeWorkspaceUser] = useRemoveWorkspaceUserMutation()
   const { showSuccessMessage, showErrorMessage } = useNotifications()
 
   const isOwner = currentWorkspace?.ownerId === user.id
@@ -23,14 +21,14 @@ const WorkspacePersonCard = ({ user }: Props) => {
     ? `${user.firstName ?? ''} ${user.lastName ?? ''}`.trim()
     : user.email
 
-  const handleRemove = (close: () => void) => {
-    dispatch(removeWorkspaceUserThunk(user.id))
-      .unwrap()
-      .then(() => {
-        showSuccessMessage('Пользователь удалён')
-        close()
-      })
-      .catch(() => showErrorMessage('Ошибка удаления'))
+  const handleRemove = async (close: () => void) => {
+    try {
+      await removeWorkspaceUser(user.id).unwrap()
+      showSuccessMessage('Пользователь удалён')
+      close()
+    } catch {
+      showErrorMessage('Ошибка удаления')
+    }
   }
 
   return (

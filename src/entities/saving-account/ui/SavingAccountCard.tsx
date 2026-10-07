@@ -1,75 +1,37 @@
-import { Badge, Box, Card, Heading, HStack, Text, VStack } from '@chakra-ui/react'
+import { Badge, Box, Button, Card, Heading, HStack, Text } from '@chakra-ui/react'
 import { SavingAccountType } from '../types/saving-account.type'
-import { COLOR } from '@/shared/config/colors'
-import ProgressCircleUI from '@/shared/ui/progress-circle'
-import { formatAmount } from '@/shared/ui/SummaryCard'
+import { Utensils } from 'lucide-react'
+import { formattingMonay } from '@/shared/utils/formattingMonay'
+import Progress from '@/shared/ui/progress'
+import { useRouter } from 'next/router'
+import { AddTransactionModal } from '@/features/transaction-management'
 
 type Props = {
   savingAccount: SavingAccountType
-  onClick?: (id: string) => void
 }
 
-const SavingAccountCard = ({ savingAccount, onClick }: Props) => {
-  const currentBalance = Number(savingAccount.amount)
+const SavingAccountCard = ({ savingAccount }: Props) => {
+  const router = useRouter()
   const periodExpense = Number(savingAccount.periodExpense)
   const periodMax = Number(savingAccount.periodStartBalance) + Number(savingAccount.periodIncome)
-  const progress = periodMax > 0 ? Math.min(Math.round((currentBalance / periodMax) * 100), 100) : 0
 
   return (
-    <Card.Root
-      width="100%"
-      minH={'100%'}
-      borderRadius={'2xl'}
-      overflow={'hidden'}
-      _hover={{ cursor: 'pointer', backgroundColor: 'bg.tabs' }}
-      onClick={() => onClick && onClick(savingAccount.id)}
-    >
-      <Card.Body display={'flex'} flexDirection={'column'} padding={4} gap={4}>
-        <HStack width={'100%'} gap={3}>
-          <Box
-            width={10}
-            height={10}
-            bgColor={"bg.tabs"}
-            borderRadius={'50%'}
-            display={'flex'}
-            alignItems={'center'}
-            justifyContent={'center'}
-            fontSize={'xl'}
-            flexShrink={0}
-          >
-            {savingAccount.emoji ?? '💰'}
-          </Box>
-          <HStack gap={2} flexWrap={'wrap'}>
-            <Heading size={'sm'} color={'text.sidebar'}>{savingAccount.name}</Heading>
-            {savingAccount.workspaceName && (
-              <Badge size={'sm'} variant={'subtle'} colorPalette={'purple'}>{savingAccount.workspaceName}</Badge>
-            )}
-          </HStack>
-        </HStack>
-        <HStack width={'100%'} gap={4}>
-          <ProgressCircleUI size={'xl'} value={progress} />
-          <VStack align={'start'} gap={0}>
-            <Text fontWeight={600}>{formatAmount(currentBalance)} ₽</Text>
-            <Text color={"text.sidebar"} fontSize={'xs'}>из {formatAmount(periodMax)} ₽</Text>
-          </VStack>
-        </HStack>
-      </Card.Body>
-      <Card.Footer
-        padding={4}
-        display={'flex'}
-        flexDirection={'row'}
-        justifyContent={'space-between'}
-        background={'linear-gradient(to right, rgba(255,255,255,0.04), rgba(255,255,255,0.07))'}
-        borderTop={`1px solid ${COLOR.BORDER}`}
-      >
-        <Text fontSize={'xs'} color={COLOR.LABEL}>
-          Потрачено{' '}
-          <Text as={'span'} color={COLOR.EXPENSE_TEXT} fontWeight={600}>
-            {formatAmount(periodExpense)} ₽
-          </Text>
-        </Text>
-        <Text fontSize={'xs'} color={COLOR.LABEL}>{savingAccount.transactionCount} операций</Text>
-      </Card.Footer>
+    <Card.Root variant={'primary'} gap={4}>
+      <HStack width={'100%'}>
+        <Box p={'8px'} bg={'#FFF1F2'} borderRadius={'12px'}><Utensils size={'16px'}/></Box>
+        <Heading cursor={'pointer'} flex={1} fontSize={'12px'} fontWeight={'bold'} onClick={() => router.push(`/budgets/${savingAccount.id}`)}>{savingAccount.name}</Heading>
+        {savingAccount.isSafe && <Badge>Сейф</Badge>}
+      </HStack>
+      <Box>
+        <Text fontSize={'12px'} color={'#94A3B8'}>Осталось в конверте:</Text>
+        <Heading fontSize={'20px'}>{formattingMonay(savingAccount.amount)} <Text as={'span'} fontSize={'12px'} color={'#94A3B8'}>₽</Text></Heading>
+        <Progress spend={periodExpense} remaining={periodMax}/>
+      </Box>
+      <HStack width={'100%'}>
+        <Button variant={'secondary'} onClick={e => e.stopPropagation()}>Расход</Button>
+        <AddTransactionModal envelope={savingAccount} nameButton='Перевести'/>
+      </HStack>
+
     </Card.Root>
   )
 }

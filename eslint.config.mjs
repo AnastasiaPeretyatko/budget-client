@@ -84,5 +84,7 @@ export default defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // сам конфиг не входит в tsconfig, поэтому строгие правила с типами для него не работают
+    "eslint.config.mjs",
   ]),
 ]);

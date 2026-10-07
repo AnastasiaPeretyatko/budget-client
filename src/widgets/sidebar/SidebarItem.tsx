@@ -1,5 +1,4 @@
-import { HStack, Icon, Portal, Text, Tooltip } from '@chakra-ui/react'
-import React from 'react'
+import { Button, Icon, Portal, Text, Tooltip } from '@chakra-ui/react'
 import { SidebarItemProps, useSidebarContext } from './Sidebar'
 import { useRouter } from 'next/router'
 
@@ -9,24 +8,15 @@ const SidebarItem = ({ title, icon, path }: SidebarItemProps) => {
   const isActive = router.pathname === path || router.pathname.startsWith(path + '/')
 
   const button = (
-    <HStack
-      as="button"
+    <Button
+      variant={'sidebar'}
+      data-current={isActive ? '' : undefined}
+      data-collapsed={collapsed ? '' : undefined}
       onClick={() => router.push(path)}
-      width="100%"
-      px={3}
-      py={2}
-      borderRadius={4}
-      justify={collapsed ? 'center' : 'start'}
-      gap={3}
-      cursor="pointer"
-      bg={isActive ? 'bg.tabs' : 'transparent'}
-      _hover={{ bg: 'bg.tabs' }}
-      transition="background 0.15s, color 0.15s"
-      color={'text.sidebar'}
     >
       <Icon fontSize="lg">{icon}</Icon>
-      {!collapsed && <Text fontSize="sm" truncate>{title}</Text>}
-    </HStack>
+      {!collapsed && <Text fontSize="sm" color={'inherit'}>{title}</Text>}
+    </Button>
   )
 
   if (collapsed) {

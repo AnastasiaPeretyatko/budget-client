@@ -1,6 +1,10 @@
-import axios, { AxiosResponse } from 'axios';
+import axios, { AxiosError, AxiosResponse, InternalAxiosRequestConfig } from 'axios';
+import { PUBLIC_ROUTES } from '../config/routes';
 
 const BASE_URL = process.env.NEXT_PUBLIC_BASEURL;
+
+// запрос с пометкой «уже пробовали обновить токен и повторить», чтобы не зациклиться на 401
+type RetryableRequestConfig = InternalAxiosRequestConfig & { _isRetry?: boolean }
 
 export const http = axios.create({
   baseURL: BASE_URL,
@@ -41,16 +45,16 @@ http.interceptors.request.use(
 
 http.interceptors.response.use(
   (response: AxiosResponse) => response,
-  async (error) => {
-    const originalRequest = error.config;
-    if (error.response?.status === 401 && !originalRequest._isRetry) {
+  async (error: AxiosError) => {
+    const originalRequest = error.config as RetryableRequestConfig | undefined;
+    if (error.response?.status === 401 && originalRequest && !originalRequest._isRetry) {
       if (!isRefreshing) {
         isRefreshing = true;
         originalRequest._isRetry = true;
 
         try {
           const refreshToken = localStorage.getItem('refreshToken');
-          const { data } = await axios.post(`${BASE_URL}/auth/refresh`, {
+          const { data } = await axios.post<{ token: string }>(`${BASE_URL}/auth/refresh`, {
             token: refreshToken,
           });
 
@@ -68,7 +72,10 @@ http.interceptors.response.use(
         } catch (err) {
           isRefreshing = false;
           localStorage.clear();
-          window.location.assign('/login');
+          const isPublic = PUBLIC_ROUTES.includes( window.location.pathname)
+          if ( !isPublic) {
+            window.location.assign('/login');
+          }
           return Promise.reject(err);
         }
       } else {

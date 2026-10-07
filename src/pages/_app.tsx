@@ -12,7 +12,7 @@ moment.locale('ru');
 export default function App({ Component, pageProps }: AppProps) {
   return (
     <Provider store={store}>
-      <ChakraProvider>
+      <ChakraProvider forcedTheme="light">
         <AppGuard Component={Component} pageProps={pageProps}/>
         <Toaster />
       </ChakraProvider>
