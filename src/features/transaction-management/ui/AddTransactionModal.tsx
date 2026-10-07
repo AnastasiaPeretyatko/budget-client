@@ -9,12 +9,13 @@ import EnvelopeSelectWrapper from './EnvelopeSelectWrapper'
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
 import { CategorySearchSelect } from '@/features/category-management'
 import { TagSelectInput } from '@/features/tag-management'
-import { BaseTransactionType } from '@/entities/transaction'
+import { TransactionFormType } from '@/entities/transaction'
 import BaseDatePicker from '@/shared/ui/date-picker'
 import moment from 'moment'
 import { useAddTransactionMutation } from '@/entities/transaction/api/transactionApi'
 import { useNotifications } from '@/shared/hooks/useNotifications'
 import { generateTransactionType } from '@/shared/utils/generatetransactionType'
+import { getErrorMessage } from '@/shared/utils/getErrorMessage'
 
 type Props = {
   envelope?: EnvelopesType;
@@ -26,32 +27,34 @@ const AMOUNT_CONST = ['500', '1000', '3000', '5000']
 const AddTransactionModal = ({ envelope, nameButton }: Props) => {
   const [addTransaction, { isLoading }] = useAddTransactionMutation()
   const { showErrorMessage, showSuccessMessage } = useNotifications();
-  const { register, setValue, handleSubmit, control, reset, watch } = useForm<BaseTransactionType>({
+  const { register, setValue, handleSubmit, control, reset, watch } = useForm<TransactionFormType>({
     defaultValues: {
       fromAccountId: envelope?.id,
       toAccountId: '',
       // categoryId: '',
       tagIds: [],
-      date: new Date(),
+      // в форме дата — строка 'YYYY-MM-DD' (так с ней работает BaseDatePicker), в Date она превращается при отправке
+      date: moment().format('YYYY-MM-DD'),
     },
   })
 
-  const onSubmit: SubmitHandler<BaseTransactionType> = (data) => {
+  const onSubmit: SubmitHandler<TransactionFormType> = async (data) => {
     try {
       // Календарь отдаёт только день (без часов), поэтому к выбранному дню
       // добавляем текущее время на момент создания транзакции
       const now = moment()
       const date = moment(data.date).set({ hour: now.hour(), minute: now.minute() }).toDate()
 
-      addTransaction({
+      // .unwrap() превращает ошибку запроса в настоящее исключение — иначе catch её не увидит
+      await addTransaction({
         ...data,
         date,
         type: generateTransactionType(data.fromAccountId, data.toAccountId)
-      })
+      }).unwrap()
       showSuccessMessage('Транзакция успешно создана')
       reset()
     } catch (error) {
-      showErrorMessage(error)
+      showErrorMessage(getErrorMessage(error, 'Ошибка при создании транзакции'))
     }
   }
 
@@ -103,8 +106,8 @@ const AddTransactionModal = ({ envelope, nameButton }: Props) => {
               <BaseDatePicker
                 selectionMode='single'
                 label='Выберите дату'
-                defaultDate={moment(field.value).format('YYYY-MM-DD')}
-                onChangeValue={(dates) => field.onChange(moment(dates[0], 'YYYY-MM-DD').toDate())}
+                defaultDate={field.value}
+                onChangeValue={(dates) => field.onChange(dates[0])}
               />
             )}
           />

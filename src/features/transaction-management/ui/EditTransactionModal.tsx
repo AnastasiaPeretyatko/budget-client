@@ -6,6 +6,7 @@ import BaseDatePicker from '@/shared/ui/date-picker'
 import FieldInput from '@/shared/ui/FieldInput'
 import BaseModal from '@/shared/ui/modal'
 import { useNotifications } from '@/shared/hooks/useNotifications'
+import { getErrorMessage } from '@/shared/utils/getErrorMessage'
 import { SearchSelectOption } from '@/shared/ui/search-select'
 import { HStack, IconButton, VStack } from '@chakra-ui/react'
 import { useState } from 'react'
@@ -56,11 +57,12 @@ const EditTransactionModal = ({ transaction, trigger }: Props) => {
     return Object.keys(newErrors).length === 0
   }
 
-  const handleSave = (close: () => void) => {
+  const handleSave = async (close: () => void) => {
     if (!validate()) return
     setIsLoading(true)
     try {
-      editTransaction({
+      // .unwrap() превращает ошибку запроса в настоящее исключение — иначе catch её не увидит
+      await editTransaction({
         id: transaction.id,
         data: {
           amount,
@@ -71,11 +73,11 @@ const EditTransactionModal = ({ transaction, trigger }: Props) => {
           fromAccountId: fromOption?.value || undefined,
           toAccountId: toOption?.value || undefined,
         }
-      })
+      }).unwrap()
       showSuccessMessage('Транзакция обновлена')
       close()
     } catch (error) {
-      showErrorMessage(error)
+      showErrorMessage(getErrorMessage(error, 'Ошибка при обновлении транзакции'))
     } finally {
       setIsLoading(false)
     }

@@ -1,5 +1,6 @@
 import { useArchiveCategoriesMutation } from '@/entities/category/api/categoriesApi'
 import { useNotifications } from '@/shared/hooks/useNotifications'
+import { getErrorMessage } from '@/shared/utils/getErrorMessage'
 import BaseModalV2 from '@/shared/ui/modal_v2'
 import { Button, Heading, HStack, IconButton, Text } from '@chakra-ui/react'
 import { Archive } from 'lucide-react'
@@ -16,10 +17,11 @@ const CategoryArchiveDialog = ({ id, trigger }: Props) => {
 
   const handleArchive = async() => {
     try {
-      await archiveCategory(id)
+      // .unwrap() превращает ошибку запроса в настоящее исключение — иначе catch её не увидит
+      await archiveCategory(id).unwrap()
       showSuccessMessage('Категория успешно заархивирована')
     } catch (error) {
-      showErrorMessage(error)
+      showErrorMessage(getErrorMessage(error, 'Ошибка при архивации категории'))
     }
   }
 
