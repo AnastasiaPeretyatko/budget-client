@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { Box, Button, Heading, HStack, Text, VStack } from '@chakra-ui/react'
 import BaseDrawer from '@/shared/ui/drawer'
 
@@ -35,6 +35,7 @@ const getDefaultValues = (envelopeId?: string): Partial<TransactionFormType> => 
 })
 
 const AddTransactionModal = ({ envelope, nameButton }: Props) => {
+  const [open, setOpen] = useState(false)
   const [addTransaction, { isLoading }] = useAddTransactionMutation()
   const { showErrorMessage, showSuccessMessage } = useNotifications();
   const { register, setValue, handleSubmit, control, reset, watch } = useForm<TransactionFormType>({
@@ -63,13 +64,14 @@ const AddTransactionModal = ({ envelope, nameButton }: Props) => {
       showSuccessMessage('Транзакция успешно создана')
       // reset() без аргументов вернул бы конверт, который был при первом открытии, поэтому передаём актуальные значения
       reset(getDefaultValues(envelope?.id))
+      setOpen(false)
     } catch (error) {
       showErrorMessage(getErrorMessage(error, 'Ошибка при создании транзакции'))
     }
   }
 
   return (
-    <BaseDrawer trigger={<Button variant={'primary'} onClick={e => e.stopPropagation()}>{nameButton}</Button>}>
+    <BaseDrawer open={open} onOpenChange={setOpen} trigger={<Button variant={'primary'} onClick={e => e.stopPropagation()}>{nameButton}</Button>}>
       <VStack as={'form'} height={'100%'} onSubmit={handleSubmit(onSubmit)}>
         <VStack width={'100%'} align={'start'} mb={10}>
           <HStack>
@@ -123,7 +125,7 @@ const AddTransactionModal = ({ envelope, nameButton }: Props) => {
           />
         </VStack>
         <HStack width={'100%'} gap={4} pt={4} borderTop={'1px solid #F1F5F9'}>
-          <Button flex={1} variant={'secondary'}>Отмена</Button>
+          <Button flex={1} variant={'secondary'} onClick={() => setOpen(false)}>Отмена</Button>
           <Button flex={1} variant={'primary'} type='submit' loading={isLoading}>Зафиксировать перевод</Button>
         </HStack>
       </VStack>

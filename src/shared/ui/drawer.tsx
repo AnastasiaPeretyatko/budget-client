@@ -5,11 +5,19 @@ import { BsCardChecklist } from 'react-icons/bs'
 type Props = {
   trigger?: ReactNode
   isFooter?: boolean
+  // если передать open + onOpenChange, дровером можно управлять снаружи (например, закрыть после отправки формы)
+  open?: boolean
+  onOpenChange?: (open: boolean) => void
 } & PropsWithChildren
 
-const BaseDrawer = ({ trigger, children, isFooter = false }: Props) => {
+const BaseDrawer = ({ trigger, children, isFooter = false, open, onOpenChange }: Props) => {
   return (
-    <Drawer.Root size={'sm'} preventScroll={false}>
+    <Drawer.Root
+      size={'sm'}
+      preventScroll={false}
+      open={open}
+      onOpenChange={onOpenChange ? e => onOpenChange(e.open) : undefined}
+    >
       <Drawer.Trigger asChild>
         {
           trigger ?? <Button size={'xs'}><BsCardChecklist/></Button>
