@@ -7,8 +7,8 @@ export const categoriesApi = createApi({
   tagTypes: ['Categories'],
   baseQuery: axiosBaseQuery(),
   endpoints: (build) => ({
-    getCategories: build.query<CategoryType[],void>({
-      query: () => ({ url: '/categories/all', method: 'GET' }),
+    getCategories: build.query<CategoryType[], { search?: string } | void>({
+      query: (arg) => ({ url: '/categories/all', method: 'GET', params: { search: arg?.search || undefined } }),
       providesTags: (result) => result
         ? [
           ...result.map(({ id }) => ({ type: 'Categories' as const, id })),
