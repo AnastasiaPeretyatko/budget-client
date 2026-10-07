@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { Box, Button, Heading, HStack, Text, VStack } from '@chakra-ui/react'
 import BaseDrawer from '@/shared/ui/drawer'
 
@@ -24,19 +25,27 @@ type Props = {
 
 const AMOUNT_CONST = ['500', '1000', '3000', '5000']
 
+const getDefaultValues = (envelopeId?: string): Partial<TransactionFormType> => ({
+  fromAccountId: envelopeId,
+  toAccountId: '',
+  // categoryId: '',
+  tagIds: [],
+  // в форме дата — строка 'YYYY-MM-DD' (так с ней работает BaseDatePicker), в Date она превращается при отправке
+  date: moment().format('YYYY-MM-DD'),
+})
+
 const AddTransactionModal = ({ envelope, nameButton }: Props) => {
   const [addTransaction, { isLoading }] = useAddTransactionMutation()
   const { showErrorMessage, showSuccessMessage } = useNotifications();
   const { register, setValue, handleSubmit, control, reset, watch } = useForm<TransactionFormType>({
-    defaultValues: {
-      fromAccountId: envelope?.id,
-      toAccountId: '',
-      // categoryId: '',
-      tagIds: [],
-      // в форме дата — строка 'YYYY-MM-DD' (так с ней работает BaseDatePicker), в Date она превращается при отправке
-      date: moment().format('YYYY-MM-DD'),
-    },
+    defaultValues: getDefaultValues(envelope?.id),
   })
+
+  // defaultValues useForm читает только один раз. Когда на странице меняют конверт,
+  // компонент не создаётся заново, поэтому подставляем новый конверт в поле «С какого» вручную
+  useEffect(() => {
+    setValue('fromAccountId', envelope?.id)
+  }, [envelope?.id, setValue])
 
   const onSubmit: SubmitHandler<TransactionFormType> = async (data) => {
     try {
@@ -52,7 +61,8 @@ const AddTransactionModal = ({ envelope, nameButton }: Props) => {
         type: generateTransactionType(data.fromAccountId, data.toAccountId)
       }).unwrap()
       showSuccessMessage('Транзакция успешно создана')
-      reset()
+      // reset() без аргументов вернул бы конверт, который был при первом открытии, поэтому передаём актуальные значения
+      reset(getDefaultValues(envelope?.id))
     } catch (error) {
       showErrorMessage(getErrorMessage(error, 'Ошибка при создании транзакции'))
     }
