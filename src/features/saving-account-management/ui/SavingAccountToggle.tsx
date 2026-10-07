@@ -1,17 +1,14 @@
-import { RootState, useAppDispatch } from '@/app/store'
-import { fetchSavingAccountsThunk } from '@/entities/saving-account'
+import { useGetEnvelopesQuery } from '@/entities/envelope/api/envelopesApi'
 import BasePopover from '@/shared/ui/popover'
 import { IconButton, Text, Input, HStack, VStack, } from '@chakra-ui/react'
 import { ChevronDown } from 'lucide-react'
 import { useRouter } from 'next/router'
-import React, { useEffect } from 'react'
+import React from 'react'
 import { IoIosCheckmark } from 'react-icons/io'
-import { useSelector } from 'react-redux'
 
 const SavingAccountToggle = () => {
-  const dispatch = useAppDispatch()
   const router = useRouter()
-  const { savingAccounts } = useSelector((state: RootState) => state.savingAccounts);
+  const { data: savingAccounts = [] } = useGetEnvelopesQuery()
   const [search, setSearch] = React.useState('');
 
   // eslint-disable-next-line max-len
@@ -33,12 +30,6 @@ const SavingAccountToggle = () => {
     }
     return acc;
   }, []);
-
-  useEffect(() => {
-    if (savingAccounts.length === 0) {
-      dispatch(fetchSavingAccountsThunk());
-    }
-  }, [dispatch, savingAccounts.length]);
 
   return (
     <BasePopover TriggerButton={<IconButton size={'xs'} variant={'ghost'} aria-label="Toggle Saving Account"><ChevronDown/></IconButton>}>

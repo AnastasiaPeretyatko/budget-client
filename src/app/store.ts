@@ -1,7 +1,6 @@
 import { configureStore } from '@reduxjs/toolkit'
 import { useDispatch, useSelector } from 'react-redux'
 import { authReducer } from '@/entities/auth'
-import { savingReducer } from '@/entities/saving-account'
 import { workspacesReducer } from '@/entities/workspace'
 import { selectedPeriodReducer } from '@/entities/bulling-period'
 import { userReducer } from '@/entities/user'
@@ -17,7 +16,6 @@ import { statisticsApi } from '@/entities/statistics/api/statisticsApi'
 export const store = configureStore({
   reducer: {
     auth: authReducer,
-    savingAccounts: savingReducer,
     workspaces: workspacesReducer,
     selectedPeriod: selectedPeriodReducer,
     user: userReducer,

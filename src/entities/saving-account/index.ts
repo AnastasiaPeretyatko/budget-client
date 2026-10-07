@@ -1,5 +1,3 @@
 export type { BaseSavingAccountType, SavingAccountType } from './types/saving-account.type'
-export { fetchSavingAccountsThunk } from './api/saving-account.thunk'
 export { getAllSavingRequest, postSavingRequest } from './api/saving-account.service'
 export { default as SavingAccountCard } from './ui/SavingAccountCard'
-export { default as savingReducer } from './api/saving-account.slice'
