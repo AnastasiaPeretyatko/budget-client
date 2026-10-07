@@ -51,3 +51,27 @@ export type TransactionParamsType = {
   toAccountId?: string,
   type: TransactionTypeEnum | null
 } & ParamsType
+
+export type UpdateTransactionArgs = {
+  id: string
+  data: {
+    fromAccountId?: string
+    toAccountId?: string
+    categoryId?: string
+    tagIds?: string[]
+    amount?: string
+    description?: string | null
+    date?: Date
+    type?: TransactionTypeEnum
+  }
+}
+
+export type GetAllTransactionResponse = {
+  rows: TransactionType[]
+  count: number
+}
+
+export type TagFilterOperator =
+  | { eq: string }
+  | { in: string[] }
+  | { nin: string[] }

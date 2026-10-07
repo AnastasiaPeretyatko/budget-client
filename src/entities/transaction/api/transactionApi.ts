@@ -4,11 +4,18 @@ import { createApi } from '@reduxjs/toolkit/query/react';
 import type { ThunkDispatch, UnknownAction } from '@reduxjs/toolkit';
 import { envelopesApi } from '@/entities/envelope/api/envelopesApi';
 import { envelopeApi } from '@/entities/envelope/api/envelopApi';
-import { BaseTransactionType, TransactionType } from '../types/transaction.type';
-import { TagFilterOperator, UpdateTransactionArgs } from './transaction.thunk';
+import { statisticsApi } from '@/entities/statistics/api/statisticsApi';
+import {
+  BaseTransactionType,
+  BatchTransaction,
+  GetAllTransactionResponse,
+  TagFilterOperator,
+  TransactionType,
+  UpdateTransactionArgs
+} from '../types/transaction.type';
 
-// Конверты лежат в других api (у каждого свой кэш), поэтому invalidatesTags отсюда
-// их не затрагивает. После успешной мутации помечаем конверты устаревшими —
+// Конверты и статистика лежат в других api (у каждого свой кэш), поэтому invalidatesTags отсюда
+// их не затрагивает. После успешной мутации помечаем их устаревшими —
 // RTK Query сам перезапросит те, что сейчас показаны на экране.
 const refreshEnvelopes = async (
   _arg: unknown,
@@ -21,6 +28,7 @@ const refreshEnvelopes = async (
     await queryFulfilled
     dispatch(envelopesApi.util.invalidateTags(['Envelopes']))
     dispatch(envelopeApi.util.invalidateTags(['Envelope']))
+    dispatch(statisticsApi.util.invalidateTags(['Statistics']))
   } catch {
     // запрос не удался — остатки не менялись, обновлять нечего
   }
@@ -50,7 +58,7 @@ export const transactionApi = createApi({
   baseQuery: axiosBaseQuery(),
   endpoints: build => ({
     getTransaction: build.query<
-    {rows: TransactionType[], count: number},
+    GetAllTransactionResponse,
     Partial<GetAllTransactionArgs>>({
       query: data => ({ url: 'transition/all', method: 'POST', data }),
       providesTags: (result) => result?.rows
@@ -63,6 +71,11 @@ export const transactionApi = createApi({
     addTransactionFromTemplate: build.mutation<TransactionType,
     {templateId: string, overrides: Partial<TemplateType>}>({
       query: (data) => ({ url: 'transition/from-template', method:'POST', data }),
+      invalidatesTags: [{ type: 'Transaction', id: 'LIST' }],
+      onQueryStarted: refreshEnvelopes,
+    }),
+    addTransactionsBatch: build.mutation<TransactionType[], BatchTransaction[]>({
+      query: (data) => ({ url: 'transition/batch', method:'POST', data }),
       invalidatesTags: [{ type: 'Transaction', id: 'LIST' }],
       onQueryStarted: refreshEnvelopes,
     }),
@@ -87,6 +100,7 @@ export const transactionApi = createApi({
 export const {
   useAddTransactionFromTemplateMutation,
   useAddTransactionMutation,
+  useAddTransactionsBatchMutation,
   useGetTransactionQuery,
   useDeleteTransactionMutation,
   useEditTransactionMutation

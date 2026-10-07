@@ -2,10 +2,8 @@ import { configureStore } from '@reduxjs/toolkit'
 import { useDispatch, useSelector } from 'react-redux'
 import { authReducer } from '@/entities/auth'
 import { savingReducer } from '@/entities/saving-account'
-import { transactionsReducer } from '@/entities/transaction'
 import { workspacesReducer } from '@/entities/workspace'
 import { billingPeriodReducer, selectedPeriodReducer } from '@/entities/bulling-period'
-import { statisticsReducer } from '@/entities/statistics'
 import { userReducer } from '@/entities/user'
 import { templatesApi } from '@/entities/template/api/templatesApi'
 import { transactionApi } from '@/entities/transaction/api/transactionApi'
@@ -19,12 +17,10 @@ import { statisticsApi } from '@/entities/statistics/api/statisticsApi'
 export const store = configureStore({
   reducer: {
     auth: authReducer,
-    transactions: transactionsReducer,
     savingAccounts: savingReducer,
     workspaces: workspacesReducer,
     billingPeriod: billingPeriodReducer,
     selectedPeriod: selectedPeriodReducer,
-    statistics: statisticsReducer,
     user: userReducer,
     [templatesApi.reducerPath]: templatesApi.reducer,
     [transactionApi.reducerPath]: transactionApi.reducer,

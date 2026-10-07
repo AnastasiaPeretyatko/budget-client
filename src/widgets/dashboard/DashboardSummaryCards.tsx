@@ -3,7 +3,7 @@
 import { useEffect, useMemo } from 'react'
 import { useSelector } from 'react-redux'
 import { RootState, useAppDispatch } from '@/app/store'
-import { fetchDashboardSummaryThunk } from '@/entities/statistics'
+import { useGetDashboardSummaryQuery } from '@/entities/statistics/api/statisticsApi'
 import { fetchLatestPeriodThunk } from '@/entities/bulling-period'
 import { HStack } from '@chakra-ui/react'
 import moment from 'moment'
@@ -12,12 +12,13 @@ import { PeriodProgressCard } from '@/entities/bulling-period'
 
 const DashboardSummaryCards = () => {
   const dispatch = useAppDispatch()
-  const { dashboardSummary, isDashboardSummaryLoading } =
-    useSelector((state: RootState) => state.statistics)
+  const {
+    data: dashboardSummary,
+    isLoading: isDashboardSummaryLoading
+  } = useGetDashboardSummaryQuery()
   const { latestPeriod } = useSelector((state: RootState) => state.billingPeriod)
 
   useEffect(() => {
-    dispatch(fetchDashboardSummaryThunk())
     dispatch(fetchLatestPeriodThunk())
   }, [dispatch])
 
