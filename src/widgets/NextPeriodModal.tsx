@@ -1,5 +1,5 @@
-import { useAddPeriodMutation } from '@/entities/bulling-period/api/billing-periodApi'
-import { BillingPeriodType } from '@/entities/bulling-period'
+import { useAddPeriodMutation } from '@/entities/billing-period/api/billing-periodApi'
+import { BillingPeriodType } from '@/entities/billing-period'
 import { useBoolean } from '@/shared/hooks/useBoolean'
 import { useNotifications } from '@/shared/hooks/useNotifications'
 import BaseModalV2 from '@/shared/ui/modal_v2'

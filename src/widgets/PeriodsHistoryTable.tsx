@@ -1,5 +1,5 @@
-import { BillingPeriodHistoryItem } from '@/entities/bulling-period'
-import { PERIOD_DELTA_COLOR, PERIOD_RESULT_CONFIG } from '@/entities/bulling-period/constants/period-result'
+import { BillingPeriodHistoryItem } from '@/entities/billing-period'
+import { PERIOD_DELTA_COLOR, PERIOD_RESULT_CONFIG } from '@/entities/billing-period/constants/period-result'
 import { formatDelta } from '@/shared/utils/formatDelta'
 import { formatDate } from '@/shared/utils/formatPeriod'
 import { formattingMonay } from '@/shared/utils/formattingMonay'

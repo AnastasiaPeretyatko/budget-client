@@ -3,7 +3,7 @@ import BaseDatePicker from '@/shared/ui/date-picker'
 import BasePopover from '@/shared/ui/popover'
 import { Box, Button, Float, VStack } from '@chakra-ui/react'
 import { useState } from 'react'
-import { useAddPeriodMutation, useGetLatestPeriodQuery } from '@/entities/bulling-period/api/billing-periodApi'
+import { useAddPeriodMutation, useGetLatestPeriodQuery } from '@/entities/billing-period/api/billing-periodApi'
 import Label from '@/shared/ui/label'
 
 const AddBillingPeriodButton = () => {

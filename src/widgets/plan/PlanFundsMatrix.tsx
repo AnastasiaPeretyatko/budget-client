@@ -1,7 +1,7 @@
 import { MacroFundEnum } from '@/entities/category'
 import { MACRO_FUND_CONFIG } from '@/entities/category/constants/macro-fund'
 import { PlanFundItem } from '@/entities/statistics'
-import { PERIOD_DELTA_COLOR } from '@/entities/bulling-period/constants/period-result'
+import { PERIOD_DELTA_COLOR } from '@/entities/billing-period/constants/period-result'
 import { formattingMonay } from '@/shared/utils/formattingMonay'
 import { toNumber } from '@/shared/utils/toNumber'
 import { Box, Card, Grid, Heading, HStack, Text, VStack } from '@chakra-ui/react'

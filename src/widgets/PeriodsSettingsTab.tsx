@@ -2,7 +2,7 @@ import {
   useGetPeriodsHistoryQuery,
   useGetPeriodsQuery,
   useGetPeriodSummaryQuery
-} from '@/entities/bulling-period/api/billing-periodApi'
+} from '@/entities/billing-period/api/billing-periodApi'
 import { VStack } from '@chakra-ui/react'
 import React from 'react'
 import CurrentCycleCard from './CurrentCycleCard'

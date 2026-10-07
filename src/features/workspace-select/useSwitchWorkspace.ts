@@ -2,7 +2,7 @@ import { useRouter } from 'next/router'
 import { useAppDispatch } from '@/app/store'
 import { resetApiCache } from '@/app/resetApiCache'
 import { setActiveWorkspace } from '@/entities/workspace'
-import { setSelectedPeriodId } from '@/entities/bulling-period'
+import { setSelectedPeriodId } from '@/entities/billing-period'
 
 type Options = {
   // Куда перейти после смены. Без него остаёмся на странице (кроме страниц с id в адресе)

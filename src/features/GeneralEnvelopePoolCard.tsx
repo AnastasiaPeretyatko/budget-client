@@ -6,9 +6,9 @@ import { useGetEnvelopesQuery } from '@/entities/envelope/api/envelopesApi'
 import { Card, Flex, Heading, HStack, Text, VStack } from '@chakra-ui/react'
 import { BanknoteIcon, CalendarIcon } from 'lucide-react'
 import { CreateSavingModal } from './saving-account-management'
-import { useGetPeriodsQuery } from '@/entities/bulling-period/api/billing-periodApi'
+import { useGetPeriodsQuery } from '@/entities/billing-period/api/billing-periodApi'
 import { useEffect, useState } from 'react'
-import { BillingPeriodType } from '@/entities/bulling-period'
+import { BillingPeriodType } from '@/entities/billing-period'
 
 const GeneralEnvelopePoolCard = () => {
   const { data: billingPeriods, isLoading } = useGetPeriodsQuery()

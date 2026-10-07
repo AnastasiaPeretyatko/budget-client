@@ -1,7 +1,7 @@
 import { CategoryFormType, CreateCategoryDto, MacroFundEnum } from '@/entities/category'
 import { CATEGORY_COLORS } from '@/entities/category/constants/category-colors'
 import { MACRO_FUND_CONFIG } from '@/entities/category/constants/macro-fund'
-import { useSelectedPeriod } from '@/entities/bulling-period/api/useSelectedPeriod'
+import { useSelectedPeriod } from '@/entities/billing-period/api/useSelectedPeriod'
 import ColorPicker from '@/shared/ui/color-picker'
 import FieldInput from '@/shared/ui/FieldInput'
 import IconPicker from '@/shared/ui/icon-picker/IconPicker'

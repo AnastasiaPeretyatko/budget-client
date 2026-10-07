@@ -1,10 +1,10 @@
-import { useGetPeriodsQuery } from '@/entities/bulling-period/api/billing-periodApi';
+import { useGetPeriodsQuery } from '@/entities/billing-period/api/billing-periodApi';
 import formatPeriod from '@/shared/utils/formatPeriod';
 import { createListCollection, Portal, Select } from '@chakra-ui/react';
 import { CalendarIcon } from 'lucide-react';
 import { useEffect, useMemo } from 'react'
 import { useAppDispatch, useAppSelector } from '@/app/store';
-import { setSelectedPeriodId } from '@/entities/bulling-period';
+import { setSelectedPeriodId } from '@/entities/billing-period';
 
 const BillingPeriodSelect = () => {
   const dispatch = useAppDispatch()

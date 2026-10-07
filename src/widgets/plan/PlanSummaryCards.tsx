@@ -1,5 +1,5 @@
 import { PlanStatisticsType } from '@/entities/statistics'
-import { PERIOD_DELTA_COLOR } from '@/entities/bulling-period/constants/period-result'
+import { PERIOD_DELTA_COLOR } from '@/entities/billing-period/constants/period-result'
 import { formattingMonay } from '@/shared/utils/formattingMonay'
 import { toNumber } from '@/shared/utils/toNumber'
 import { Card, Flex, Grid, Heading, Link, Text, VStack } from '@chakra-ui/react'

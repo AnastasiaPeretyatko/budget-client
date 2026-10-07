@@ -6,7 +6,7 @@ import { useGetTransactionQuery } from '@/entities/transaction/api/transactionAp
 import { BasePagination } from '@/shared/ui/pagination'
 import { useState } from 'react'
 import { TransactionTypeEnum } from '@/entities/transaction'
-import { useSelectedPeriod } from '@/entities/bulling-period/api/useSelectedPeriod'
+import { useSelectedPeriod } from '@/entities/billing-period/api/useSelectedPeriod'
 
 type Props = {
   accountId?: string

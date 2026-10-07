@@ -2,11 +2,11 @@
 
 import { useMemo } from 'react'
 import { useGetDashboardSummaryQuery } from '@/entities/statistics/api/statisticsApi'
-import { useGetLatestPeriodQuery } from '@/entities/bulling-period/api/billing-periodApi'
+import { useGetLatestPeriodQuery } from '@/entities/billing-period/api/billing-periodApi'
 import { HStack } from '@chakra-ui/react'
 import moment from 'moment'
 import { BalanceCard, TotalIncomeCard, TotalSpentCard } from '@/entities/statistics'
-import { PeriodProgressCard } from '@/entities/bulling-period'
+import { PeriodProgressCard } from '@/entities/billing-period'
 
 const DashboardSummaryCards = () => {
   const {

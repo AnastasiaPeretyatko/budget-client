@@ -2,7 +2,7 @@ import { RootState, useAppDispatch } from '@/app/store'
 import { resetApiCache } from '@/app/resetApiCache'
 import { deleteToken, setIsAuth } from '@/entities/auth'
 import { clearActiveWorkspace } from '@/entities/workspace'
-import { setSelectedPeriodId } from '@/entities/bulling-period'
+import { setSelectedPeriodId } from '@/entities/billing-period'
 import { Avatar, Menu, Portal } from "@chakra-ui/react"
 import { LogOut } from 'lucide-react'
 import { useRouter } from 'next/router'

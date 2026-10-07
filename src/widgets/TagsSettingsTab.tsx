@@ -1,4 +1,4 @@
-import { useSelectedPeriod } from '@/entities/bulling-period/api/useSelectedPeriod'
+import { useSelectedPeriod } from '@/entities/billing-period/api/useSelectedPeriod'
 import { useGetTagsQuery } from '@/entities/tag/api/tagsApi'
 import { VStack } from '@chakra-ui/react'
 import React from 'react'
