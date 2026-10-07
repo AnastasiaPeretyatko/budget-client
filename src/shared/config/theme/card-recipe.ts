@@ -1,6 +1,22 @@
 import { defineSlotRecipe } from '@chakra-ui/react';
 import { cardAnatomy } from '@chakra-ui/react/anatomy';
 
+// Slot recipe = аналог составного компонента v2 (multi-part / parts).
+// Описываем стили для каждого «слота» составного компонента, а variant `tone`
+// разом перекрашивает нужные слоты (акцентный градиент фона + бейдж с иконкой).
+// Лежит здесь, а не в system.ts: system.ts сам импортирует этот файл, и импорт в обратную сторону
+// создавал бы круг (файлы ждут друг друга и падают при запуске).
+export const toneVariant = (token: string) => ({
+  root: {
+    // токен-ссылки в произвольном градиенте не резолвятся, поэтому берём CSS-переменную
+    background: `linear-gradient(135deg, color-mix(in srgb, var(--chakra-colors-${token}) 9%, transparent) 0%, transparent 60%)`,
+  },
+  badge: {
+    bg: `color-mix(in srgb, var(--chakra-colors-${token}) 16%, transparent)`,
+    color: `${token}.fg`,
+  },
+})
+
 // Рецепт для встроенного Card. Ключ в slotRecipes должен быть именно `card`,
 // иначе <Card.Root variant="primary" /> его не увидит.
 export const cardRecipe = defineSlotRecipe({
@@ -56,10 +72,10 @@ export const summaryCardRecipe = defineSlotRecipe({
       }
     },
     tone: {
-      // primary: toneVariant('primary'),
-      // income: toneVariant('income'),
-      // expense: toneVariant('expense'),
-      // period: toneVariant('period'),
+      primary: toneVariant('primary'),
+      income: toneVariant('income'),
+      expense: toneVariant('expense'),
+      period: toneVariant('period'),
     },
   },
   defaultVariants: {

@@ -46,20 +46,6 @@ export const amountTextRecipe = defineRecipe({
   },
 })
 
-// Slot recipe = аналог составного компонента v2 (multi-part / parts).
-// Описываем стили для каждого «слота» составного компонента, а variant `tone`
-// разом перекрашивает нужные слоты (акцентный градиент фона + бейдж с иконкой).
-export const toneVariant = (token: string) => ({
-  root: {
-    // токен-ссылки в произвольном градиенте не резолвятся, поэтому берём CSS-переменную
-    background: `linear-gradient(135deg, color-mix(in srgb, var(--chakra-colors-${token}) 9%, transparent) 0%, transparent 60%)`,
-  },
-  badge: {
-    bg: `color-mix(in srgb, var(--chakra-colors-${token}) 16%, transparent)`,
-    color: `${token}.fg`,
-  },
-})
-
 const config = defineConfig({
   globalCss: {
     "html, body": {

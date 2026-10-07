@@ -8,7 +8,7 @@ import {
 } from '@chakra-ui/react'
 import { InfoTip } from '@/shared/ui/toggle-tip'
 import { AmountText } from '@/shared/ui/amount-text'
-import { summaryCardRecipe } from '@/shared/config/theme/system'
+import { summaryCardRecipe } from '@/shared/config/theme/card-recipe'
 
 export const formatAmount = (value: number) =>
   value.toLocaleString('ru-RU', { minimumFractionDigits: 2 })
