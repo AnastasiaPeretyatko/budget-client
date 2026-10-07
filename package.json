@@ -4,6 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "next dev --webpack",
+    "typegen": "chakra typegen src/shared/config/theme/system.ts",
+    "prebuild": "npm run typegen",
     "build": "next build --webpack",
     "start": "next start",
     "lint": "eslint"
@@ -29,6 +31,7 @@
     "recharts": "^3.8.1"
   },
   "devDependencies": {
+    "@chakra-ui/cli": "^3.37.0",
     "@next/eslint-plugin-next": "^16.1.7",
     "@types/node": "^20",
     "@types/react": "^19",
