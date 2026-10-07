@@ -1,6 +1,6 @@
 import { useGetTemplatesQuery } from '@/entities/template/api/templatesApi'
 import { Card, Circle, Float, HStack, IconButton, VStack } from '@chakra-ui/react'
-import { ChangeEvent, Dispatch, SetStateAction, useMemo, useState } from 'react'
+import { Dispatch, SetStateAction, useState } from 'react'
 import TemplateList from '../template-list/TemplateList'
 import { BasePagination } from '@/shared/ui/pagination'
 import SearchInput from '@/shared/ui/search-input'
@@ -10,8 +10,10 @@ import TransactionCategoriesBox from '@/features/transaction-management/ui/Trans
 import TransactionTagsBox from '@/features/transaction-management/ui/TransactionTagsBox'
 import { useBoolean } from '@/shared/hooks/useBoolean'
 import { Funnel } from 'lucide-react'
+import useDebounce from '@/shared/hooks/useDebounce'
 
 const LIMIT = 10
+const SEARCH_DEBOUNCE_MS = 400
 
 const TemplatePage = () => {
   const [search, setSearch] = useState<string>('')
@@ -22,20 +24,27 @@ const TemplatePage = () => {
   const [tagIds, setTagIds] = useState<string[]>([])
   const [isOpenFilter, setOpenFilter] = useBoolean()
 
+  // в поле показываем search сразу, а на сервер отправляем debouncedSearch — после паузы в наборе
+  const debouncedSearch = useDebounce(search, SEARCH_DEBOUNCE_MS)
+
+  // Страницу сбрасываем не при наборе, а когда новый поиск реально применился: тогда запрос сразу идёт
+  // за первой страницей. setState прямо во время рендера — штатный приём React: он перерисует компонент
+  // до отправки запроса, поэтому запроса со старой страницей не будет.
+  const [appliedSearch, setAppliedSearch] = useState(debouncedSearch)
+  if (appliedSearch !== debouncedSearch) {
+    setAppliedSearch(debouncedSearch)
+    setPage(1)
+  }
+
   const { data } = useGetTemplatesQuery({
-    search,
+    search: debouncedSearch,
     page,
     type: filterType === 'all' ? undefined : filterType,
     categoryIds: categoryIds.length ? categoryIds : undefined,
     tagIds: tagIds.length ? tagIds : undefined,
   })
 
-  // при смене поиска или фильтра результаты другие — возвращаемся на первую страницу
-  const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setSearch(e.target.value)
-    setPage(1)
-  }
-
+  // при смене фильтра результаты другие — возвращаемся на первую страницу
   const handleTypeChange = (type: TransactionTypeEnum | 'all') => {
     setFilterType(type)
     setPage(1)
@@ -53,15 +62,14 @@ const TemplatePage = () => {
     setPage(1)
   }
 
-  const countPages = useMemo(() => {
-    return Math.ceil((data?.count ?? 0)/LIMIT)
-  }, [data?.count])
+  // count с сервера — общее число шаблонов, число страниц BasePagination считает сам
+  const total = data?.count ?? 0
 
   return (
     <VStack width={'100%'} gap={4}>
       <Card.Root variant={'primary'} width={'100%'} gap={4} divideY={'1px'}>
         <HStack width={'100%'} gap={2}>
-          <SearchInput width={'50%'} placeholder='Поиск шаблонов...' value={search} onChange={handleSearchChange}/>
+          <SearchInput width={'50%'} placeholder='Поиск шаблонов...' value={search} onChange={(e) => setSearch(e.target.value)}/>
           <FilterType filter={filterType} onChangeFilter={handleTypeChange}/>
           <IconButton variant={'secondary'} onClick={setOpenFilter.toggle} position={'relative'}>
             <Funnel/>
@@ -76,11 +84,11 @@ const TemplatePage = () => {
         )}
       </Card.Root>
       {data?.data && <TemplateList templates={data.data}/>}
-      {countPages > 1 &&
+      {total > LIMIT &&
         <BasePagination
           // BasePagination помнит страницу у себя — пересоздаём его, когда страница сбрасывается
-          key={`${search}|${filterType}|${categoryIds}|${tagIds}`}
-          count={countPages}
+          key={`${debouncedSearch}|${filterType}|${categoryIds}|${tagIds}`}
+          count={total}
           onChangePage={setPage}
         />
       }
