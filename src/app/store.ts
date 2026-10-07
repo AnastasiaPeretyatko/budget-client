@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { authReducer } from '@/entities/auth'
 import { workspacesReducer } from '@/entities/workspace'
 import { selectedPeriodReducer } from '@/entities/bulling-period'
-import { userReducer } from '@/entities/user'
+import { userApi } from '@/entities/user/api/userApi'
 import { templatesApi } from '@/entities/template/api/templatesApi'
 import { transactionApi } from '@/entities/transaction/api/transactionApi'
 import { envelopesApi } from '@/entities/envelope/api/envelopesApi'
@@ -18,7 +18,6 @@ export const store = configureStore({
     auth: authReducer,
     workspaces: workspacesReducer,
     selectedPeriod: selectedPeriodReducer,
-    user: userReducer,
     [templatesApi.reducerPath]: templatesApi.reducer,
     [transactionApi.reducerPath]: transactionApi.reducer,
     [envelopesApi.reducerPath]: envelopesApi.reducer,
@@ -26,7 +25,8 @@ export const store = configureStore({
     [billingPeriodApi.reducerPath]: billingPeriodApi.reducer,
     [categoriesApi.reducerPath]: categoriesApi.reducer,
     [tagsApi.reducerPath]: tagsApi.reducer,
-    [statisticsApi.reducerPath]: statisticsApi.reducer
+    [statisticsApi.reducerPath]: statisticsApi.reducer,
+    [userApi.reducerPath]: userApi.reducer
   },
   middleware: (getDefaultMiddlewars) => getDefaultMiddlewars().concat(
     templatesApi.middleware,
@@ -36,7 +36,8 @@ export const store = configureStore({
     envelopeApi.middleware,
     categoriesApi.middleware,
     tagsApi.middleware,
-    statisticsApi.middleware
+    statisticsApi.middleware,
+    userApi.middleware
   )
 })
 
