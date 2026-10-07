@@ -13,9 +13,9 @@ const CreateSavingModal = () => {
   const [description, setDescription] = useState('')
   const [isSafe, setIsSafe] = useState(false)
 
-  const handleSave = (close: () => void) => {
+  const handleSave = async(close: () => void) => {
     try {
-      addEvelopes({ name, amount, description, isSafe })
+      await addEvelopes({ name, amount, description, isSafe }).unwrap()
       showSuccessMessage('Накопительный счет успешно создан')
       close()
     } catch (error) {
