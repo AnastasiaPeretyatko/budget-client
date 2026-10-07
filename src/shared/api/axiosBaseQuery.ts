@@ -5,8 +5,9 @@ import { http } from '@/shared/api/http' // путь поправь под св�
 type AxiosBaseQueryArgs = {
   url: string
   method: AxiosRequestConfig['method']
-  data?: AxiosRequestConfig['data']
-  params?: AxiosRequestConfig['params']
+  // в AxiosRequestConfig эти поля имеют тип any; нам хватает unknown — мы лишь передаём их в axios как есть
+  data?: unknown
+  params?: unknown
 }
 
 export const axiosBaseQuery =
