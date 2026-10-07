@@ -38,6 +38,7 @@
     "src/entities/auth/auth.context.tsx"
   ],
   "exclude": [
-    "node_modules"
+    "node_modules",
+    ".next/dev/types/validator.ts"
   ]
 }
