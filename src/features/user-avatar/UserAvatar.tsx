@@ -1,6 +1,8 @@
 import { RootState, useAppDispatch } from '@/app/store'
 import { resetApiCache } from '@/app/resetApiCache'
 import { deleteToken, setIsAuth } from '@/entities/auth'
+import { clearActiveWorkspace } from '@/entities/workspace'
+import { setSelectedPeriodId } from '@/entities/bulling-period'
 import { Avatar, Menu, Portal } from "@chakra-ui/react"
 import { LogOut } from 'lucide-react'
 import { useRouter } from 'next/router'
@@ -15,8 +17,13 @@ const UserAvatar = () => {
   const handleClickLogout = () => {
     localStorage.removeItem('token')
     localStorage.removeItem('refreshToken')
+    // пространство и период принадлежат пользователю: следующий вход выбирает их заново
+    localStorage.removeItem('workspaceId')
+    localStorage.removeItem('period')
     dispatch(deleteToken())
     dispatch(setIsAuth(false))
+    dispatch(clearActiveWorkspace())
+    dispatch(setSelectedPeriodId(null))
     // данные предыдущего пользователя не должны остаться в кэше
     dispatch(resetApiCache())
     router.push('/login')
