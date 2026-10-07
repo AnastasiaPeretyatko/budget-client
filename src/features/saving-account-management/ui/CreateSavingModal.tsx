@@ -5,7 +5,7 @@ import { useNotifications } from '@/shared/hooks/useNotifications'
 import { useAddEvelopesMutation } from '@/entities/envelope/api/envelopesApi'
 
 const CreateSavingModal = () => {
-  const [addEvelopes]= useAddEvelopesMutation()
+  const [addEvelopes, { isLoading }]= useAddEvelopesMutation()
   const { showErrorMessage, showSuccessMessage } = useNotifications()
 
   const [name, setName] = useState('')
@@ -24,7 +24,7 @@ const CreateSavingModal = () => {
   }
 
   return (
-    <BaseModal title='Создать новый накопительный счет' buttonTrigger={<Button variant={'primary'}>Создать конверт</Button>} onClickSave={handleSave}>
+    <BaseModal title='Создать новый накопительный счет' buttonTrigger={<Button variant={'primary'}>Создать конверт</Button>} onClickSave={handleSave} isLoading={isLoading}>
       <Input variant={'primary'} placeholder='Название' onChange={e => setName(e.target.value)}/>
       <Input variant={'primary'} placeholder='Сумма' onChange={e => setAmount(e.target.value)}/>
       <Textarea variant={'primary'} placeholder='Описание' onChange={e => setDescription(e.target.value)}/>

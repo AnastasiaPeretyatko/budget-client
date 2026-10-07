@@ -11,7 +11,8 @@ type Props = {
   confirmLabel?: string;
   confirmColorPalette?: string;
   isOpen?: boolean
-  onClose?: () => void
+  onClose?: () => void;
+  isLoading?: boolean;
 }
 
 const BaseModal = ({
@@ -24,7 +25,8 @@ const BaseModal = ({
   confirmLabel = 'Сохранить',
   confirmColorPalette,
   isOpen = false,
-  onClose
+  onClose,
+  isLoading = false
 }: Props) => {
   const [open, setOpen] = useState(isOpen)
 
@@ -75,7 +77,7 @@ const BaseModal = ({
                 <Dialog.ActionTrigger asChild>
                   <Button variant="secondary">Отмена</Button>
                 </Dialog.ActionTrigger>
-                <Button variant={'primary'} size="sm" colorPalette={confirmColorPalette} onClick={handleSave}>{confirmLabel}</Button>
+                <Button variant={'primary'} size="sm" colorPalette={confirmColorPalette} onClick={handleSave} loading={isLoading}>{confirmLabel}</Button>
               </Dialog.Footer>
             )}
             <Dialog.CloseTrigger asChild>
