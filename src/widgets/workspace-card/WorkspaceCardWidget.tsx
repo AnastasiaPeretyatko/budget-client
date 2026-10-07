@@ -1,4 +1,5 @@
 import { AppDispatch } from '@/app/store'
+import { resetApiCache } from '@/app/resetApiCache'
 import { WorkspaceListType, setActiveWorkspace, WorkspaceCard } from '@/entities/workspace'
 import { useRouter } from 'next/router'
 import { useDispatch } from 'react-redux'
@@ -14,6 +15,8 @@ const WorkspaceCardWidget = ({ workspace }: Props) => {
   const handleSelect = (id: string) => {
     localStorage.setItem('workspaceId', id)
     dispatch(setActiveWorkspace(id))
+    // кэш предыдущего пространства не должен попасть на экран нового
+    dispatch(resetApiCache())
     router.push('/dashboard')
   }
 

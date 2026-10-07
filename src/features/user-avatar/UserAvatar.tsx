@@ -1,4 +1,5 @@
 import { RootState, useAppDispatch } from '@/app/store'
+import { resetApiCache } from '@/app/resetApiCache'
 import { deleteToken, setIsAuth } from '@/entities/auth'
 import { Avatar, Menu, Portal } from "@chakra-ui/react"
 import { LogOut } from 'lucide-react'
@@ -16,6 +17,8 @@ const UserAvatar = () => {
     localStorage.removeItem('refreshToken')
     dispatch(deleteToken())
     dispatch(setIsAuth(false))
+    // данные предыдущего пользователя не должны остаться в кэше
+    dispatch(resetApiCache())
     router.push('/login')
   }
 

@@ -4,6 +4,7 @@ import { authReducer } from '@/entities/auth'
 import { workspacesReducer } from '@/entities/workspace'
 import { selectedPeriodReducer } from '@/entities/bulling-period'
 import { userApi } from '@/entities/user/api/userApi'
+import { workspaceApi } from '@/entities/workspace/api/workspaceApi'
 import { templatesApi } from '@/entities/template/api/templatesApi'
 import { transactionApi } from '@/entities/transaction/api/transactionApi'
 import { envelopesApi } from '@/entities/envelope/api/envelopesApi'
@@ -26,7 +27,8 @@ export const store = configureStore({
     [categoriesApi.reducerPath]: categoriesApi.reducer,
     [tagsApi.reducerPath]: tagsApi.reducer,
     [statisticsApi.reducerPath]: statisticsApi.reducer,
-    [userApi.reducerPath]: userApi.reducer
+    [userApi.reducerPath]: userApi.reducer,
+    [workspaceApi.reducerPath]: workspaceApi.reducer
   },
   middleware: (getDefaultMiddlewars) => getDefaultMiddlewars().concat(
     templatesApi.middleware,
@@ -37,7 +39,8 @@ export const store = configureStore({
     categoriesApi.middleware,
     tagsApi.middleware,
     statisticsApi.middleware,
-    userApi.middleware
+    userApi.middleware,
+    workspaceApi.middleware
   )
 })
 

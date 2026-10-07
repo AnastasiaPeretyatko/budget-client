@@ -1,9 +1,7 @@
-import { AppDispatch } from '@/app/store'
-import { deleteWorkspaceThunk } from '@/entities/workspace'
+import { useDeleteWorkspaceMutation } from '@/entities/workspace/api/workspaceApi'
 import { useNotifications } from '@/shared/hooks/useNotifications'
 import BaseModal from '@/shared/ui/modal'
 import { Text } from '@chakra-ui/react'
-import { useDispatch } from 'react-redux'
 
 type Props = {
   workspaceId: string
@@ -12,17 +10,17 @@ type Props = {
 }
 
 const WorkspaceDeleteModal = ({ workspaceId, workspaceTitle, trigger }: Props) => {
-  const dispatch = useDispatch<AppDispatch>()
+  const [deleteWorkspace] = useDeleteWorkspaceMutation()
   const { showErrorMessage, showSuccessMessage } = useNotifications()
 
-  const handleDelete = (close: () => void) => {
-    dispatch(deleteWorkspaceThunk(workspaceId))
-      .unwrap()
-      .then(() => {
-        showSuccessMessage('Workspace deleted successfully')
-        close()
-      })
-      .catch(() => showErrorMessage('Error deleting workspace'))
+  const handleDelete = async (close: () => void) => {
+    try {
+      await deleteWorkspace(workspaceId).unwrap()
+      showSuccessMessage('Workspace deleted successfully')
+      close()
+    } catch {
+      showErrorMessage('Error deleting workspace')
+    }
   }
 
   return (

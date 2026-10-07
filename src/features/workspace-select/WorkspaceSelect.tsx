@@ -1,25 +1,19 @@
 
-import { RootState, useAppDispatch, useAppSelector } from '@/app/store'
-import { fetchWorkspacesThunk } from '@/entities/workspace';
+import { useGetWorkspacesQuery } from '@/entities/workspace/api/workspaceApi'
 import { Portal, Select, createListCollection } from "@chakra-ui/react"
-import { useEffect, useMemo } from 'react'
+import { useMemo } from 'react'
 
 export const WorkspaceSelect = () => {
-  const dispatch = useAppDispatch();
-  const { workspaces } = useAppSelector((state: RootState) => state.workspaces);
+  const { data: workspaces } = useGetWorkspacesQuery()
 
   const currentWorkspaceId = localStorage.getItem('workspaceId') as string
 
   const collection = useMemo(
     () => createListCollection({
-      items: workspaces.map(w => ({ label: w.title, value: w.id })),
+      items: (workspaces ?? []).map(w => ({ label: w.title, value: w.id })),
     }),
     [workspaces],
   )
-
-  useEffect(() => {
-    dispatch(fetchWorkspacesThunk())
-  }, [dispatch])
 
   return (
     <Select.Root variant={'primary'} collection={collection} defaultValue={[currentWorkspaceId]}>
