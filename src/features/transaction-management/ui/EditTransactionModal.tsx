@@ -10,6 +10,7 @@ import { getErrorMessage } from '@/shared/utils/getErrorMessage'
 import { SearchSelectOption } from '@/shared/ui/search-select'
 import { HStack, IconButton, VStack } from '@chakra-ui/react'
 import { useState } from 'react'
+import moment from 'moment'
 import { FaArrowRightLong } from 'react-icons/fa6'
 import { useEditTransactionMutation } from '@/entities/transaction/api/transactionApi'
 
@@ -24,7 +25,8 @@ const EditTransactionModal = ({ transaction, trigger }: Props) => {
 
   const [amount, setAmount] = useState(transaction.amount)
   const [description, setDescription] = useState(transaction.description ?? '')
-  const [date, setDate] = useState(new Date(transaction.date).toISOString().split('T')[0])
+  // moment берёт локальную дату; toISOString() считал бы по UTC и мог сдвинуть день
+  const [date, setDate] = useState(moment(transaction.date).format('YYYY-MM-DD'))
   const [categoryId, setCategoryId] = useState(transaction.category?.id ?? '')
   const [tagIds, setTagIds] = useState<string[]>(transaction.tags?.map(t => t.id) ?? [])
   // eslint-disable-next-line max-len
@@ -61,13 +63,18 @@ const EditTransactionModal = ({ transaction, trigger }: Props) => {
     if (!validate()) return
     setIsLoading(true)
     try {
+      // Календарь отдаёт только день (без часов), поэтому к выбранному дню
+      // добавляем текущее время на момент сохранения
+      const now = moment()
+      const newDate = moment(date).set({ hour: now.hour(), minute: now.minute() }).toDate()
+
       // .unwrap() превращает ошибку запроса в настоящее исключение — иначе catch её не увидит
       await editTransaction({
         id: transaction.id,
         data: {
           amount,
           description: description || null,
-          date: new Date(date),
+          date: newDate,
           categoryId: categoryId || undefined,
           tagIds,
           fromAccountId: fromOption?.value || undefined,

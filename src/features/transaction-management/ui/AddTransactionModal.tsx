@@ -36,6 +36,9 @@ const getDefaultValues = (envelopeId?: string): Partial<TransactionFormType> => 
 
 const AddTransactionModal = ({ envelope, nameButton }: Props) => {
   const [open, setOpen] = useState(false)
+  // Категория, теги и календарь помнят выбор у себя внутри, а reset() очищает только форму.
+  // Меняем key — поля создаются заново и снова показывают то, что в форме (чистые значения)
+  const [formKey, setFormKey] = useState(0)
   const [addTransaction, { isLoading }] = useAddTransactionMutation()
   const { showErrorMessage, showSuccessMessage } = useNotifications();
   const { register, setValue, handleSubmit, control, reset, watch } = useForm<TransactionFormType>({
@@ -64,6 +67,7 @@ const AddTransactionModal = ({ envelope, nameButton }: Props) => {
       showSuccessMessage('Транзакция успешно создана')
       // reset() без аргументов вернул бы конверт, который был при первом открытии, поэтому передаём актуальные значения
       reset(getDefaultValues(envelope?.id))
+      setFormKey(key => key + 1)
       setOpen(false)
     } catch (error) {
       showErrorMessage(getErrorMessage(error, 'Ошибка при создании транзакции'))
@@ -72,7 +76,7 @@ const AddTransactionModal = ({ envelope, nameButton }: Props) => {
 
   return (
     <BaseDrawer open={open} onOpenChange={setOpen} trigger={<Button variant={'primary'} onClick={e => e.stopPropagation()}>{nameButton}</Button>}>
-      <VStack as={'form'} height={'100%'} onSubmit={handleSubmit(onSubmit)}>
+      <VStack key={formKey} as={'form'} height={'100%'} onSubmit={handleSubmit(onSubmit)}>
         <VStack width={'100%'} align={'start'} mb={10}>
           <HStack>
             <Box p={4} borderRadius={'12px'} bg={'#D1FAE5'}><ArrowLeftRight size={'14px'}/></Box>

@@ -41,7 +41,7 @@ const AllTransactionsBlock = () => {
 
   const { data, isLoading } = useGetTransactionQuery({
     filter: { periodId: selectedPeriodId!, type: filter === 'all' ? null : filter as TransactionTypeEnum, categoryIds, tag: { in: tagIds } },
-    paging: { offset: (page * LIMIT) - LIMIT },
+    paging: { limit: LIMIT, offset: (page * LIMIT) - LIMIT },
     search: debouncedSearch,
   },)
 

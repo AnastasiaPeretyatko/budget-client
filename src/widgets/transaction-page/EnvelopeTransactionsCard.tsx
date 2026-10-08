@@ -1,13 +1,17 @@
-import { Heading, Card, Text, HStack, Spinner } from '@chakra-ui/react'
+import { Heading, Card, Text, HStack, Spinner, IconButton, Float, Circle } from '@chakra-ui/react'
 import FilterType from './FilterType'
 import SearchInput from '@/shared/ui/search-input'
 import TransactionsTable from './TransactionsTable'
 import { useGetTransactionQuery } from '@/entities/transaction/api/transactionApi'
 import { BasePagination } from '@/shared/ui/pagination'
-import { useState } from 'react'
+import { Dispatch, SetStateAction, useState } from 'react'
 import { TransactionTypeEnum } from '@/entities/transaction'
 import { useSelectedPeriod } from '@/entities/billing-period/api/useSelectedPeriod'
 import useDebounce from '@/shared/hooks/useDebounce'
+import { useBoolean } from '@/shared/hooks/useBoolean'
+import TransactionCategoriesBox from '@/features/transaction-management/ui/TransactionCategoriesBox'
+import TransactionTagsBox from '@/features/transaction-management/ui/TransactionTagsBox'
+import { Funnel } from 'lucide-react'
 
 type Props = {
   accountId?: string
@@ -19,6 +23,9 @@ const EnvelopeTransactionsCard = ({ accountId }: Props) => {
   const [page, setPage] = useState(1);
   const [filter, setFilter] = useState<TransactionTypeEnum | 'all'>('all')
   const [search, setSearch] = useState<string>('')
+  const [categoryIds, setCategoryIds] = useState<string[]>([])
+  const [tagIds, setTagIds] = useState<string[]>([])
+  const [isOpenFilter, setOpenFilter] = useBoolean()
   const { dateBetween } = useSelectedPeriod()
 
   // в поле показываем search сразу, а на сервер отправляем debouncedSearch — после паузы в наборе
@@ -39,8 +46,10 @@ const EnvelopeTransactionsCard = ({ accountId }: Props) => {
         accountId,
         type: filter === 'all' ? null : filter as TransactionTypeEnum,
         date: dateBetween && { between: dateBetween },
+        categoryIds,
+        tag: { in: tagIds },
       },
-      paging: { offset: (page * LIMIT) - LIMIT },
+      paging: { limit: LIMIT, offset: (page * LIMIT) - LIMIT },
       search: debouncedSearch
     },
     { skip: !accountId || !dateBetween }
@@ -52,6 +61,18 @@ const EnvelopeTransactionsCard = ({ accountId }: Props) => {
     setPage(1)
   }
 
+  // Боксы категорий и тегов ждут обычный setState, поэтому оборачиваем его:
+  // после каждого изменения выбора возвращаемся на первую страницу
+  const handleCategoryIds: Dispatch<SetStateAction<string[]>> = (value) => {
+    setCategoryIds(value)
+    setPage(1)
+  }
+
+  const handleTagIds: Dispatch<SetStateAction<string[]>> = (value) => {
+    setTagIds(value)
+    setPage(1)
+  }
+
   return (
     <Card.Root width={'100%'} variant={'primary'} gap={2}>
       <Heading fontSize={'18px'}>История операций по конверту</Heading>
@@ -59,7 +80,19 @@ const EnvelopeTransactionsCard = ({ accountId }: Props) => {
       <HStack width={'100%'}>
         <SearchInput width={'50%'} placeholder='Поиск...' value={search} onChange={(e) => setSearch(e.target.value)}/>
         <FilterType filter={filter} onChangeFilter={handleFilterChange}/>
+        <IconButton variant={'secondary'} onClick={setOpenFilter.toggle} position={'relative'}>
+          <Funnel/>
+          {(!!categoryIds.length || !!tagIds.length) && <Float><Circle w={2} h={2} bg={'red'}/></Float>}
+        </IconButton>
       </HStack>
+      {
+        isOpenFilter && (
+          <>
+            <TransactionCategoriesBox categoryIds={categoryIds} setCategoryIds={handleCategoryIds}/>
+            <TransactionTagsBox tagIds={tagIds} setTagIds={handleTagIds}/>
+          </>
+        )
+      }
       {
         isLoading ? <Spinner/> : (
           <TransactionsTable transactions={transaction?.rows || []}/>
@@ -68,7 +101,7 @@ const EnvelopeTransactionsCard = ({ accountId }: Props) => {
       {!!transaction?.count &&
         <BasePagination
           // BasePagination помнит страницу у себя — пересоздаём его, когда страница сбрасывается
-          key={`${debouncedSearch}|${filter}`}
+          key={`${debouncedSearch}|${filter}|${categoryIds}|${tagIds}`}
           count={transaction?.count || 0}
           onChangePage={setPage}
         />
