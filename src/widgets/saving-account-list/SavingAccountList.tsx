@@ -28,7 +28,7 @@ const SavingAccountList = ({ isDisplayCreteModal = false, limit, wrap = false }:
           savingAccount={account}
         />
       ))}
-      {isDisplayCreteModal && <CreateSavingModal />}
+      {isDisplayCreteModal && <CreateSavingModal lastIndex={visibleAccounts.length}/>}
     </Box>
   )
 }

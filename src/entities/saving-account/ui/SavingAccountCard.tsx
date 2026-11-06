@@ -1,14 +1,14 @@
 import { Badge, Box, Button, Card, Heading, HStack, IconButton, Text } from '@chakra-ui/react'
-import { SavingAccountType } from '../types/saving-account.type'
 import { GripVertical, Utensils } from 'lucide-react'
 import { formattingMonay } from '@/shared/utils/formattingMonay'
 import Progress from '@/shared/ui/progress'
 import { useRouter } from 'next/router'
 import { AddTransactionModal } from '@/features/transaction-management'
 import { useSortable } from '@dnd-kit/react/sortable';
+import { EnvelopesType } from '@/entities/envelope/types/envelopes.type'
 
 type Props = {
-  savingAccount: SavingAccountType
+  savingAccount: EnvelopesType
 }
 
 const SavingAccountCard = ({ savingAccount }: Props) => {
