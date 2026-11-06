@@ -31,7 +31,18 @@ export const envelopeApi = createApi({
         }
       },
     }),
+    batch: build.mutation<void, {id: string, index: number}[]>({
+      query: (data: {id: string, index: number}[]) => ({ url: '/saving/batch', method: 'PATCH', data }),
+      onQueryStarted: async (_arg, { dispatch, queryFulfilled }) => {
+        try {
+          await queryFulfilled
+          dispatch(envelopesApi.util.invalidateTags(['Envelopes']))
+        } catch {
+          // не удалось, данные в базе не менялись
+        }
+      },
+    })
   })
 })
 
-export const { useGetEnvelopeQuery, useUpdateEnvelopeMutation } = envelopeApi
+export const { useGetEnvelopeQuery, useUpdateEnvelopeMutation, useBatchMutation } = envelopeApi

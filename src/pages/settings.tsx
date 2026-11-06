@@ -1,5 +1,5 @@
 import InvitePersonBlock from '@/widgets/workspace-settings/InvitePersonBlock'
-import { Heading, VStack } from '@chakra-ui/react'
+import { Card, Heading, VStack } from '@chakra-ui/react'
 import WorkspaceStartDay from '@/features/workspace-management/ui/WorkspaceStartDay'
 import BaseTabs from '@/shared/ui/tabs'
 import MyDetailsForm from '@/features/user-settings/ui/MyDetailsForm'
@@ -7,10 +7,10 @@ import { LuSettings, LuUser } from 'react-icons/lu'
 
 const WorkspaceSettingsTab = () => {
   return (
-    <VStack width={'100%'} align={'start'} gap={6} pt={4}>
+    <Card.Root width={'100%'} variant={'primary'} gap={4}>
       <WorkspaceStartDay />
       <InvitePersonBlock />
-    </VStack>
+    </Card.Root>
   )
 }
 
@@ -19,11 +19,7 @@ const SettingsPage = () => {
     {
       value: 'Мой профиль',
       icon: <LuUser />,
-      component: (
-        <VStack width={'100%'} align={'start'} gap={6} pt={4}>
-          <MyDetailsForm />
-        </VStack>
-      ),
+      component: <MyDetailsForm />
     },
     {
       value: 'Рабочее пространство',

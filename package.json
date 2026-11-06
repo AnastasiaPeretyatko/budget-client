@@ -12,6 +12,9 @@
   },
   "dependencies": {
     "@chakra-ui/react": "^3.34.0",
+    "@dnd-kit/helpers": "^0.5.1",
+    "@dnd-kit/react": "^0.5.1",
+    "@dnd-kit/sortable": "^10.0.0",
     "@emotion/react": "^11.14.0",
     "@reduxjs/toolkit": "^2.11.2",
     "axios": "^1.13.6",

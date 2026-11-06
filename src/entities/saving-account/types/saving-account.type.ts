@@ -18,4 +18,5 @@ export type SavingAccountType = BaseSavingAccountType & {
   transactionCount: number;
   emoji?: string | null;
   workspaceName?: string | null;
+  index: number
 }

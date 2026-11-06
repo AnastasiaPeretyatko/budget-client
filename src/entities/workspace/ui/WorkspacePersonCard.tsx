@@ -3,7 +3,7 @@ import { useGetCurrentWorkspaceQuery, useRemoveWorkspaceUserMutation } from '../
 import { useNotifications } from '@/shared/hooks/useNotifications'
 import BaseAvatar from '@/shared/ui/avatar'
 import BaseModal from '@/shared/ui/modal'
-import { HStack, IconButton, Text } from '@chakra-ui/react'
+import { Badge, HStack, IconButton, Text } from '@chakra-ui/react'
 import { LuX } from 'react-icons/lu'
 
 type Props = {
@@ -33,8 +33,9 @@ const WorkspacePersonCard = ({ user }: Props) => {
 
   return (
     <HStack width={'100%'} gap={4}>
-      <BaseAvatar name={displayName}/>
-      <Text width={'100%'}>{displayName}</Text>
+      <BaseAvatar name={displayName} size='sm'/>
+      <Text fontSize={'sm'} width={'100%'}>{displayName}</Text>
+      <Badge>{isOwner ? 'owner' : 'member'}</Badge>
       {!isOwner && (
         <BaseModal
           title="Удаление пользователя"

@@ -51,7 +51,7 @@ const GeneralEnvelopePoolCard = () => {
       </HStack>
 
       <HStack width={'100%'} align={'start'}>
-        <CreateSavingModal/>
+        <CreateSavingModal lastIndex={envelopes?.at(-1)?.index || 0}/>
       </HStack>
     </Card.Root>
   )

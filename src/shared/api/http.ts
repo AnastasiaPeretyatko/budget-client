@@ -9,7 +9,7 @@ type RetryableRequestConfig = InternalAxiosRequestConfig & { _isRetry?: boolean 
 export const http = axios.create({
   baseURL: BASE_URL,
   headers: {
-    'Access-Control-Allow-Origin': BASE_URL,
+    // 'Access-Control-Allow-Origin': BASE_URL,
     'ngrok-skip-browser-warning': true,
   },
 });
@@ -74,7 +74,7 @@ http.interceptors.response.use(
           localStorage.clear();
           const isPublic = PUBLIC_ROUTES.includes( window.location.pathname)
           if ( !isPublic) {
-            window.location.assign('/login');
+            window.location.assign('/');
           }
           return Promise.reject(err);
         }

@@ -1,5 +1,4 @@
 import InvitePeopleForm from '@/features/workspace-management/ui/InvitePeopleForm'
-import { COLOR } from '@/shared/config/colors'
 import { Heading, Text, VStack } from '@chakra-ui/react'
 import WorkspacePeopleList from '../workspace-people/WorkspacePeopleList'
 
@@ -7,11 +6,14 @@ const InvitePersonBlock = () => {
 
   return (
     <VStack width={'100%'} align={'start'} gap={4}>
-      <Heading size={'md'}>Invite members</Heading>
-      <Text color={COLOR.LABEL}>
-        Easily add new members to your team by entering their email addresses below. Once invited,
-        they&apos;ll receive an email with a link to join.
-      </Text>
+      <VStack align={'start'} gap={0}>
+        <Heading fontSize={'18px'}>Пригласить участников</Heading>
+        <Text fontSize={'sm'} color={'label'}>
+        Вы можете легко добавить новых участников в свою команду,
+        введя их адреса электронной почты ниже.
+        После приглашения они получат электронное письмо со ссылкой для вступления в команду.
+        </Text>
+      </VStack>
       <InvitePeopleForm/>
 
       <WorkspacePeopleList/>

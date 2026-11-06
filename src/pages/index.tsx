@@ -1,19 +1,25 @@
-/* eslint-disable max-len */
-import MoneyAnimation from '@/shared/assets/animated/MoneyComponent'
-import { Box, Container, HStack, Text } from '@chakra-ui/react'
+import SignInModal from '@/widgets/signin/SignInModal'
+import { Heading, HStack, Image, Text, VStack } from '@chakra-ui/react'
 
 const Home = () => {
   return (
-    <Container width={"100%"} height={'100vh'} padding={4} display={'flex'} flexDir={'column'} alignItems={'center'}>
-      <HStack justify={'center'} height={'100%'} >
-        <MoneyAnimation/>
-        <Box width={'30%'}>
-          <Text fontSize={'xl'}>
-            Отслеживайте расходы, планируйте бюджет и копите на важное — вместе и без лишнего стресса
-          </Text>
-        </Box>
+    <VStack width={'100%'}>
+      <HStack width={'100%'} padding={4} boxShadow={'lg'}>
+        <HStack flex={1}>
+          <Image alt='logo' src={'/logo.png'} width={30}/>
+          <Heading>FinFlow</Heading>
+        </HStack>
+        <SignInModal/>
       </HStack>
-    </Container>
+
+      <VStack width={'50%'} textAlign={'center'} my={8} gap={2}>
+        <Heading fontSize={'36px'} lineHeight={'normal'}>Управляйте деньгами осознанно.
+        Семейный бюджет без стресса и кассовых разрывов</Heading>
+        <Text fontSize={'12px'} color={'label'}>Автоматическая синхронизация со счетами и картами, виртуальные целевые конверты,
+      прозрачное распределение зарплаты (50/30/20) и совместный доступ для всей семьи.</Text>
+      </VStack>
+      <Image alt='dashboard' src={'/dashboard.png'} borderRadius={'12px'} boxShadow={'lg'}/>
+    </VStack>
   )
 }
 

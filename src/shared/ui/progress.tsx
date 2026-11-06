@@ -7,7 +7,7 @@ type ProgressProps = {
 }
 
 const Progress = ({ remaining, spend }: ProgressProps) => {
-  const defaultValue = useMemo(() => spend / (remaining + spend) * 100, [remaining, spend])
+  const defaultValue = useMemo(() => (remaining - spend) * 100 / remaining, [remaining, spend])
 
   return (
     <ProgressRoot width={'100%'} defaultValue={defaultValue || 0} variant={'primary'}>

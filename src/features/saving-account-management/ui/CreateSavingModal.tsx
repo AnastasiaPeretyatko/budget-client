@@ -1,50 +1,66 @@
-import BaseModal from '@/shared/ui/modal'
-import { Button, Checkbox, Input, Text, Textarea } from '@chakra-ui/react'
-import { useState } from 'react'
+import { Button, HStack, VStack } from '@chakra-ui/react'
 import { useNotifications } from '@/shared/hooks/useNotifications'
 import { useAddEvelopesMutation } from '@/entities/envelope/api/envelopesApi'
+import { Controller, SubmitHandler, useForm } from 'react-hook-form'
+import { BaseEnvelopesType } from '@/entities/envelope/types/envelopes.type'
+import BaseModalV2 from '@/shared/ui/modal_v2'
+import IconPicker from '@/shared/ui/icon-picker/IconPicker'
+import FieldInput from '@/shared/ui/FieldInput'
+import BaseTextarea from '@/shared/ui/textarea'
+import ColorPicker from '@/shared/ui/color-picker'
+import { CATEGORY_COLORS } from '@/entities/category/constants/category-colors'
+import { useBoolean } from '@/shared/hooks/useBoolean'
 
-const CreateSavingModal = () => {
+const CreateSavingModal = ({ lastIndex }: {lastIndex: number}) => {
   const [addEvelopes, { isLoading }]= useAddEvelopesMutation()
   const { showErrorMessage, showSuccessMessage } = useNotifications()
+  const { register, handleSubmit, control, watch } = useForm<BaseEnvelopesType>()
+  const [isOpen, setIsOpen] = useBoolean()
 
-  const [name, setName] = useState('')
-  const [amount, setAmount] = useState('')
-  const [description, setDescription] = useState('')
-  const [isSafe, setIsSafe] = useState(false)
-
-  const handleSave = async(close: () => void) => {
-    try {
-      await addEvelopes({ name, amount, description, isSafe }).unwrap()
-      showSuccessMessage('Накопительный счет успешно создан')
-      close()
-    } catch (error) {
-      showErrorMessage('Ошибка создания накопительного счета', error)
-    }
+  const onSubmit: SubmitHandler<BaseEnvelopesType> = async(data) => {
+    await addEvelopes({ ...data, index: lastIndex + 1 })
+      .unwrap()
+      .then(() => {
+        setIsOpen.off()
+        showSuccessMessage('Накопительный счет успешно создан')
+      })
+      .catch(err => showErrorMessage('Ошибка создания накопительного счета', err))
   }
 
   return (
-    <BaseModal title='Создать новый накопительный счет' buttonTrigger={<Button variant={'primary'}>Создать конверт</Button>} onClickSave={handleSave} isLoading={isLoading}>
-      <Input variant={'primary'} placeholder='Название' onChange={e => setName(e.target.value)}/>
-      <Input variant={'primary'} placeholder='Сумма' onChange={e => setAmount(e.target.value)}/>
-      <Textarea variant={'primary'} placeholder='Описание' onChange={e => setDescription(e.target.value)}/>
-      <Checkbox.Root
-        checked={isSafe}
-        onCheckedChange={e => setIsSafe(!!e.checked)}
-        colorPalette={'green'}
-        size={'sm'}
-        alignItems={'start'}
-      >
-        <Checkbox.HiddenInput />
-        <Checkbox.Control><Checkbox.Indicator /></Checkbox.Control>
-        <Checkbox.Label>
-          <Text fontSize={'12px'} fontWeight={700}>Резервный сейф</Text>
-          <Text fontSize={'11px'} color={'label'} fontWeight={400}>
-            Переводы сюда учитываются на странице «План» как отложенные в резерв
-          </Text>
-        </Checkbox.Label>
-      </Checkbox.Root>
-    </BaseModal>
+    <BaseModalV2
+      trigger={<Button variant={'primary'}>Создать конверт</Button>}
+      isOpen={isOpen}
+      setIsOpen={setIsOpen}
+    >
+      <VStack as={'form'} width={'100%'} gap={4} align={'start'} onSubmit={handleSubmit(onSubmit)}>
+        <HStack width={'100%'} gap={4}>
+          <Controller
+            control={control}
+            name='icon'
+            render={({ field }) => <IconPicker value={field.value} onChange={field.onChange} color={watch('color')}/>}
+          />
+          <FieldInput label='Название' variant={'primary'} placeholder='Введите название' {...register('name')}/>
+        </HStack>
+        <Controller
+          control={control}
+          name='color'
+          render={({ field }) => (
+            <ColorPicker
+              colors={CATEGORY_COLORS}
+              value={field.value}
+              onChange={field.onChange}
+            />
+          )}
+        />
+        <FieldInput label='Сумма' variant={'primary'} placeholder='Начальная сумма' defaultValue={0} {...register('amount')}/>
+        <BaseTextarea label='Описание' placeholder='Ввидите описание' {...register('description')}/>
+        <HStack width={'100%'}>
+          <Button  variant={'outline'}>Отменить</Button>
+          <Button flex={1} variant={'primary'} type='submit' loading={isLoading}>Сохранить</Button>
+        </HStack>
+      </VStack>
+    </BaseModalV2>
   )
 }
 

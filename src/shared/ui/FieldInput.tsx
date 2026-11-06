@@ -9,6 +9,7 @@ type Props = {
   invalid?: boolean;
   errorText?: string;
   startElement?: ReactNode;
+  endElement?: ReactNode;
   type?: React.HTMLInputTypeAttribute;
 } & InputProps & PropsWithChildren
 
@@ -19,32 +20,31 @@ const FieldInput = ({
   invalid,
   errorText,
   startElement,
+  endElement,
   children,
   ...props
 }:Props) => {
+  const isInvalid = invalid || !!errorText
+
   const input = (
     <Input
       variant={'primary'}
       borderRadius={8}
       borderWidth={2}
-      borderColor={invalid ? 'red.500' : 'outline'}
+      borderColor={isInvalid ? 'red.500' : 'outline'}
       {...props}
     />
   )
 
   return (
-    <Field.Root required={required} invalid={invalid}>
+    <Field.Root required={required} invalid={isInvalid}>
       <HStack width={'100%'} justify={'space-between'}>
         {label && <Label color={'#64748B'}>
           {label} {required && <Field.RequiredIndicator />}
         </Label>}
         {children}
       </HStack>
-
-      {startElement
-        ? <InputGroup width={'100%'} startElement={startElement}>{input}</InputGroup>
-        : input
-      }
+      <InputGroup width={'100%'} {...{ startElement, endElement }}>{input}</InputGroup>
       {errorText && <Field.ErrorText>{errorText}</Field.ErrorText>}
       {helperText && !errorText && <Field.HelperText>{helperText}</Field.HelperText>}
     </Field.Root>

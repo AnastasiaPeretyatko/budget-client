@@ -7,7 +7,7 @@ const WorkspacePeopleList = () => {
 
   return (
     <VStack width={'100%'} gap={4} align={'start'}>
-      <Heading size='sm'>Members with access</Heading>
+      <Heading size='sm'>Участники с доступом</Heading>
       {
         currentWorkspace?.users.map(user => (
           <WorkspacePersonCard key={user.id} user={user}/>

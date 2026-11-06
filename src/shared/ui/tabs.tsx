@@ -14,15 +14,10 @@ const BaseTabs = ({ list, isOnlyIcon, children, isBorder, fitted = true }: Props
     <Tabs.Root
       size={'sm'}
       defaultValue={list[0].value}
-      variant="plain"
+      variant="primary"
       width={'100%'}
       lazyMount
       unmountOnExit
-      css={{
-        "--tabs-indicator-bg": `colors.bg.tabs`,
-        // "--tabs-indicator-shadow": "shadows.xs",
-        // "--tabs-trigger-radius": "radii.full",
-      }}
     >
       <HStack align={'center'}>
         {children}

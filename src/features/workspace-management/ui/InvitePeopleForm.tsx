@@ -1,7 +1,7 @@
 import { useInviteUserMutation } from '@/entities/workspace/api/workspaceApi'
-import { COLOR } from '@/shared/config/colors'
 import { useNotifications } from '@/shared/hooks/useNotifications'
 import { Button, HStack, Input } from '@chakra-ui/react'
+import { PlusIcon } from 'lucide-react'
 import { useState } from 'react'
 
 const InvitePeopleForm = () => {
@@ -24,8 +24,8 @@ const InvitePeopleForm = () => {
 
   return (
     <HStack width={'100%'} gap={4}>
-      <Input placeholder='Email address' borderColor={COLOR.BORDER} borderRadius={8} value={email} onChange={e => setEmail(e.target.value)}/>
-      <Button size={'sm'} onClick={handleInvitePeople}>Invite people</Button>
+      <Input variant={'primary'} placeholder='Почта...' value={email} onChange={e => setEmail(e.target.value)}/>
+      <Button variant={'primary'} onClick={handleInvitePeople}><PlusIcon/> Пригласить</Button>
     </HStack>
   )
 }

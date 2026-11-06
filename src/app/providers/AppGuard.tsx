@@ -30,7 +30,7 @@ export function AppGuard({ Component, pageProps }: AppGuardProps) {
       const localToken = localStorage.getItem('token')
 
       if (!localToken) {
-        if (!isPublic) router.push('/login')
+        if (!isPublic) router.push('/')
         dispatch(setIsLoading(false))
         return
       }
@@ -44,7 +44,7 @@ export function AppGuard({ Component, pageProps }: AppGuardProps) {
         .catch((reason) => {
           if (reason !== 'unavailable') {
             localStorage.clear()
-            router.push('/login')
+            router.push('/')
           }
         })
     }
@@ -61,7 +61,7 @@ export function AppGuard({ Component, pageProps }: AppGuardProps) {
     }
 
     if (!storedWorkspaceId && requiresWorkspace) {
-      router.push('/workspaces')
+      router.push('/dashboard')
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLoading, isPublic, requiresWorkspace, activeWorkspaceId])

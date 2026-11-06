@@ -26,7 +26,7 @@ const UserAvatar = () => {
     dispatch(setSelectedPeriodId(null))
     // данные предыдущего пользователя не должны остаться в кэше
     dispatch(resetApiCache())
-    router.push('/login')
+    router.push('/')
   }
 
   if (!user) {

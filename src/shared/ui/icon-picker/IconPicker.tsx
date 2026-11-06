@@ -13,9 +13,10 @@ type Props = {
   onChange?: (iconName: IconName) => void
   disabled?: boolean
   size?: "2xs" | "xs" | "sm" | "md" | "lg" | "xl" | "2xl"
+  color?: string;
 }
 
-const IconPicker = ({ value, onChange, disabled }: Props) => {
+const IconPicker = ({ value, onChange, disabled, color = COLOR.PRIMARY_COLOR }: Props) => {
   const [search, setSearch] = useState('');
 
   const filteredIcons = useMemo(() => {
@@ -26,8 +27,8 @@ const IconPicker = ({ value, onChange, disabled }: Props) => {
 
   const selectedIcon: JSX.Element = useMemo(() => {
     const IconComponent = LucideIcons[value || 'Wallet'] as LucideIcon;
-    return <IconComponent style={{ width: 24, height: 24 }} color={COLOR.PRIMARY_COLOR}/>;
-  }, [value]);
+    return <IconComponent style={{ width: 24, height: 24 }} color={color}/>;
+  }, [color, value]);
 
   return (
     <BasePopover
