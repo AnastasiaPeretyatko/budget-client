@@ -7,7 +7,6 @@ const BudgetsPage = () => {
     <VStack width={'100%'} align={'start'} gap={4}>
       <GeneralEnvelopePoolCard />
       <CurrentEnvelopesList/>
-      {/* <SavingAccountList isDisplayCreteModal wrap /> */}
     </VStack>
   )
 }

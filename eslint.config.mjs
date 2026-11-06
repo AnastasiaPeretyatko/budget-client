@@ -83,6 +83,8 @@ export default defineConfig([
     ".next/**",
     "out/**",
     "build/**",
+    "public/sw.js",
+    "public/workbox-*.js",
     "next-env.d.ts",
     // сам конфиг не входит в tsconfig, поэтому строгие правила с типами для него не работают
     "eslint.config.mjs",
