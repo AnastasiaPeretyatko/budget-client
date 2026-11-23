@@ -39,14 +39,14 @@ const FieldInput = ({
   return (
     <Field.Root required={required} invalid={isInvalid}>
       <HStack width={'100%'} justify={'space-between'}>
-        {label && <Label color={'#64748B'}>
+        {label && <Label color={'text.label'}>
           {label} {required && <Field.RequiredIndicator />}
         </Label>}
         {children}
       </HStack>
       <InputGroup width={'100%'} {...{ startElement, endElement }}>{input}</InputGroup>
       {errorText && <Field.ErrorText>{errorText}</Field.ErrorText>}
-      {helperText && !errorText && <Field.HelperText>{helperText}</Field.HelperText>}
+      {helperText && !errorText && <Field.HelperText color={'label'}>{helperText}</Field.HelperText>}
     </Field.Root>
   )
 }

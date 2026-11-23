@@ -1,14 +1,16 @@
 import { TemplateType } from '@/entities/template/types/template.type'
 import { useAddTransactionFromTemplateMutation } from '@/entities/transaction/api/transactionApi'
 import { TYPE_CONFIG } from '@/entities/transaction/constants/transaction-type'
+import { COLOR } from '@/shared/config/colors'
 import { useNotifications } from '@/shared/hooks/useNotifications'
 import BaseDataList from '@/shared/ui/data-list'
 import BaseDrawer from '@/shared/ui/drawer'
 import FieldInput from '@/shared/ui/FieldInput'
 import IconPicker from '@/shared/ui/icon-picker/IconPicker'
 import BaseTextarea from '@/shared/ui/textarea'
-import { formattingMonay } from '@/shared/utils/formattingMonay'
+import TagList from '@/widgets/TagList'
 import { Badge, Button, Heading, HStack, Text, VStack } from '@chakra-ui/react'
+import { ArrowRight } from 'lucide-react'
 import { useState } from 'react'
 
 type Props = {
@@ -24,8 +26,12 @@ const UsedTemplateDrawer = ({ template }: Props) => {
 
   const dataList = [
     {
-      label: 'Сумма',
-      value: formattingMonay(template.amount)
+      label: 'Перевод',
+      value: <HStack>
+        {(template.fromAccount?.name || 'Наличные')}
+        <ArrowRight size={16} color={COLOR.LABEL}/>
+        {(template.toAccount?.name || 'Наличные')}
+      </HStack>
     },
     {
       label: 'Тип',
@@ -37,7 +43,7 @@ const UsedTemplateDrawer = ({ template }: Props) => {
     },
     {
       label: 'Теги',
-      value: template.tags?.map(tag => `#${tag.name}`).join(', ') || '—'
+      value: template.tags && <TagList tags={template.tags}/>
     }
   ]
 
@@ -74,7 +80,7 @@ const UsedTemplateDrawer = ({ template }: Props) => {
 
         <VStack width={'100%'} align={'start'} gap={2}>
           <Heading size={'sm'}>Как это работает?</Heading>
-          <Text color={'text.sidebar'}>
+          <Text fontSize={'xs'} color={'text.label'}>
             При нажатии на шаблон создастся новая транзакция с указанными паркаметрами.
             Вы сможете изменить сумму, описание или категорию перед сохранением.</Text>
         </VStack>

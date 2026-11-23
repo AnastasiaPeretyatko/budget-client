@@ -3,12 +3,15 @@
 import { useMemo } from 'react'
 import { useGetDashboardSummaryQuery } from '@/entities/statistics/api/statisticsApi'
 import { useGetLatestPeriodQuery } from '@/entities/billing-period/api/billing-periodApi'
-import { HStack } from '@chakra-ui/react'
+import { Grid, GridItem } from '@chakra-ui/react'
 import moment from 'moment'
 import { BalanceCard, TotalIncomeCard, TotalSpentCard } from '@/entities/statistics'
 import { PeriodProgressCard } from '@/entities/billing-period'
+import { useIsMobile } from '@/shared/hooks/useIsMobile'
 
 const DashboardSummaryCards = () => {
+  const isMobile = useIsMobile()
+
   const {
     data: dashboardSummary,
     isLoading: isDashboardSummaryLoading
@@ -33,28 +36,38 @@ const DashboardSummaryCards = () => {
   const daysRemaining = totalDays !== null ? Math.max(totalDays - daysFromStart, 0) : 0
 
   return (
-    <HStack width="100%" gap={4} align="stretch">
-      <BalanceCard
-        balance={Number(dashboardSummary?.balance ?? 0)}
-        isLoading={isDashboardSummaryLoading}
-        change={dashboardSummary?.balanceChange}
-      />
-      <TotalIncomeCard
-        value={Number(dashboardSummary?.totalIncome ?? 0)}
-        isLoading={isDashboardSummaryLoading}
-        change={dashboardSummary?.incomeChange}
-      />
-      <TotalSpentCard
-        value={Number(dashboardSummary?.totalExpenses ?? 0)}
-        isLoading={isDashboardSummaryLoading}
-        change={dashboardSummary?.expensesChange}
-      />
-      <PeriodProgressCard
-        daysRemaining={daysRemaining}
-        totalDays={totalDays}
-        percent={periodPercent}
-      />
-    </HStack>
+    <Grid width="100%" gap={2} templateColumns={{ base: "repeat(2, minmax(0, 1fr))", lg: "repeat(4, 1fr)" }}>
+      <GridItem colSpan={{ base: 2, lg: 1 }}>
+        <BalanceCard
+          balance={Number(dashboardSummary?.balance ?? 0)}
+          isLoading={isDashboardSummaryLoading}
+          change={dashboardSummary?.balanceChange}
+        />
+      </GridItem>
+      <GridItem>
+        <TotalIncomeCard
+          value={Number(dashboardSummary?.totalIncome ?? 0)}
+          isLoading={isDashboardSummaryLoading}
+          change={dashboardSummary?.incomeChange}
+        />
+      </GridItem>
+      <GridItem>
+        <TotalSpentCard
+          value={Number(dashboardSummary?.totalExpenses ?? 0)}
+          isLoading={isDashboardSummaryLoading}
+          change={dashboardSummary?.expensesChange}
+        />
+      </GridItem>
+      {
+        !isMobile &&
+        <PeriodProgressCard
+          daysRemaining={daysRemaining}
+          totalDays={totalDays}
+          percent={periodPercent}
+        />
+      }
+
+    </Grid>
   )
 }
 

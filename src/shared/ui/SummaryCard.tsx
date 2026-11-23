@@ -9,6 +9,7 @@ import {
 import { InfoTip } from '@/shared/ui/toggle-tip'
 import { AmountText } from '@/shared/ui/amount-text'
 import { summaryCardRecipe } from '@/shared/config/theme/card-recipe'
+import { useIsMobile } from '../hooks/useIsMobile'
 
 export const formatAmount = (value: number) =>
   value.toLocaleString('ru-RU', { minimumFractionDigits: 2 })
@@ -43,15 +44,16 @@ const SummaryCard = ({
 }: SummaryCardProps) => {
   const recipe = useSlotRecipe({ key: 'summaryCard' })
   const styles = recipe(variantProps)
+  const isMobile = useIsMobile()
 
   return (
     <Card.Root css={styles.root}>
       <Card.Body css={styles.body}>
-        <chakra.div display="flex" w="100%" justifyContent="space-between" alignItems="center">
+        <chakra.div display="flex" w="100%" justifyContent="space-between" alignItems={{ base: 'start', lg: 'center' }} flexDir={{ base:'row-reverse', lg: 'row' }} gap={2}>
           <chakra.div display="flex" flexDir="column" gap={1} flex={1} minW={0}>
             <chakra.div css={styles.header}>
               <chakra.span css={styles.label}>{label}</chakra.span>
-              <InfoTip />
+              {!isMobile && <InfoTip />}
             </chakra.div>
             {isLoading ? (
               <Spinner size="sm" />
@@ -62,7 +64,7 @@ const SummaryCard = ({
               </>
             )}
           </chakra.div>
-          {badge ?? (icon ? <chakra.div css={styles.badge}>{icon}</chakra.div> : null)}
+          {badge ?? (!isMobile && icon ? <chakra.div css={styles.badge}>{icon}</chakra.div> : null)}
         </chakra.div>
       </Card.Body>
     </Card.Root>

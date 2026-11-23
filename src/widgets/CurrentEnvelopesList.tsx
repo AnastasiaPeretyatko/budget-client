@@ -46,9 +46,9 @@ const CurrentEnvelopesList = () => {
           await batch(payload);
         }}
       >
-        <Grid width={'100%'} templateColumns={"repeat(4, 1fr)"} gap={4}>
+        <Grid width={'100%'} templateColumns={{ base: 'repeat(1, 1fr)', lg: "repeat(4, 1fr)" }} gap={4}>
           {
-            data?.map(acc => <SavingAccountCard key={acc.id} savingAccount={acc}/>)
+            data?.map(acc => <SavingAccountCard key={acc.id} savingAccount={acc} isVisibleDrag/>)
           }
         </Grid>
       </DragDropProvider>

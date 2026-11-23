@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { ReactElement, useEffect, useState } from 'react'
 import { Box, Button, Heading, HStack, Text, VStack } from '@chakra-ui/react'
 import BaseDrawer from '@/shared/ui/drawer'
 
@@ -15,12 +15,12 @@ import BaseDatePicker from '@/shared/ui/date-picker'
 import moment from 'moment'
 import { useAddTransactionMutation } from '@/entities/transaction/api/transactionApi'
 import { useNotifications } from '@/shared/hooks/useNotifications'
-import { generateTransactionType } from '@/shared/utils/generatetransactionType'
 import { getErrorMessage } from '@/shared/utils/getErrorMessage'
+import { culculationAmount } from '@/shared/utils/culculatAmount'
 
 type Props = {
   envelope?: EnvelopesType;
-  nameButton: string;
+  nameButton: string | ReactElement;
 }
 
 const AMOUNT_CONST = ['500', '1000', '3000', '5000']
@@ -57,18 +57,21 @@ const AddTransactionModal = ({ envelope, nameButton }: Props) => {
       // добавляем текущее время на момент создания транзакции
       const now = moment()
       const date = moment(data.date).set({ hour: now.hour(), minute: now.minute() }).toDate()
+      const amount = data.amount
+
+      console.log('amount',{ amount: culculationAmount(amount) });
 
       // .unwrap() превращает ошибку запроса в настоящее исключение — иначе catch её не увидит
-      await addTransaction({
-        ...data,
-        date,
-        type: generateTransactionType(data.fromAccountId, data.toAccountId)
-      }).unwrap()
-      showSuccessMessage('Транзакция успешно создана')
-      // reset() без аргументов вернул бы конверт, который был при первом открытии, поэтому передаём актуальные значения
-      reset(getDefaultValues(envelope?.id))
-      setFormKey(key => key + 1)
-      setOpen(false)
+      // await addTransaction({
+      //   ...data,
+      //   date,
+      //   type: generateTransactionType(data.fromAccountId, data.toAccountId)
+      // }).unwrap()
+      // showSuccessMessage('Транзакция успешно создана')
+      // // reset() без аргументов вернул бы конверт, который был при первом открытии, поэтому передаём актуальные значения
+      // reset(getDefaultValues(envelope?.id))
+      // setFormKey(key => key + 1)
+      // setOpen(false)
     } catch (error) {
       showErrorMessage(getErrorMessage(error, 'Ошибка при создании транзакции'))
     }
@@ -77,7 +80,7 @@ const AddTransactionModal = ({ envelope, nameButton }: Props) => {
   return (
     <BaseDrawer open={open} onOpenChange={setOpen} trigger={<Button variant={'primary'} onClick={e => e.stopPropagation()}>{nameButton}</Button>}>
       <VStack key={formKey} as={'form'} height={'100%'} onSubmit={handleSubmit(onSubmit)}>
-        <VStack width={'100%'} align={'start'} mb={10}>
+        <VStack width={'100%'} align={'start'} mb={{ base: 'none', lg: 10 }}>
           <HStack>
             <Box p={4} borderRadius={'12px'} bg={'#D1FAE5'}><ArrowLeftRight size={'14px'}/></Box>
             <Heading fontSize={'18px'}>Ручной перевод капитала</Heading>
@@ -87,7 +90,7 @@ const AddTransactionModal = ({ envelope, nameButton }: Props) => {
         <VStack width={'100%'} align={'start'} gap={4} flex={1}>
           <VStack align={'start'} width={'100%'} gap={4}>
             <EnvelopeSelectWrapper control={control} />
-            <FieldInput label='Сумма распределения:' {...register('amount')}>
+            <FieldInput label='Сумма распределения:' {...register('amount')} helperText={'В поле можно проводить операции сложения и вычитания.'}>
               {envelope && <Button
                 size={'xs'}
                 variant={'unstyle'}
@@ -129,7 +132,7 @@ const AddTransactionModal = ({ envelope, nameButton }: Props) => {
           />
         </VStack>
         <HStack width={'100%'} gap={4} pt={4} borderTop={'1px solid #F1F5F9'}>
-          <Button flex={1} variant={'secondary'} onClick={() => setOpen(false)}>Отмена</Button>
+          <Button variant={'secondary'} onClick={() => setOpen(false)}>Отмена</Button>
           <Button flex={1} variant={'primary'} type='submit' loading={isLoading}>Зафиксировать перевод</Button>
         </HStack>
       </VStack>

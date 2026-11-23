@@ -42,14 +42,15 @@ export const summaryCardRecipe = defineSlotRecipe({
   slots: ['root', 'body', 'header', 'label', 'value', 'badge'],
   base: {
     root: { flex: 1, borderRadius: 'lg', overflow: 'hidden' },
-    body: { p: 4 },
+    body: { p: 0 },
     header: { display: 'flex', alignItems: 'center', gap: 1 },
     label: { color: 'label.fg', fontWeight: 500, fontSize: 'sm' },
     value: { minW: 0 },
     badge: {
       flexShrink: 0,
-      w: '44px',
-      h: '44px',
+      w: { lg: '44px', base: '26px' },
+      h: { lg: '44px', base: '26px' },
+      p: 1,
       borderRadius: 'full',
       display: 'flex',
       alignItems: 'center',
@@ -66,7 +67,7 @@ export const summaryCardRecipe = defineSlotRecipe({
           borderWidth: '1px',
           bg: '#FFFFFF',
           boxShadow: 'md',
-          padding: '20px'
+          padding: { lg: '20px', base: '12px' }
         }
 
       }

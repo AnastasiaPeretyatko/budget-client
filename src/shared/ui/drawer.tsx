@@ -13,7 +13,7 @@ type Props = {
 const BaseDrawer = ({ trigger, children, isFooter = false, open, onOpenChange }: Props) => {
   return (
     <Drawer.Root
-      size={'sm'}
+      size={{ base: 'full', lg: 'sm' }}
       preventScroll={false}
       open={open}
       onOpenChange={onOpenChange ? e => onOpenChange(e.open) : undefined}
@@ -26,7 +26,7 @@ const BaseDrawer = ({ trigger, children, isFooter = false, open, onOpenChange }:
       <Portal>
         <Drawer.Backdrop />
         <Drawer.Positioner>
-          <Drawer.Content p={4}>
+          <Drawer.Content p={4} height={'100%'} overflow={'auto'}>
             {children}
             { isFooter && <Drawer.Footer>
               <Button variant="outline">Cancel</Button>

@@ -48,7 +48,12 @@ export const amountTextRecipe = defineRecipe({
 
 const config = defineConfig({
   globalCss: {
-    "html, body": {
+    "html, bodyб #root": {
+      width: '100%',
+      minHeight: '100%',
+      margin: 0,
+    },
+    body: {
       background: '#FAF8FF'
     }
   },
@@ -83,11 +88,13 @@ const config = defineConfig({
         },
         outline: { value: { base: '#ffffff', _dark: '#1A1F2B' } },
         text: {
-          sidebar: { value: { base: '#676661', _dark: '#BCBAB6' } }
+          sidebar: { value: { base: '#676661', _dark: '#BCBAB6' } },
+          label: { value: { base: '#64748B', _dark: '#E2E7FF' } }
         },
         input:{
           bg: { value: { base: '#F2F3FF', _dark: '#030304' } }
-        }
+        },
+        divide: { value: { base: '#E2E7FF', _dark: '#bcbab6' } }
       },
     },
     recipes: {

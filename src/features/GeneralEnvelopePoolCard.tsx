@@ -30,8 +30,8 @@ const GeneralEnvelopePoolCard = () => {
 
   return (
     <Card.Root width={'100%'} variant={'primary'} gap={4}>
-      <HStack width={'100%'} align={'start'} gap={4} divideX={'1px'}>
-        <HStack minW={'max-content'} align={'start'}>
+      <HStack width={'100%'} align={'start'} gap={4} divideX={'1px'} flexDir={{ base: 'column', lg: 'row' }}>
+        <HStack minW={'max-content'} align={'start'} >
           <Flex align={'center'} justify={'center'} borderRadius={'16px'} bg={'#ECFDF5'} padding={'12px'}>
             <BanknoteIcon color='#059669'/>
           </Flex>

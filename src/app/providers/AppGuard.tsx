@@ -6,7 +6,7 @@ import { setActiveWorkspace } from '@/entities/workspace';
 import LoadingAnimation from '@/shared/assets/animated/LoadingComponent';
 import { NextComponentType, NextPageContext } from 'next';
 import { useRouter } from 'next/router'
-import { useEffect } from 'react';
+import { useEffect, useLayoutEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux'
 
 type AppGuardProps = {
@@ -25,7 +25,7 @@ export function AppGuard({ Component, pageProps }: AppGuardProps) {
   const isWorkspacePage = NO_WORKSPACE_ROUTES.includes(router.pathname)
   const requiresWorkspace = !isPublic && !isWorkspacePage
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (!token && isLoading) {
       const localToken = localStorage.getItem('token')
 

@@ -10,7 +10,7 @@ type Props = {
 const TemplateList = ({ templates }: Props) => {
 
   return (
-    <Grid templateColumns={'repeat(3, 1fr)'} width={'100%'} gap={6}>
+    <Grid templateColumns={{ base: 'repeat(2, 1fr)', lg: 'repeat(4, 1fr)' }} width={'100%'} gap={6}>
       {templates?.map(t => (
         <TemplateCard key={t.id} template={t}>
           <TempleteActionRow template={t}/>

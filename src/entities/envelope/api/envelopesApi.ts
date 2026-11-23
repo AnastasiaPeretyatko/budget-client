@@ -19,8 +19,11 @@ export const envelopesApi = createApi({
     addEvelopes: build.mutation<EnvelopesType, BaseEnvelopesType>({
       query: (data) => ({ url: '/saving', method:'POST', data }),
       invalidatesTags: [{ type: 'Envelopes', id: 'LIST' }]
-    })
+    }),
   })
 })
 
-export const { useGetEnvelopesQuery, useAddEvelopesMutation } = envelopesApi
+export const {
+  useGetEnvelopesQuery,
+  useAddEvelopesMutation
+} = envelopesApi

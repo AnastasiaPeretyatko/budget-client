@@ -1,4 +1,4 @@
-import { Button, HStack, VStack } from '@chakra-ui/react'
+import { Button, Heading, HStack, VStack } from '@chakra-ui/react'
 import { useNotifications } from '@/shared/hooks/useNotifications'
 import { useAddEvelopesMutation } from '@/entities/envelope/api/envelopesApi'
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
@@ -14,7 +14,13 @@ import { useBoolean } from '@/shared/hooks/useBoolean'
 const CreateSavingModal = ({ lastIndex }: {lastIndex: number}) => {
   const [addEvelopes, { isLoading }]= useAddEvelopesMutation()
   const { showErrorMessage, showSuccessMessage } = useNotifications()
-  const { register, handleSubmit, control, watch } = useForm<BaseEnvelopesType>()
+  const {
+    register,
+    handleSubmit,
+    control,
+    watch,
+    formState: { errors }
+  } = useForm<BaseEnvelopesType>()
   const [isOpen, setIsOpen] = useBoolean()
 
   const onSubmit: SubmitHandler<BaseEnvelopesType> = async(data) => {
@@ -27,12 +33,15 @@ const CreateSavingModal = ({ lastIndex }: {lastIndex: number}) => {
       .catch(err => showErrorMessage('Ошибка создания накопительного счета', err))
   }
 
+  console.log('errors',{ errors });
+
   return (
     <BaseModalV2
       trigger={<Button variant={'primary'}>Создать конверт</Button>}
       isOpen={isOpen}
       setIsOpen={setIsOpen}
     >
+      <Heading>Создать новый конверт</Heading>
       <VStack as={'form'} width={'100%'} gap={4} align={'start'} onSubmit={handleSubmit(onSubmit)}>
         <HStack width={'100%'} gap={4}>
           <Controller
@@ -40,7 +49,7 @@ const CreateSavingModal = ({ lastIndex }: {lastIndex: number}) => {
             name='icon'
             render={({ field }) => <IconPicker value={field.value} onChange={field.onChange} color={watch('color')}/>}
           />
-          <FieldInput label='Название' variant={'primary'} placeholder='Введите название' {...register('name')}/>
+          <FieldInput label='Название' variant={'primary'} placeholder='Введите название' {...register('name', { required: 'Поле обязательно для ввода' })} errorText={errors.name?.message}/>
         </HStack>
         <Controller
           control={control}

@@ -1,16 +1,12 @@
 import { useGetTemplatesQuery } from '@/entities/template/api/templatesApi'
-import { Card, Circle, Float, HStack, IconButton, VStack } from '@chakra-ui/react'
+import { VStack } from '@chakra-ui/react'
 import { Dispatch, SetStateAction, useState } from 'react'
 import TemplateList from '../template-list/TemplateList'
 import { BasePagination } from '@/shared/ui/pagination'
-import SearchInput from '@/shared/ui/search-input'
-import FilterType from '../transaction-page/FilterType'
 import { TransactionTypeEnum } from '@/entities/transaction'
-import TransactionCategoriesBox from '@/features/transaction-management/ui/TransactionCategoriesBox'
-import TransactionTagsBox from '@/features/transaction-management/ui/TransactionTagsBox'
 import { useBoolean } from '@/shared/hooks/useBoolean'
-import { Funnel } from 'lucide-react'
 import useDebounce from '@/shared/hooks/useDebounce'
+import WrapperFilter from '../filter/WrapperFilter'
 
 const LIMIT = 10
 const SEARCH_DEBOUNCE_MS = 400
@@ -67,7 +63,8 @@ const TemplatePage = () => {
 
   return (
     <VStack width={'100%'} gap={4}>
-      <Card.Root variant={'primary'} width={'100%'} gap={4} divideY={'1px'}>
+      {/* TODO Вернуть если не допишем фильтр */}
+      {/* <Card.Root variant={'primary'} width={'100%'} gap={4} divideY={'1px'}>
         <HStack width={'100%'} gap={2}>
           <SearchInput width={'50%'} placeholder='Поиск шаблонов...' value={search} onChange={(e) => setSearch(e.target.value)}/>
           <FilterType filter={filterType} onChangeFilter={handleTypeChange}/>
@@ -82,7 +79,8 @@ const TemplatePage = () => {
             <TransactionTagsBox tagIds={tagIds} setTagIds={handleTagIds}/>
           </>
         )}
-      </Card.Root>
+      </Card.Root> */}
+      <WrapperFilter/>
       {data?.data && <TemplateList templates={data.data}/>}
       {total > LIMIT &&
         <BasePagination

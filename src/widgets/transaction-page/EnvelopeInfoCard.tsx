@@ -1,6 +1,6 @@
 import { useGetEnvelopeQuery } from '@/entities/envelope/api/envelopApi'
+import EditSavingModal from '@/features/saving-account-management/ui/EditSavingModal'
 import SavingAccountToggle from '@/features/saving-account-management/ui/SavingAccountToggle'
-import SavingSettingsModal from '@/features/saving-account-management/ui/SavingSettingsModal'
 import { AddTransactionModal } from '@/features/transaction-management'
 import Label from '@/shared/ui/label'
 import { formattingMonay } from '@/shared/utils/formattingMonay'
@@ -18,7 +18,7 @@ const EnvelopeInfoCard = () => {
 
   return (
     <Card.Root variant={'primary'} width={'100%'} gap={4}>
-      <HStack width={'100%'} justify={'space-between'}>
+      <HStack width={'100%'} justify={'space-between'} align={'start'} flexDir={{ base: 'column', lg: 'row' }}>
         <HStack>
           <Heading fontSize={'18px'}>{data?.name} </Heading>
           <SavingAccountToggle/>
@@ -28,7 +28,7 @@ const EnvelopeInfoCard = () => {
 
         <HStack>
           {data && <AddTransactionModal envelope={data} nameButton='Добавить расход'/>}
-          {data && <SavingSettingsModal envelope={data}/>}
+          {data && <EditSavingModal envelope={data}/>}
         </HStack>
       </HStack>
       <VStack width={'100%'} align={'start'} gap={0}>

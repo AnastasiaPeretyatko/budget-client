@@ -1,7 +1,7 @@
 "use client"
 
 import { Combobox, createListCollection, Field, Portal, Spinner } from "@chakra-ui/react"
-import { useEffect, useMemo, useState } from "react"
+import { useEffect, useMemo, useRef, useState } from "react"
 import { useAsyncOptions } from "../utils/useAsyncOptions"
 
 export type SearchSelectOption = {
@@ -40,6 +40,13 @@ const SearchSelect = ({
   const [selected, setSelected] = useState<SearchSelectOption | null>(value || null)
   // текст в поле: пока печатаем — то, что печатаем, после выбора — название выбранного
   const [inputValue, setInputValue] = useState(value?.label ?? "")
+  const cachedOptions = useRef(new Map<string, SearchSelectOption>())
+
+  useEffect(() => {
+    for (const option of options) {
+      cachedOptions.current.set(option.value, option)
+    }
+  }, [options])
 
   useEffect(() => {
     setSelected(value ?? null)
@@ -48,15 +55,58 @@ const SearchSelect = ({
   }, [value?.value])
 
   const collection = useMemo(() => {
-    const items: Item[] = [...options]
-    // выбранный вариант должен быть в списке, даже если сервер его не вернул
-    if (!search && selected?.value && !items.some((o) => o.value === selected.value)) {
+    const query = search.trim().toLocaleLowerCase()
+
+    // Объединяем кеш и текущие результаты сервера
+    const allOptions = new Map(cachedOptions.current)
+
+    for (const option of options) {
+      allOptions.set(option.value, option)
+    }
+
+    let items: Item[] = [...allOptions.values()]
+
+    // Мгновенная локальная фильтрация и сортировка
+    if (query) {
+      items = items
+        .filter((option) =>
+          option.label.toLocaleLowerCase().includes(query)
+        )
+        .sort((a, b) => {
+          const aStarts = a.label.toLocaleLowerCase().startsWith(query)
+          const bStarts = b.label.toLocaleLowerCase().startsWith(query)
+
+          // Совпадения с началом строки показываем первыми
+          if (aStarts !== bStarts) return aStarts ? -1 : 1
+
+          return a.label.localeCompare(b.label)
+        })
+    }
+
+    // Сохраняем выбранный вариант
+    if (
+      !query &&
+    selected?.value &&
+    !items.some((o) => o.value === selected.value)
+    ) {
       items.unshift(selected)
     }
-    const name = search.trim()
-    if (onCreate && name && !items.some((o) => o.label.toLowerCase() === name.toLowerCase())) {
-      items.push({ label: `Создать: ${name}`, value: CREATE_VALUE, isCreate: true })
+
+    // Пункт создания
+    if (
+      onCreate &&
+    query &&
+    !items.some(
+      (o) => o.label.toLocaleLowerCase() === query
+    )
+    ) {
+      items.push({
+        label: `Создать: ${search.trim()}`,
+        value: CREATE_VALUE,
+        isCreate: true,
+      })
     }
+
     return createListCollection({ items })
   }, [options, search, selected, onCreate])
 

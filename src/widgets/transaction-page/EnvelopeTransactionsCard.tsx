@@ -12,6 +12,7 @@ import { useBoolean } from '@/shared/hooks/useBoolean'
 import TransactionCategoriesBox from '@/features/transaction-management/ui/TransactionCategoriesBox'
 import TransactionTagsBox from '@/features/transaction-management/ui/TransactionTagsBox'
 import { Funnel } from 'lucide-react'
+import { useIsMobile } from '@/shared/hooks/useIsMobile'
 
 type Props = {
   accountId?: string
@@ -27,6 +28,7 @@ const EnvelopeTransactionsCard = ({ accountId }: Props) => {
   const [tagIds, setTagIds] = useState<string[]>([])
   const [isOpenFilter, setOpenFilter] = useBoolean()
   const { dateBetween } = useSelectedPeriod()
+  const isMobile = useIsMobile()
 
   // в поле показываем search сразу, а на сервер отправляем debouncedSearch — после паузы в наборе
   const debouncedSearch = useDebounce(search, SEARCH_DEBOUNCE_MS)
@@ -99,15 +101,16 @@ const EnvelopeTransactionsCard = ({ accountId }: Props) => {
         )
       }
       {!!transaction?.count &&
-        <BasePagination
-          // BasePagination помнит страницу у себя — пересоздаём его, когда страница сбрасывается
-          key={`${debouncedSearch}|${filter}|${categoryIds}|${tagIds}`}
-          count={transaction?.count || 0}
-          onChangePage={setPage}
-        />
+      <BasePagination
+        // BasePagination помнит страницу у себя — пересоздаём его, когда страница сбрасывается
+        key={`${debouncedSearch}|${filter}|${categoryIds}|${tagIds}`}
+        count={transaction?.count || 0}
+        onChangePage={setPage}
+      />
       }
     </Card.Root>
   )
+
 }
 
 export default EnvelopeTransactionsCard

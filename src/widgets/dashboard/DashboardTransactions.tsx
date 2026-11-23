@@ -20,7 +20,7 @@ const TransactionTypeIcon = ({ transaction }: { transaction: TransactionType }) 
         minW={10}
         minH={10}
         borderRadius="50%"
-        backgroundColor="green.900"
+        backgroundColor="green.100"
         display="flex"
         alignItems="center"
         justifyContent="center"
@@ -35,7 +35,7 @@ const TransactionTypeIcon = ({ transaction }: { transaction: TransactionType }) 
         minW={10}
         minH={10}
         borderRadius="50%"
-        backgroundColor="purple.900"
+        backgroundColor="purple.100"
         display="flex"
         alignItems="center"
         justifyContent="center"
@@ -49,7 +49,7 @@ const TransactionTypeIcon = ({ transaction }: { transaction: TransactionType }) 
       minW={10}
       minH={10}
       borderRadius="50%"
-      backgroundColor="orange.900"
+      backgroundColor="orange.100"
       display="flex"
       alignItems="center"
       justifyContent="center"
@@ -63,7 +63,7 @@ const getTransactionLabel = (transaction: TransactionType) => {
   if (transaction.type === TransactionTypeEnum.TRANSFER) {
     return `${transaction.fromAccount?.name ?? 'Наличные'} → ${transaction.toAccount?.name ?? 'Наличные'}`
   }
-  return transaction.fromAccount?.name ?? transaction.toAccount?.name ?? 'Наличные'
+  return `${transaction.fromAccount?.name ?? 'Наличные'} → ${transaction.toAccount?.name ?? 'Наличные'}`
 }
 
 const getTransactionAmount = (transaction: TransactionType) => {
@@ -86,7 +86,14 @@ const DashboardTransactions = () => {
   const recentFive = (transactionsData?.rows ?? []).slice(0, RECENT_LIMIT)
 
   return (
-    <Grid width="100%" templateColumns="1fr 1fr" gap={4}>
+    <Grid
+      width="100%"
+      templateColumns={{
+        base: "1fr",
+        lg: "repeat(2, minmax(0, 1fr))",
+      }}
+      gap={4}
+    >
       {/* Left column: Top-5 purchases */}
       <Card.Root borderRadius={16} border="none">
         <Card.Body p={5} gap={4} display="flex" flexDir="column">

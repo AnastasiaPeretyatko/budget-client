@@ -1,12 +1,10 @@
 import { Box, Flex, Heading, IconButton, Image, VStack } from '@chakra-ui/react'
 import { createContext, ReactElement, useContext, useState } from 'react'
 import SidebarItem from './SidebarItem'
-import PiggyBankIcon from '@/shared/icon/PiggyBankIcon'
-import { LuLayoutDashboard, LuPanelLeftClose, LuPanelLeftOpen, LuReceipt } from 'react-icons/lu'
-import { MdCalendarViewMonth, MdOutlineSettings } from 'react-icons/md'
-import { TbBusinessplan } from 'react-icons/tb'
-import { GoProjectTemplate } from 'react-icons/go'
+import { LuPanelLeftClose, LuPanelLeftOpen } from 'react-icons/lu'
 import Label from '@/shared/ui/label'
+import { useIsMobile } from '@/shared/hooks/useIsMobile'
+import { SIDEBAR_LIST } from './value-sidebar'
 
 export type SidebarItemProps = {
   title: string
@@ -17,49 +15,13 @@ export type SidebarItemProps = {
 const SidebarContext = createContext({ collapsed: false })
 export const useSidebarContext = () => useContext(SidebarContext)
 
-const SIDEBAR_LIST: SidebarItemProps[] = [
-  {
-    title: 'Сегодня',
-    icon: <LuLayoutDashboard />,
-    path: '/dashboard',
-  },
-  {
-    title: 'Счета',
-    icon: <PiggyBankIcon size="md" />,
-    path: '/budgets',
-  },
-  {
-    title: 'План',
-    icon: <TbBusinessplan/>,
-    path: '/plan',
-  },
-  {
-    title: 'Шаблоны',
-    icon: <GoProjectTemplate/>,
-    path: '/templates'
-  },
-  {
-    title: 'Транзакции',
-    icon: <LuReceipt />,
-    path: '/transactions',
-  },
-  {
-    title: 'Инструменты',
-    icon: <MdCalendarViewMonth/>,
-    path: '/view'
-  },
-  {
-    title: 'Настройки',
-    icon: <MdOutlineSettings/>,
-    path: '/settings'
-  },
-]
-
 const SIDEBAR_WIDTH_EXPANDED = '250px'
 const SIDEBAR_WIDTH_COLLAPSED = '68px'
 
 const Sidebar = () => {
-  const [collapsed, setCollapsed] = useState(false)
+  const isMobile = useIsMobile()
+
+  const [collapsed, setCollapsed] = useState(isMobile || false)
 
   return (
     <SidebarContext.Provider value={{ collapsed }}>

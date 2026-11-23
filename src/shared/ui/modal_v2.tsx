@@ -13,7 +13,7 @@ const BaseModalV2 = ({ isOpen, setIsOpen, trigger, children, size = 'md' }: Prop
   return (
     <Dialog.Root
       size={size}
-      placement={'center'}
+      placement={{ base: 'bottom', lg: 'center' }}
       open={isOpen}
       onOpenChange={() => setIsOpen?.toggle()}
     >
@@ -24,8 +24,8 @@ const BaseModalV2 = ({ isOpen, setIsOpen, trigger, children, size = 'md' }: Prop
       }
       <Portal >
         <Dialog.Backdrop />
-        <Dialog.Positioner>
-          <Dialog.Content padding={8} gap={4} background={'bg.body'}>
+        <Dialog.Positioner >
+          <Dialog.Content padding={{ base: 4, lg: 8 }} gap={4} background={'bg.body'} marginY={{ base: '0', lg: 16 }}>
             {children}
             <Dialog.CloseTrigger asChild>
               <CloseButton size="sm" />

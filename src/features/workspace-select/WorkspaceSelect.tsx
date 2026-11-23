@@ -3,7 +3,7 @@ import { useAppSelector } from '@/app/store'
 import { useGetWorkspacesQuery } from '@/entities/workspace/api/workspaceApi'
 import { useSwitchWorkspace } from './useSwitchWorkspace'
 import { Portal, Select, createListCollection } from "@chakra-ui/react"
-import { useMemo } from 'react'
+import { useEffect, useMemo } from 'react'
 
 export const WorkspaceSelect = () => {
   const { data: workspaces } = useGetWorkspacesQuery()
@@ -22,6 +22,12 @@ export const WorkspaceSelect = () => {
     const id = e.value[0]
     if (id && id !== activeWorkspaceId) switchWorkspace(id)
   }
+
+  useEffect(() => {
+    if (!activeWorkspaceId && workspaces?.[0].id) {
+      switchWorkspace(workspaces?.[0].id)
+    }
+  }, [activeWorkspaceId, switchWorkspace, workspaces])
 
   return (
     <Select.Root

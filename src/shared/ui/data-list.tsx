@@ -1,8 +1,8 @@
 import { DataList } from '@chakra-ui/react'
-import { CSSProperties } from 'react';
+import { CSSProperties, ReactNode } from 'react';
 
 type Props = {
-  data: {value: string; label: string}[];
+  data: {value: string | ReactNode | undefined; label: string}[];
   style?: CSSProperties
 }
 
@@ -12,7 +12,7 @@ const BaseDataList = ({ data, style }: Props) => {
       {
         data.map((item) => (
           <DataList.Item key={item.label} justifyContent={'space-between'}>
-            <DataList.ItemLabel textTransform={'uppercase'} fontSize={'10px'} fontWeight={'600'} color={'text.sidebar'}>{item.label}</DataList.ItemLabel>
+            <DataList.ItemLabel textTransform={'uppercase'} fontSize={'10px'} fontWeight={'600'} color={'text.label'}>{item.label}</DataList.ItemLabel>
             <DataList.ItemValue justifyContent={'end'} whiteSpace={'nowrap'}>{item.value}</DataList.ItemValue>
           </DataList.Item>
         ))
